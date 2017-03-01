@@ -1,6 +1,8 @@
 package com.example.carrc.seniorproject;
 
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
@@ -30,15 +36,91 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnKeyListener {
 
+    // True means the button says login, false means the button says sign up
     Boolean loginModeActive = true;
+    // the TextView that says either, "Or, Sign up", or "Or, Login"
     TextView changeSignupModeTextView;
     EditText passwordEditText;
+
+    // This method performs a ParseRole Query to find the role that matched the role String provided
+    // Once the role it found, the user is added to the role specified
+    public void addToRole(final ParseUser user, final String Role){
+
+        // Sleep time of 5 seconds to give the database time to save the user before proceeding
+        SystemClock.sleep(5000);
+
+        final ParseQuery<ParseRole> parseRoleParseQuery = ParseRole.getQuery();
+        parseRoleParseQuery.findInBackground(new FindCallback<ParseRole>() {
+            @Override
+            public void done(List<ParseRole> objects, ParseException e) {
+                // Make sure there are roles in the database
+                if(objects.size() > 0){
+                    // iterate through the roles
+                    for(int i = 0; i < objects.size(); i++){
+                        // if the role name matches the given role String
+                        if (objects.get(i).getName().matches(Role)) {
+                            Log.i("Role Name", Role + " Role Selected");
+                            // add the user to the given role
+                            objects.get(i).getUsers().add(user);
+                            // save changes
+                            objects.get(i).saveInBackground();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // This method returns which role the current user is apart of. (Customer, Employee, Manager)
+    public String getRole(){
+
+        // create a ParseRole query
+        ParseQuery<ParseRole> roleQuery = ParseRole.getQuery();
+        // create the list that the roles will be saved in
+        List<ParseRole> allRoles = null;
+
+        try {
+            // perform the role query
+            allRoles = roleQuery.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<ParseRole> userRoles = new ArrayList<ParseRole>();
+        ArrayList<String> userRolesNames = new ArrayList<String>();
+        for(ParseRole role : allRoles) {
+            // create a query that retrieves the users relations from the current role
+            ParseQuery usersQuery = role.getRelation("users").getQuery();
+            // only find the role if the current users objectId is listed in current role selected
+            usersQuery.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+            try {
+                // if the user is apart of the role
+                if(usersQuery.count() > 0) {
+                    // save the role
+                    userRoles.add(role);
+                    // save the roles name
+                    userRolesNames.add(role.getName().toString());
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        // return the name of the role
+        return userRolesNames.get(0);
+    }
 
 
     @Override
@@ -72,6 +154,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
 
+        if(view.getId() == R.id.forgotPasswordTextView){
+            Intent intent = new Intent(this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        }
+
     }
 
     public void login(View view){
@@ -89,6 +176,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void done(ParseUser user, ParseException e) {
                         if(user != null){
                             Log.i("Login", "Successful");
+
+                            String userRole = getRole();
+
+                            // direct the user to the proper Activity depending on their role
+                            if(userRole.matches("Customer")){
+                                Intent intent = new Intent(MainActivity.this, CustomerDashboardActivity.class);
+                                startActivity(intent);
+                            } else if(userRole.matches("Manager")){
+                                Intent intent = new Intent(MainActivity.this, ManagerDashboardActivity.class);
+                                startActivity(intent);
+                            } else if(userRole.matches("Employee")){
+                                Intent intent = new Intent(MainActivity.this, EmployeeDashboardActivity.class);
+                                startActivity(intent);
+                            }
+
+
+
                         } else {
                             Toast.makeText(MainActivity.this, "Invalid username/password combination", Toast.LENGTH_SHORT).show();
                         }
@@ -97,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             } else {
 
-                ParseUser user = new ParseUser();
+                final ParseUser user = new ParseUser();
                 user.setUsername(usernameEditText.getText().toString());
                 user.setPassword(passwordEditText.getText().toString());
 
@@ -106,6 +210,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void done(ParseException e) {
                         if (e == null) {
                             Log.i("Sign Up", "Success");
+
+                            addToRole(user, "Customer");
+
                         } else {
                             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -129,8 +236,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RelativeLayout backgroundRelativeLayout = (RelativeLayout) findViewById(R.id.backgroundRelativeLayout);
         backgroundRelativeLayout.setOnClickListener(this);
 
+        TextView forgotPasswordTextView = (TextView) findViewById(R.id.forgotPasswordTextView);
+        forgotPasswordTextView.setOnClickListener(this);
+
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
         passwordEditText.setOnKeyListener(this);
+
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
     }

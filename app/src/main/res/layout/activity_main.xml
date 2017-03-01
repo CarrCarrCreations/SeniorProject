@@ -17,7 +17,7 @@
         android:ems="10"
         android:layout_marginTop="100dp"
         android:id="@+id/usernameTextView"
-        android:hint="Enter username here..."
+        android:hint="Enter email here..."
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
