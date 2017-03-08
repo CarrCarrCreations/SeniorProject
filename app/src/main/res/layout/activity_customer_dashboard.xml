@@ -10,4 +10,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.carrc.seniorproject.CustomerDashboardActivity">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:text="Message Waiter/Waitress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/messengerButton"
+            android:onClick="messenger" />
+
+        <Button
+            android:text="Menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/menuButton"
+            android:onClick="openMenu" />
+    </LinearLayout>
 </RelativeLayout>

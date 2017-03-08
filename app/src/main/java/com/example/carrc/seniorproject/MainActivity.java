@@ -1,6 +1,8 @@
 package com.example.carrc.seniorproject;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -183,12 +185,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             if(userRole.matches("Customer")){
                                 Intent intent = new Intent(MainActivity.this, CustomerDashboardActivity.class);
                                 startActivity(intent);
+                                finish();
                             } else if(userRole.matches("Manager")){
                                 Intent intent = new Intent(MainActivity.this, ManagerDashboardActivity.class);
                                 startActivity(intent);
+                                finish();
                             } else if(userRole.matches("Employee")){
                                 Intent intent = new Intent(MainActivity.this, EmployeeDashboardActivity.class);
                                 startActivity(intent);
+                                finish();
                             }
 
 
@@ -205,12 +210,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 user.setUsername(usernameEditText.getText().toString());
                 user.setPassword(passwordEditText.getText().toString());
 
+                SharedPreferences sharedPreferences = this.getSharedPreferences("com.example.carrc.seniorproject", Context.MODE_PRIVATE );
+                sharedPreferences.edit().putString("username", usernameEditText.getText().toString()).apply();
+                sharedPreferences.edit().putString("password", passwordEditText.getText().toString()).apply();
+
                 user.signUpInBackground(new SignUpCallback() {
                     @Override
                     public void done(ParseException e) {
                         if (e == null) {
                             Log.i("Sign Up", "Success");
-
                             addToRole(user, "Customer");
 
                         } else {

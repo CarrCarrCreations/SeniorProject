@@ -85,7 +85,7 @@ public class StarterApplication extends Application {
 
           // create the default manager account and save to database
           ParseUser managerUser = new ParseUser();
-          managerUser.setUsername("manager@manager.com");
+          managerUser.setUsername("manager");
           managerUser.setPassword("pass");
           managerUser.signUpInBackground(new SignUpCallback() {
             @Override

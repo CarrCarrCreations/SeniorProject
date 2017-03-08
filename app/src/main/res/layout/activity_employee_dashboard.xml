@@ -10,4 +10,39 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.carrc.seniorproject.EmployeeDashboardActivity">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/tableWorkingEditText"
+            android:hint="Enter the table number you are serving..." />
+
+        <Button
+            android:text="Add Table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/servingTableButton"
+            android:onClick="servingTable" />
+
+        <Button
+            android:text="Remove all tables"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/endShiftButton"
+            android:onClick="removeAllTables" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tablesWaitedListView" />
+
+    </LinearLayout>
 </RelativeLayout>

@@ -10,4 +10,53 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.carrc.seniorproject.ManagerDashboardActivity">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:text="Create Employee Account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/createEmployeeButton"
+            android:onClick="createEmployee" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/tableNumberEditText"
+            android:hint="Enter Table Number Here..." />
+
+        <Button
+            android:text="Save Table Number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tableNumberButton"
+            android:onClick="setTableNumber" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/numOfTablesEditText"
+            android:hint="Enter number of tables here..." />
+
+        <Button
+            android:text="Set Number Of Tables"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/numOfTablesButton"
+            android:onClick="setNumTables" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tableNumberTextView" />
+    </LinearLayout>
 </RelativeLayout>

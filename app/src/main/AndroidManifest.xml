@@ -23,11 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ManagerActivity" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".EmployeeDashboardActivity" />
         <activity android:name=".ManagerDashboardActivity" />
-        <activity android:name=".CustomerDashboardActivity"></activity>
+        <activity android:name=".CustomerDashboardActivity" />
+        <activity android:name=".CreateEmployeeAccountActivity" />
+        <activity android:name=".MessengerListActivity" />
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".EmployeeMessengerListActivity" />
+        <activity android:name=".EmployeeChatActivity" />
+        <activity android:name=".MenuMainActivity"> </activity>
     </application>
 
 </manifest>
