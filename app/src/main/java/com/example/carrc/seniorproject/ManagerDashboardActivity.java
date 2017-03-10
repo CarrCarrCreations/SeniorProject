@@ -32,6 +32,11 @@ public class ManagerDashboardActivity extends AppCompatActivity {
         finish();
     }
 
+    public void deleteAccount(View view){
+        Intent intent = new Intent(getApplicationContext(), DeleteEmployeeAccountActivity.class );
+        startActivity(intent);
+    }
+
     public void setNumTables(View view){
         EditText numOfTablesEditText = (EditText) findViewById(R.id.numOfTablesEditText);
         int num = Integer.parseInt(numOfTablesEditText.getText().toString());

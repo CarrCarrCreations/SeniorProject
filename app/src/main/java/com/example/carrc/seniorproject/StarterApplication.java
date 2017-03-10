@@ -46,6 +46,7 @@ public class StarterApplication extends Application {
       // http://ec2-52-36-220-73.us-west-2.compute.amazonaws.com:80/apps
       // username: user
       // password: qKcWnh9GJiNl
+      // all users in the database passwords are = pass
 
 
     //ParseUser.enableAutomaticUser();
