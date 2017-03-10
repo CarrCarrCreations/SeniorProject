@@ -28,11 +28,8 @@
         <activity android:name=".ManagerDashboardActivity" />
         <activity android:name=".CustomerDashboardActivity" />
         <activity android:name=".CreateEmployeeAccountActivity" />
-        <activity android:name=".MessengerListActivity" />
         <activity android:name=".ChatActivity" />
-        <activity android:name=".EmployeeMessengerListActivity" />
         <activity android:name=".EmployeeChatActivity" />
-        <activity android:name=".MenuMainActivity"> </activity>
     </application>
 
 </manifest>
