@@ -119,6 +119,13 @@ public class ManagerDashboardActivity extends AppCompatActivity {
             finish();
         }
 
+        if(item.getItemId() == R.id.update){
+
+            Intent intent = new Intent(getApplicationContext(), UpdateAccountInfoActivity.class);
+            startActivity(intent);
+
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

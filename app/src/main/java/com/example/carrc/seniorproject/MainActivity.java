@@ -55,7 +55,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Boolean loginModeActive = true;
     // the TextView that says either, "Or, Sign up", or "Or, Login"
     TextView changeSignupModeTextView;
+
+    EditText usernameEditText;
     EditText passwordEditText;
+
+    SharedPreferences sharedPreferences;
 
     // This method performs a ParseRole Query to find the role that matched the role String provided
     // Once the role it found, the user is added to the role specified
@@ -165,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void login(View view){
 
-        EditText usernameEditText = (EditText) findViewById(R.id.usernameTextView);
+        usernameEditText = (EditText) findViewById(R.id.usernameTextView);
 
 
         if(usernameEditText.getText().toString().matches("") || passwordEditText.getText().toString().matches("")){
@@ -178,6 +182,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void done(ParseUser user, ParseException e) {
                         if(user != null){
                             Log.i("Login", "Successful");
+
+                            sharedPreferences.edit().putString("username", usernameEditText.getText().toString()).apply();
+                            sharedPreferences.edit().putString("password", passwordEditText.getText().toString()).apply();
 
                             String userRole = getRole();
 
@@ -210,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 user.setUsername(usernameEditText.getText().toString());
                 user.setPassword(passwordEditText.getText().toString());
 
-                SharedPreferences sharedPreferences = this.getSharedPreferences("com.example.carrc.seniorproject", Context.MODE_PRIVATE );
                 sharedPreferences.edit().putString("username", usernameEditText.getText().toString()).apply();
                 sharedPreferences.edit().putString("password", passwordEditText.getText().toString()).apply();
 
@@ -237,6 +243,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         setTitle("Welcome");
+
+        sharedPreferences = this.getSharedPreferences("com.example.carrc.seniorproject", Context.MODE_PRIVATE );
 
         changeSignupModeTextView = (TextView) findViewById(R.id.changeSignupModeTextView);
         changeSignupModeTextView.setOnClickListener(this);
