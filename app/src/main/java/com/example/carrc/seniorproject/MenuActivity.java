@@ -52,12 +52,12 @@ public class MenuActivity extends AppCompatActivity {
 
         // example intolerances=diary%2Cegg%2Cwheat& seperate each intolerance with %2C and end with &
         // dairy, egg, gluten, peanut, sesame, seafood, shellfish, soy, sulfite, tree nut, and wheat.
-        intolerances = "dairy";
+        intolerances = "intolerances=dairy&";
 
 
 
         try {
-            HttpResponse<JsonNode> response = Unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?" + dietType + "instructionsRequired=false&intolerances=gluten&limitLicense=false&number=10&offset=0&query=" + mealType + "&type=" + courseType)
+            HttpResponse<JsonNode> response = Unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?" + dietType + "instructionsRequired=false&" + intolerances + "limitLicense=false&number=10&offset=0&query=" + mealType + "&type=" + courseType)
                     .header("X-Mashape-Key", "cfCeth6V86mshu6OGAO9QCgv8vy7p1MHJYZjsnhCMiRIAdAEmm")
                     .header("Accept", "application/json")
                     .asJson();
