@@ -31,7 +31,8 @@
         <activity android:name=".ChatActivity" />
         <activity android:name=".EmployeeChatActivity" />
         <activity android:name=".UpdateAccountInfoActivity" />
-        <activity android:name=".DeleteEmployeeAccountActivity"></activity>
+        <activity android:name=".DeleteEmployeeAccountActivity" />
+        <activity android:name=".MenuActivity"></activity>
     </application>
 
 </manifest>

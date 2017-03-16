@@ -29,7 +29,10 @@ public class DeleteEmployeeAccountActivity extends AppCompatActivity {
 
         usernameEditText = (EditText) findViewById(R.id.usernameEditText);
         final String usernameString = usernameEditText.getText().toString();
-        
+
+        // try using ParseUser.become() with session key, to become the user you want to delete.
+        // then log out when done.
+
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("username", usernameString);
 

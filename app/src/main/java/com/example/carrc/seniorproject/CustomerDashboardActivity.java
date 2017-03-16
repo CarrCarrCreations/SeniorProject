@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.MenuAdapter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,8 +57,8 @@ public class CustomerDashboardActivity extends AppCompatActivity {
     }
 
     public void openMenu(View view){
-        //Intent intent = new Intent(this, MenuMainActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
     }
 
     @Override

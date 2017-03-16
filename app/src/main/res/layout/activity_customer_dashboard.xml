@@ -25,7 +25,7 @@
             android:onClick="messenger" />
 
         <Button
-            android:text="Menu"
+            android:text="Add menu items to database"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/menuButton"
