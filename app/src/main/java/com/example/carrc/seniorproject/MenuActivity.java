@@ -14,6 +14,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -31,11 +32,13 @@ public class MenuActivity extends AppCompatActivity {
 
     String[] recipeIDs;
     ArrayList<ParseObject> recipesList;
+    ArrayList<ParseObject> ingredientList;
 
     String mealType;
     String courseType;
     String dietType;
     String intolerances;
+    String recipeNum;
 
     Future<HttpResponse<JsonNode>> response;
 
@@ -54,10 +57,13 @@ public class MenuActivity extends AppCompatActivity {
         // dairy, egg, gluten, peanut, sesame, seafood, shellfish, soy, sulfite, tree nut, and wheat.
         intolerances = "intolerances=dairy&";
 
+        // number of recipes to look up
+        recipeNum = "20";
+
 
 
         try {
-            HttpResponse<JsonNode> response = Unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?" + dietType + "instructionsRequired=false&" + intolerances + "limitLicense=false&number=10&offset=0&query=" + mealType + "&type=" + courseType)
+            HttpResponse<JsonNode> response = Unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?" + dietType + "instructionsRequired=false&" + intolerances + "limitLicense=false&number=" + recipeNum + "&offset=0&query=" + mealType + "&type=" + courseType)
                     .header("X-Mashape-Key", "cfCeth6V86mshu6OGAO9QCgv8vy7p1MHJYZjsnhCMiRIAdAEmm")
                     .header("Accept", "application/json")
                     .asJson();
@@ -90,88 +96,126 @@ public class MenuActivity extends AppCompatActivity {
 
         for (int i = 0; i < recipeIDs.length; i++) {
 
-            System.out.println("recipeID: " + recipeIDs[i]);
-            System.out.println("waiting .5 second...");
-            SystemClock.sleep(500);
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
+            query.whereEqualTo("FoodID", recipeIDs[i]);
 
-            response = Unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/" + recipeIDs[i] + "/information?includeNutrition=false")
-                    .header("X-Mashape-Key", "cfCeth6V86mshu6OGAO9QCgv8vy7p1MHJYZjsnhCMiRIAdAEmm")
-                    .header("Accept", "application/json")
-                    .asJsonAsync(new Callback<JsonNode>() {
-                        @Override
-                        public void completed(HttpResponse<JsonNode> response) {
+            try {
+                List<ParseObject> queryList = query.find();
+                if (queryList.size() == 0) {
 
-                            ParseObject recipe = new ParseObject("Recipes");
+                    System.out.println(recipeIDs[i]);
+                    System.out.println("waiting .5 second...");
+                    SystemClock.sleep(500);
 
-                            String responseString = response.getBody().toString();
-                            JSONObject jObj = null;
+                    response = Unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/" + recipeIDs[i] + "/information?includeNutrition=false")
+                            .header("X-Mashape-Key", "cfCeth6V86mshu6OGAO9QCgv8vy7p1MHJYZjsnhCMiRIAdAEmm")
+                            .header("Accept", "application/json")
+                            .asJsonAsync(new Callback<JsonNode>() {
+                                @Override
+                                public void completed(HttpResponse<JsonNode> response) {
+
+                                    ParseObject recipe = new ParseObject("Recipes");
+
+                                    String responseString = response.getBody().toString();
+                                    JSONObject jObj = null;
+
+                                    try {
+                                        jObj = new JSONObject(responseString);
+
+                                        String formatCourseType = courseType.replace("+", "");
+
+                                        recipe.put("mealType", mealType);
+                                        recipe.put("course", formatCourseType);
+                                        recipe.put("ItemTitle", jObj.getString("title"));
+                                        recipe.put("FoodID", jObj.getString("id"));
+                                        recipe.put("Image", jObj.getString("image"));
+                                        recipe.put("PricePerServing", jObj.getString("pricePerServing"));
+                                        recipe.put("vegetarian", jObj.getString("vegetarian"));
+                                        recipe.put("vegan", jObj.getString("vegan"));
+                                        recipe.put("glutenFree", jObj.getString("glutenFree"));
+                                        recipe.put("dairyFree", jObj.getString("dairyFree"));
+                                        recipe.put("veryHealthy", jObj.getString("veryHealthy"));
+                                        recipe.put("cheap", jObj.getString("cheap"));
+                                        recipe.put("veryPopular", jObj.getString("veryPopular"));
+                                        recipe.put("weightWatcher", jObj.getString("weightWatcherSmartPoints"));
+
+                                        JSONArray ingredientArray = jObj.getJSONArray("extendedIngredients");
+                                        int len = ingredientArray.length();
+
+                                        for (int j = 0; j < len; j++) {
+                                            JSONObject json = ingredientArray.getJSONObject(j);
+                                            recipe.put("IngredientName" + j, json.getString("name"));
+                                            recipe.put("IngredientID" + j, json.getString("id"));
+                                            recipe.put("IngredientAmount" + j, json.getString("amount"));
+                                            recipe.put("IngredientUnit" + j, json.getString("unit"));
+
+                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
+                                            query.whereEqualTo("ID", json.getString("id"));
+
+                                            if(query.find().size() == 0){
+
+                                                ParseObject ingredientsObj = new ParseObject("Ingredients");
+                                                ingredientsObj.put("ID", json.getString("id"));
+                                                ingredientsObj.put("Name", json.getString("name"));
+                                                ingredientsObj.put("Unit", json.getString("unit"));
+                                                ingredientsObj.saveInBackground();
+
+                                            }
+                                            //clean clean = new clean();
+                                            //clean.execute(json.getString("id"));
+                                        }
+
+                                        downloadTask2 task = new downloadTask2();
+                                        task.execute(recipe);
 
 
-                            try {
-                                jObj = new JSONObject(responseString);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
 
-                                String formatCourseType = courseType.replace("+", "");
-
-                                recipe.put("mealType", mealType);
-                                recipe.put("course", formatCourseType);
-                                recipe.put("ItemTitle", jObj.getString("title"));
-                                recipe.put("FoodID", jObj.getString("id"));
-                                recipe.put("Image", jObj.getString("image"));
-                                recipe.put("PricePerServing", jObj.getString("pricePerServing"));
-                                recipe.put("vegetarian", jObj.getString("vegetarian"));
-                                recipe.put("vegan", jObj.getString("vegan"));
-                                recipe.put("glutenFree", jObj.getString("glutenFree"));
-                                recipe.put("dairyFree", jObj.getString("dairyFree"));
-                                recipe.put("veryHealthy", jObj.getString("veryHealthy"));
-                                recipe.put("cheap", jObj.getString("cheap"));
-                                recipe.put("veryPopular", jObj.getString("veryPopular"));
-                                recipe.put("weightWatcher", jObj.getString("weightWatcherSmartPoints"));
-
-                                JSONArray ingredientArray = jObj.getJSONArray("extendedIngredients");
-                                int len = ingredientArray.length();
-
-                                for(int j=0; j<len; j++)
-                                {
-                                    JSONObject json = ingredientArray.getJSONObject(j);
-                                    recipe.put("IngredientName" + j, json.getString("name"));
-                                    recipe.put("IngredientID" + j, json.getString("id"));
-                                    recipe.put("IngredientAmount" + j, json.getString("amount"));
-                                    recipe.put("IngredientUnit" + j, json.getString("unit"));
 
                                 }
 
-                                recipesList.add(recipe);
+                                @Override
+                                public void failed(UnirestException e) {
+
+                                }
+
+                                @Override
+                                public void cancelled() {
+
+                                }
+                            });
 
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                } else {
+                    Log.i("Recipe", "Recipe Exists");
+                }
 
-                        @Override
-                        public void failed(UnirestException e) {
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-                            System.out.println("API call failed... " + e.getMessage());
-
-                        }
-
-                        @Override
-                        public void cancelled() {
-
-                        }
-                    });
-
-
-        }
-
+        /*
         for(int i = 0; i < recipesList.size(); i++){
 
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
-
-            System.out.println("Saving...");
+            System.out.println("Saving Recipe...");
             downloadTask2 task = new downloadTask2();
             task.execute(recipesList.get(i));
+        }
+        */
 
+        /*
+        for(int i = 0; i < ingredientList.size(); i++){
+
+            System.out.println("Saving ingredient...");
+            downloadTask2 task = new downloadTask2();
+            task.execute(ingredientList.get(i));
+
+        }
+        */
         }
     }
 
