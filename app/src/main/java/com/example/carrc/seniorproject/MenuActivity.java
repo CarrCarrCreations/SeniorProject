@@ -31,8 +31,6 @@ import java.util.concurrent.Future;
 public class MenuActivity extends AppCompatActivity {
 
     String[] recipeIDs;
-    ArrayList<ParseObject> recipesList;
-    ArrayList<ParseObject> ingredientList;
 
     String mealType;
     String courseType;
@@ -46,10 +44,10 @@ public class MenuActivity extends AppCompatActivity {
     public void getRecipes(){
 
         // type of food you are looking for
-        mealType = "breakfast";
+        mealType = "dinner";
 
         // main+course, side dish, dessert, appetizer, salad, bread, breakfast, soup, beverage, sauce, or drink.
-        courseType = "breakfast";
+        courseType = "dinner";
         //  pescetarian, lacto vegetarian, ovo vegetarian, vegan, and vegetarian.
         dietType = "diet=vegetarian&";
 
@@ -73,7 +71,6 @@ public class MenuActivity extends AppCompatActivity {
             JSONObject jObj = new JSONObject(responseString);
             JSONArray jsonArray = jObj.getJSONArray("results");
             recipeIDs = new String[jsonArray.length()];
-            recipesList = new ArrayList<>();
             Log.i("RecipeLength", String.valueOf(recipeIDs.length));
 
             for(int i = 0; i < jsonArray.length(); i++){
@@ -161,8 +158,6 @@ public class MenuActivity extends AppCompatActivity {
                                                 ingredientsObj.saveInBackground();
 
                                             }
-                                            //clean clean = new clean();
-                                            //clean.execute(json.getString("id"));
                                         }
 
                                         downloadTask2 task = new downloadTask2();

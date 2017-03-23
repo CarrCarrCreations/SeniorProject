@@ -61,6 +61,11 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void menu(View view){
+        Intent intent = new Intent(this, MenuMainActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
