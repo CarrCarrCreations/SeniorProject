@@ -31,6 +31,10 @@ import java.util.concurrent.ExecutionException;
 
 public class MenuMainActivity extends AppCompatActivity {
 
+    public void search(View view){
+        
+    }
+
     public class ImageDownloader extends AsyncTask<String, Void, Bitmap>{
 
         @Override
