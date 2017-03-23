@@ -1,0 +1,46 @@
+Menu Activity:
+•	Break food into categories
+1.	Breakfast, lunch, dinner…
+•	Searchable menu
+2.	Burgers, smoothies, steaks…
+•	Filter food by allergies / intolerances
+3.	Gluten free, dairy free…
+
+Menu Item Activity:
+•	Food picture
+•	If item substitute is available, show items that can be changed out.
+4.	Cheeses, breads …
+•	Display intolerances
+•	Add to cart function
+
+Create recipe:
+•	Picture (URL or upload picture)
+•	Ingredients name
+•	Ingredients quantities
+•	Ingredients units
+•	Intolerances
+Edit recipe
+Delete recipe
+
+Inventory Activity:
+•	Searchable
+•	View inventory
+•	Manually modify inventory
+
+Cart Activity:
+•	Display the order
+•	Save order to database for later view, such a waiter reviewing order
+•	Modify the inventory
+
+Payment Activity:
+•	Pay
+•	Delete all messages between the table and the waiter
+
+Random points to be done:
+Build the menu database (Automated script already created, just needs to fill database)
+Build inventory database (using the ingredients)
+Push notifications to waiter’s phones when they receive a message or get called with the call waiter button
+Call waiter functionality 
+Customer account information activity
+•	Change password, delete account…
+
