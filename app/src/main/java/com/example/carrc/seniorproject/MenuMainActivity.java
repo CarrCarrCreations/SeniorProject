@@ -1,5 +1,6 @@
 package com.example.carrc.seniorproject;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -24,15 +25,29 @@ import com.parse.ParseQuery;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.InterfaceAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class MenuMainActivity extends AppCompatActivity {
 
+    String name;
+    String id;
+
+    List<RecipeInfo> recipeInfoArrayList;
+
     public void search(View view){
-        
+
+    }
+
+    public class RecipeInfo {
+
+        String recipeName;
+        String recipeID;
+
     }
 
     public class ImageDownloader extends AsyncTask<String, Void, Bitmap>{
@@ -72,6 +87,8 @@ public class MenuMainActivity extends AppCompatActivity {
 
         setTitle("Menu");
 
+        recipeInfoArrayList = new ArrayList<>();
+
         final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Recipes");
@@ -81,14 +98,26 @@ public class MenuMainActivity extends AppCompatActivity {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if(e == null){
-
-                    Log.i("ObjectsSize", String.valueOf(objects.size()));
                     if(objects.size() > 0){
 
-                        for(ParseObject object : objects){
+                        for(int i = 0; i < objects.size(); i++){
 
-                            String url = (String) object.get("Image");
-                            String name = (String) object.get("ItemTitle");
+                            // obtain the url for the recipe image
+                            String url = (String) objects.get(i).get("Image");
+
+                            // save the name and ID of the recipe
+                            name = (String) objects.get(i).get("ItemTitle");
+                            id = (String) objects.get(i).get("FoodID");
+
+                            // create a new RecipeInfo object to save the name and id of the recipe
+                            // this object will be used to match the tag of the clicked image in the activity
+                            // and send the correct info for the selected image to the MenuItemActivity
+                            RecipeInfo recipeInfo = new RecipeInfo();
+                            recipeInfo.recipeID = id;
+                            recipeInfo.recipeName = name;
+                            recipeInfoArrayList.add(recipeInfo);
+
+
 
                             ImageDownloader task = new ImageDownloader();
                             Bitmap bitmap;
@@ -111,12 +140,35 @@ public class MenuMainActivity extends AppCompatActivity {
                                 layoutParams.setMargins(0, 20, 0, 45);
                                 imageView.setLayoutParams(layoutParams);
 
-                                // set the imageview to the recipe picture
+                                // set the imageview to the recipe picture and the tag of the image
                                 imageView.setImageBitmap(bitmap);
+                                imageView.setTag(i);
+
+                                // set what happens when an image is clicked
+                                imageView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        // get the tag number of the clicked image
+                                        int tag = (int) v.getTag();
+
+                                        // obtain the name and ID from the recipeObject saved at the selected tag index
+                                        String recipeName = recipeInfoArrayList.get(tag).recipeName;
+                                        String recipeID = recipeInfoArrayList.get(tag).recipeID;
+
+                                        // create a new intent, save the name and ID and open the menuItentActivity
+                                        Intent intent = new Intent(getApplicationContext(), MenuItemActivity.class);
+                                        intent.putExtra("id", recipeID);
+                                        intent.putExtra("name", recipeName);
+                                        startActivity(intent);
+
+                                    }
+                                });
 
                                 // add the name of the recipe and recipe picture to the layout
                                 linearLayout.addView(textView);
                                 linearLayout.addView(imageView);
+
 
                             } catch (Exception e1) {
 

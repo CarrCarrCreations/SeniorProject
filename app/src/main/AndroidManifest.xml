@@ -33,7 +33,8 @@
         <activity android:name=".UpdateAccountInfoActivity" />
         <activity android:name=".DeleteEmployeeAccountActivity" />
         <activity android:name=".MenuActivity" />
-        <activity android:name=".MenuMainActivity"></activity>
+        <activity android:name=".MenuMainActivity" />
+        <activity android:name=".MenuItemActivity"></activity>
     </application>
 
 </manifest>
