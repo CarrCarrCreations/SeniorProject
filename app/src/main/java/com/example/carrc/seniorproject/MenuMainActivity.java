@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,6 +39,18 @@ public class MenuMainActivity extends AppCompatActivity {
     String id;
 
     List<RecipeInfo> recipeInfoArrayList;
+    GridLayout filterGridLayout;
+    LinearLayout linearLayout;
+
+
+    public void showFilter(View view){
+
+        if(filterGridLayout.getVisibility() == View.GONE){
+            filterGridLayout.setVisibility(View.VISIBLE);
+        } else {
+            filterGridLayout.setVisibility(View.GONE);
+        }
+    }
 
     public void search(View view){
 
@@ -80,16 +93,7 @@ public class MenuMainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu_main2);
-
-        setTitle("Menu");
-
-        recipeInfoArrayList = new ArrayList<>();
-
-        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
+    public void displayMenu(){
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Recipes");
         query.setLimit(10);
@@ -180,5 +184,22 @@ public class MenuMainActivity extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_menu_main2);
+
+        setTitle("Menu");
+
+        filterGridLayout = (GridLayout) findViewById(R.id.filterGridLayout);
+
+        recipeInfoArrayList = new ArrayList<>();
+
+        linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
+
+        displayMenu();
     }
 }
