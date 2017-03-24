@@ -47,7 +47,8 @@ public class MenuActivity extends AppCompatActivity {
         courseType = "dinner";
 
         // type of food you are looking for. Either same as courseType or use words like burger.
-        mealType = "dinner";
+        // capitalize the first letter
+        mealType = "Dinner";
 
         //  pescetarian, lacto vegetarian, ovo vegetarian, vegan, and vegetarian.
         dietType = "vegetarian";

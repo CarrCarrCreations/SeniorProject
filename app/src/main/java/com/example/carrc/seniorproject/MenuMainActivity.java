@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -40,6 +41,7 @@ public class MenuMainActivity extends AppCompatActivity {
     String id;
 
     List<RecipeInfo> recipeInfoArrayList;
+    EditText searchEditText;
     CheckBox[] checkBoxes;
     GridLayout filterGridLayout;
     LinearLayout linearLayout;
@@ -54,6 +56,12 @@ public class MenuMainActivity extends AppCompatActivity {
     CheckBox soyCheckBox;
     CheckBox wheatCheckBox;
 
+    public class RecipeInfo {
+
+        String recipeName;
+        String recipeID;
+
+    }
 
     public void showFilter(View view){
 
@@ -64,6 +72,34 @@ public class MenuMainActivity extends AppCompatActivity {
         }
     }
 
+    public List<String> intoleranceFilter(){
+
+        List<String> intoleranceQueries = new ArrayList<>();
+
+        // loop through all the checkboxes
+        for(int i = 0; i < checkBoxes.length; i++){
+            // if the current checkbox is selected
+            if(checkBoxes[i].isChecked()){
+                // get the intolerance name from the checkbox and lowercase it
+                String checkboxText = checkBoxes[i].getText().toString().toLowerCase();
+                // add the Free to the text so it matches the database entry name
+                String formattedText = checkboxText + "Free";
+                // add to intolerance list
+                intoleranceQueries.add(formattedText);
+            }
+        }
+        return intoleranceQueries;
+    }
+
+    public String searchString(){
+
+        String queryContains = searchEditText.getText().toString();
+        String output = queryContains.substring(0, 1).toUpperCase() + queryContains.substring(1);
+        Log.i("SearchString", output);
+
+        return output;
+    }
+
     public void search(View view){
 
         // get the intolerances checked
@@ -71,7 +107,22 @@ public class MenuMainActivity extends AppCompatActivity {
 
         // query the database
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Recipes");
+        ParseQuery<ParseObject> queryMealType = new ParseQuery<ParseObject>("Recipes");
 
+
+        // if there is a string input into the search bar
+        if(!searchEditText.getText().toString().matches("")){
+            String queryContains = searchString();
+            // query mealType and ItemTitle for the searched word
+            // search it with the first letter Upper and lowercase
+            query.whereContains("ItemTitle", queryContains);
+            queryMealType.whereContains("mealType", queryContains);
+
+            searchEditText.setText("");
+        }
+
+
+        // if there are intolerances
         if(intoleranceFilters.size() > 0) {
             for (int i = 0; i < intoleranceFilters.size(); i++) {
                 Log.i("Intolerance",intoleranceFilters.get(i));
@@ -79,13 +130,23 @@ public class MenuMainActivity extends AppCompatActivity {
             }
         }
 
+        // create an Array list with query and queryMealType
+        List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
+        queries.add(query);
+        queries.add(queryMealType);
+
+        // create a query that contains both query and queryMealType restraints
+        ParseQuery<ParseObject> queryMenu = ParseQuery.or(queries);
+
         linearLayout.removeAllViews();
 
-        query.findInBackground(new FindCallback<ParseObject>() {
+        queryMenu.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if(e == null){
                     if(objects.size() > 0){
+
+                        recipeInfoArrayList.clear();
 
                         for(int i = 0; i < objects.size(); i++){
 
@@ -170,12 +231,6 @@ public class MenuMainActivity extends AppCompatActivity {
 
     }
 
-    public class RecipeInfo {
-
-        String recipeName;
-        String recipeID;
-
-    }
 
     public class ImageDownloader extends AsyncTask<String, Void, Bitmap>{
 
@@ -206,26 +261,6 @@ public class MenuMainActivity extends AppCompatActivity {
             return null;
         }
     }
-
-    public List<String> intoleranceFilter(){
-
-        List<String> intoleranceQueries = new ArrayList<>();
-
-        // loop through all the checkboxes
-        for(int i = 0; i < checkBoxes.length; i++){
-            // if the current checkbox is selected
-            if(checkBoxes[i].isChecked()){
-                // get the intolerance name from the checkbox and lowercase it
-                String checkboxText = checkBoxes[i].getText().toString().toLowerCase();
-                // add the Free to the text so it matches the database entry name
-                String formattedText = checkboxText + "Free";
-                // add to intolerance list
-                intoleranceQueries.add(formattedText);
-            }
-        }
-        return intoleranceQueries;
-    }
-
 
     public void displayMenu(){
 
@@ -337,6 +372,8 @@ public class MenuMainActivity extends AppCompatActivity {
         shellfishCheckBox = (CheckBox) findViewById(R.id.shellfishCheckBox);
         soyCheckBox = (CheckBox) findViewById(R.id.soyCheckBox);
         wheatCheckBox = (CheckBox) findViewById(R.id.wheatCheckBox);
+
+        searchEditText = (EditText) findViewById(R.id.searchEditText);
 
         checkBoxes = new CheckBox[]{dairyCheckBox, eggCheckBox, glutenCheckBox, peanutCheckBox,
                 sesameCheckBox, seafoodCheckBox, shellfishCheckBox, soyCheckBox, wheatCheckBox};
