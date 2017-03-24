@@ -48,19 +48,17 @@ public class MenuActivity extends AppCompatActivity {
 
         // type of food you are looking for. Either same as courseType or use words like burger.
         // capitalize the first letter
-        mealType = "Dinner";
+        mealType = "Burger";
 
         //  pescetarian, lacto vegetarian, ovo vegetarian, vegan, and vegetarian.
-        dietType = "vegetarian";
+        dietType = "";
 
         // example intolerances=diary%2Cegg%2Cwheat seperate each intolerance with %2C
         //egg, peanut, sesame, seafood, shellfish, soy, and wheat.
-        intolerances = "dairy%2Cpeanut%2Cseafood";
+        intolerances = "";
 
         // number of recipes to look up
         recipeNum = "20";
-
-
 
         try {
             HttpResponse<JsonNode> response = Unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?diet=" + dietType + "&instructionsRequired=false&intolerances=" + intolerances + "&limitLicense=false&number=" + recipeNum + "&offset=0&query=" + mealType + "&type=" + courseType)

@@ -56,10 +56,6 @@ public class CustomerDashboardActivity extends AppCompatActivity {
 
     }
 
-    public void openMenu(View view){
-        Intent intent = new Intent(this, MenuActivity.class);
-        startActivity(intent);
-    }
 
     public void menu(View view){
         Intent intent = new Intent(this, MenuMainActivity.class);

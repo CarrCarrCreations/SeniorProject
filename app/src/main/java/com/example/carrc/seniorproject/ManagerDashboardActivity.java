@@ -32,6 +32,11 @@ public class ManagerDashboardActivity extends AppCompatActivity {
         finish();
     }
 
+    public void openMenu(View view){
+        Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
+    }
+
     public void deleteAccount(View view){
         Intent intent = new Intent(getApplicationContext(), DeleteEmployeeAccountActivity.class );
         startActivity(intent);

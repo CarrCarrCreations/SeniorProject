@@ -65,5 +65,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tableNumberTextView" />
+
+        <Button
+            android:text="API Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/apiButton"
+            android:onClick="openMenu" />
     </LinearLayout>
 </RelativeLayout>
