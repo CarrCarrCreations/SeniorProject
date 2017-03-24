@@ -29,7 +29,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/searchButton"
-        android:onClick="downloadImage" />
+        android:onClick="search" />
 
     <ScrollView
         android:layout_width="match_parent"

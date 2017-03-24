@@ -43,17 +43,18 @@ public class MenuActivity extends AppCompatActivity {
 
     public void getRecipes(){
 
-        // type of food you are looking for
-        mealType = "dinner";
-
         // main+course, side dish, dessert, appetizer, salad, bread, breakfast, soup, beverage, sauce, or drink.
         courseType = "dinner";
-        //  pescetarian, lacto vegetarian, ovo vegetarian, vegan, and vegetarian.
-        dietType = "diet=vegetarian&";
 
-        // example intolerances=diary%2Cegg%2Cwheat& seperate each intolerance with %2C and end with &
-        // dairy, egg, gluten, peanut, sesame, seafood, shellfish, soy, sulfite, tree nut, and wheat.
-        intolerances = "intolerances=dairy&";
+        // type of food you are looking for. Either same as courseType or use words like burger.
+        mealType = "dinner";
+
+        //  pescetarian, lacto vegetarian, ovo vegetarian, vegan, and vegetarian.
+        dietType = "vegetarian";
+
+        // example intolerances=diary%2Cegg%2Cwheat seperate each intolerance with %2C
+        //egg, peanut, sesame, seafood, shellfish, soy, and wheat.
+        intolerances = "dairy%2Cpeanut%2Cseafood";
 
         // number of recipes to look up
         recipeNum = "20";
@@ -61,7 +62,7 @@ public class MenuActivity extends AppCompatActivity {
 
 
         try {
-            HttpResponse<JsonNode> response = Unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?" + dietType + "instructionsRequired=false&" + intolerances + "limitLicense=false&number=" + recipeNum + "&offset=0&query=" + mealType + "&type=" + courseType)
+            HttpResponse<JsonNode> response = Unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search?diet=" + dietType + "&instructionsRequired=false&intolerances=" + intolerances + "&limitLicense=false&number=" + recipeNum + "&offset=0&query=" + mealType + "&type=" + courseType)
                     .header("X-Mashape-Key", "cfCeth6V86mshu6OGAO9QCgv8vy7p1MHJYZjsnhCMiRIAdAEmm")
                     .header("Accept", "application/json")
                     .asJson();
@@ -136,6 +137,36 @@ public class MenuActivity extends AppCompatActivity {
                                         recipe.put("veryPopular", jObj.getString("veryPopular"));
                                         recipe.put("weightWatcher", jObj.getString("weightWatcherSmartPoints"));
 
+                                        String[] intolerancesArray = intolerances.split("%2C");
+
+                                        for(String intolerance : intolerancesArray){
+                                            switch (intolerance) {
+
+                                                case "egg": recipe.put("eggFree", "true");
+                                                    break;
+
+                                                case "peanut": recipe.put("peanutFree", "true");
+                                                    break;
+
+                                                case "sesame": recipe.put("sesameFree", "true");
+                                                    break;
+
+                                                case "seafood": recipe.put("seafoodFree", "true");
+                                                    break;
+
+                                                case "shellfish": recipe.put("shellfishFree", "true");
+                                                    break;
+
+                                                case "soy": recipe.put("soyFree", "true");
+                                                    break;
+
+                                                case "wheat": recipe.put("wheatFree", "true");
+                                                    break;
+
+                                                default: break;
+                                            }
+                                        }
+
                                         JSONArray ingredientArray = jObj.getJSONArray("extendedIngredients");
                                         int len = ingredientArray.length();
 
@@ -192,25 +223,6 @@ public class MenuActivity extends AppCompatActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
-        /*
-        for(int i = 0; i < recipesList.size(); i++){
-
-            System.out.println("Saving Recipe...");
-            downloadTask2 task = new downloadTask2();
-            task.execute(recipesList.get(i));
-        }
-        */
-
-        /*
-        for(int i = 0; i < ingredientList.size(); i++){
-
-            System.out.println("Saving ingredient...");
-            downloadTask2 task = new downloadTask2();
-            task.execute(ingredientList.get(i));
-
-        }
-        */
         }
     }
 
