@@ -53,7 +53,7 @@ public class MenuActivity extends AppCompatActivity {
         //  pescetarian, lacto vegetarian, ovo vegetarian, vegan, and vegetarian.
         dietType = "";
 
-        // example intolerances=diary%2Cegg%2Cwheat seperate each intolerance with %2C
+        // example diary%2Cegg%2Cwheat seperate each intolerance with %2C
         //egg, peanut, sesame, seafood, shellfish, soy, and wheat.
         intolerances = "";
 
