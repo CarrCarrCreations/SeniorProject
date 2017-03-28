@@ -34,7 +34,8 @@
         <activity android:name=".DeleteEmployeeAccountActivity" />
         <activity android:name=".MenuActivity" />
         <activity android:name=".MenuMainActivity" />
-        <activity android:name=".MenuItemActivity"></activity>
+        <activity android:name=".MenuItemActivity" />
+        <activity android:name=".SubIngredientAvtivity"></activity>
     </application>
 
 </manifest>

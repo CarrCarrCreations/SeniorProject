@@ -72,5 +72,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/apiButton"
             android:onClick="openMenu" />
+
+        <Button
+            android:text="Create Substitute Database"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/subButton"
+            android:onClick="toSub" />
     </LinearLayout>
 </RelativeLayout>

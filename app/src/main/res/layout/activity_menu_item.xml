@@ -27,26 +27,31 @@
         android:layout_below="@+id/nameTextView"
         android:layout_centerHorizontal="true" />
 
-    <ScrollView
+    <Button
+        android:text="Add To Cart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/addCartButton"
+        android:onClick="addToCart"
         android:layout_below="@+id/ratingBar"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/linearLayout" >
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/commentsEditText"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:hint="Enter comments here..." />
 
-            <Button
-                android:text="Add To Cart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/addCartButton" />
-        </LinearLayout>
-    </ScrollView>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/addCartButton"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/commentsEditText"
+        android:id="@+id/ingredientsListView" />
 
 </RelativeLayout>
