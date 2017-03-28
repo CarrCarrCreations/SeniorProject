@@ -89,6 +89,7 @@ public class MenuItemActivity extends AppCompatActivity {
         if(menuItemName.matches("Remove Ingredient")){
 
             ingredientsArrayList.remove(itemSelectedTag);
+            ingredients.remove(itemSelectedTag);
             arrayAdapter.notifyDataSetChanged();
         }
 
@@ -101,10 +102,10 @@ public class MenuItemActivity extends AppCompatActivity {
 
         if(!comments.getText().toString().isEmpty()){
             comment = comments.getText().toString();
+            cartItem.put("Comment", comment);
         }
 
         cartItem.put("RecipeName", name);
-        cartItem.put("Comment", comment);
 
         // put each ingredients name and id
         for(int i = 0; i < ingredients.size(); i++){
