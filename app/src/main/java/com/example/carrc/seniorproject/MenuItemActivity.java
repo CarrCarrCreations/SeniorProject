@@ -39,12 +39,13 @@ public class MenuItemActivity extends AppCompatActivity {
 
     ArrayAdapter arrayAdapter;
     ArrayList<String> ingredientsArrayList = new ArrayList<>();
+    List<ingredientInfo> ingredients;
+    String menuItems[] = {"Remove Ingredient"};
 
     EditText comments;
 
     int ingredientNum;
-
-    List<ingredientInfo> ingredients;
+    int itemSelectedTag;
 
     String ingredientName;
     String ingredientID;
@@ -53,8 +54,9 @@ public class MenuItemActivity extends AppCompatActivity {
     String name;
     String id;
 
-
     RelativeLayout activity_menu_item;
+    ListView ingredientsListView;
+
 
     public class ingredientInfo {
         String ingredName;
@@ -63,16 +65,16 @@ public class MenuItemActivity extends AppCompatActivity {
     }
 
 
-    /*
     // create the menu for long pressing an item on the listView
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if(v.getId() == R.id.tablesWaitedListView){
+        if(v.getId() == R.id.ingredientsListView){
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             for(int i = 0; i < menuItems.length; i++){
                 menu.add(Menu.NONE, i, i,menuItems[i]);
             }
+            itemSelectedTag = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
         }
     }
 
@@ -82,38 +84,16 @@ public class MenuItemActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int menuItemIndex = item.getItemId();
         String menuItemName = menuItems[menuItemIndex];
-        String tableName = ((TextView) info.targetView).getText().toString();
 
 
-        if(menuItemName.matches("Messenger")){
+        if(menuItemName.matches("Remove Ingredient")){
 
-            Intent intent = new Intent(getApplicationContext(), EmployeeChatActivity.class);
-            intent.putExtra("staffName", tableName);
-            startActivity(intent);
-
-        }
-
-        if(menuItemName.matches("Remove Table")){
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Tables");
-            query.whereEqualTo("name", tableName);
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> objects, ParseException e) {
-                    if(e == null && objects.size() > 0){
-                        for(ParseObject object : objects){
-                            object.put("staff", "closed");
-                            tables.remove(object.getString("name"));
-                            arrayAdapter.notifyDataSetChanged();
-                            object.saveInBackground();
-                        }
-                    }
-                }
-            });
+            ingredientsArrayList.remove(itemSelectedTag);
+            arrayAdapter.notifyDataSetChanged();
         }
 
         return super.onContextItemSelected(item);
     }
-    */
 
 
     public void addToCart(View view){
@@ -217,75 +197,13 @@ public class MenuItemActivity extends AppCompatActivity {
         TextView nameTextView = (TextView) findViewById(R.id.nameTextView);
         nameTextView.setText(name);
 
-        ListView ingredientsListView = (ListView) findViewById(R.id.ingredientsListView);
+        ingredientsListView = (ListView) findViewById(R.id.ingredientsListView);
         registerForContextMenu(ingredientsListView);
+
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ingredientsArrayList);
         ingredientsListView.setAdapter(arrayAdapter);
 
         displayIngredients();
-
-        /*
-        linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
-
-        ingredientNum = 0;
-        whileState = true;
-
-        ingredients = new ArrayList<>();
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
-        query.whereContains("FoodID", id);
-
-        try {
-            List<ParseObject> objects = query.find();
-
-            ParseObject recipe = objects.get(0);
-            ingredients.clear();
-
-            do {
-
-                if(recipe.get("IngredientName" + ingredientNum) == null){
-                    break;
-                }
-
-                ingredientName = recipe.get("IngredientName" + ingredientNum).toString();
-                ingredientID = recipe.get("IngredientID" + ingredientNum).toString();
-
-                ingredientInfo ingredientInfo = new ingredientInfo();
-                ingredientInfo.ingredName = ingredientName;
-                ingredientInfo.ingredID = ingredientID;
-                ingredientInfo.ingredTag = ingredientNum;
-
-                ingredients.add(ingredientInfo);
-
-                final TextView textView = new TextView(getApplicationContext());
-                textView.setTextColor(Color.parseColor("Black"));
-                textView.setTag(ingredientNum);
-                textView.setPadding(0, 30, 0, 30);
-                textView.setText(ingredientName);
-
-                textView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        Toast.makeText(getBaseContext(), "Added to Cart", Toast.LENGTH_SHORT).show();
-                        return false;
-                    }
-                });
-
-                linearLayout.addView(textView);
-
-                ingredientNum++;
-
-            } while (ingredientName != null);
-
-            comments = new EditText(getApplicationContext());
-            comments.setHint("Enter comments here");
-            linearLayout.addView(comments);
-
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        */
     }
 }
