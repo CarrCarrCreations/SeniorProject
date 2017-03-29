@@ -68,6 +68,6 @@ public class DeleteEmployeeAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_employee_account);
 
-        setTitle("Delete Employee Account");
+        setTitle("delete Employee Account");
     }
 }

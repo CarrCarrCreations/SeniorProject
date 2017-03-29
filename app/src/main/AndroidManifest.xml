@@ -35,7 +35,8 @@
         <activity android:name=".MenuActivity" />
         <activity android:name=".MenuMainActivity" />
         <activity android:name=".MenuItemActivity" />
-        <activity android:name=".SubIngredientAvtivity"></activity>
+        <activity android:name=".SubIngredientAvtivity" />
+        <activity android:name=".CartActivity"></activity>
     </application>
 
 </manifest>

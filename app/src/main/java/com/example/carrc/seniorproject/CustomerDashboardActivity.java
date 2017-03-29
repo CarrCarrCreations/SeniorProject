@@ -56,6 +56,10 @@ public class CustomerDashboardActivity extends AppCompatActivity {
 
     }
 
+    public void toCart(View view){
+        Intent intent = new Intent(this, CartActivity.class);
+        startActivity(intent);
+    }
 
     public void menu(View view){
         Intent intent = new Intent(this, MenuMainActivity.class);

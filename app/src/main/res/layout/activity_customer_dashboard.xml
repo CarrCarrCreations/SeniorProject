@@ -30,5 +30,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/menuButton"
             android:onClick="menu" />
+
+        <Button
+            android:text="Cart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cartButton"
+            android:onClick="toCart" />
     </LinearLayout>
 </RelativeLayout>
