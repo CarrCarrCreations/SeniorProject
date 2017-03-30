@@ -35,8 +35,11 @@
         <activity android:name=".MenuActivity" />
         <activity android:name=".MenuMainActivity" />
         <activity android:name=".MenuItemActivity" />
-        <activity android:name=".SubIngredientAvtivity" />
-        <activity android:name=".CartActivity"></activity>
+        <activity android:name=".CartActivity" />
+        <activity android:name=".IngredientManagementActivity" />
+        <activity android:name=".EditIngredActivity" />
+        <activity android:name=".DeleteIngredActivity" />
+        <activity android:name=".AddIngredActivity"></activity>
     </application>
 
 </manifest>

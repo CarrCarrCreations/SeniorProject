@@ -32,10 +32,11 @@ public class ManagerDashboardActivity extends AppCompatActivity {
         finish();
     }
 
-    public void toSub(View view){
-        Intent intent = new Intent(this, SubIngredientAvtivity.class);
+    public void ingredientManagement(View view){
+        Intent intent = new Intent(this, IngredientManagementActivity.class);
         startActivity(intent);
     }
+
 
     public void openMenu(View view){
         Intent intent = new Intent(this, MenuActivity.class);
