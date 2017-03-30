@@ -53,6 +53,7 @@ public class MenuItemActivity extends AppCompatActivity {
     // Recipe name and id
     String name;
     String id;
+    String price;
 
     RelativeLayout activity_menu_item;
     ListView ingredientsListView;
@@ -106,6 +107,8 @@ public class MenuItemActivity extends AppCompatActivity {
         }
 
         cartItem.put("RecipeName", name);
+        cartItem.put("RecipeId", id);
+        cartItem.put("Price", price);
 
         // put each ingredients name and id
         for(int i = 0; i < ingredients.size(); i++){
@@ -143,6 +146,7 @@ public class MenuItemActivity extends AppCompatActivity {
         try {
             objects = query.find();
             ParseObject recipe = objects.get(0);
+            price = recipe.get("PricePerServing").toString();
 
             if(!ingredients.isEmpty()){
                 ingredients.clear();

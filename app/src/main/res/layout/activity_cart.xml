@@ -64,7 +64,7 @@
         android:layout_below="@+id/cartListView"
         android:layout_toEndOf="@+id/subtotalTextView"
         android:layout_marginStart="102dp"
-        android:id="@+id/subValueExtView"
+        android:id="@+id/subValueTextView"
         android:textSize="20sp" />
 
     <TextView
@@ -74,7 +74,7 @@
         android:id="@+id/taxValueTextView"
         android:textSize="20sp"
         android:layout_above="@+id/totalTextView"
-        android:layout_alignStart="@+id/subValueExtView" />
+        android:layout_alignStart="@+id/subValueTextView" />
 
     <TextView
         android:text="$20.00"

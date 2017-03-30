@@ -1,6 +1,7 @@
 package com.example.carrc.seniorproject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -21,6 +23,10 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +34,15 @@ class CustomList extends ArrayAdapter<String>{
 
     private final Activity context;
     private final List<String> recipeName;
+    private final List<String> recipePrice;
 
     public CustomList(Activity context,
-                      List<String> recipeName) {
+                      List<String> recipeName,
+                      List<String> recipePrice) {
         super(context, R.layout.list_single, recipeName);
         this.context = context;
         this.recipeName = recipeName;
+        this.recipePrice = recipePrice;
     }
 
 
@@ -46,7 +55,7 @@ class CustomList extends ArrayAdapter<String>{
         TextView price = (TextView) rowView.findViewById(R.id.txt1);
 
         name.setText(recipeName.get(position));
-        price.setText("5.00");
+        price.setText("$" + recipePrice.get(position));
 
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
@@ -94,6 +103,19 @@ public class CartActivity extends AppCompatActivity {
     ListView cartListView;
     CustomList adapter;
 
+    TextView subValueTextView;
+    TextView taxValueTextView;
+    TextView totalValueTextView;
+
+    List<String> recipeNames;
+    List<String> recipePrices;
+
+    NumberFormat nf;
+
+    public void checkOut(){
+
+    }
+
     public List<String> getRecipeNames() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Cart");
         query.whereEqualTo("Username", ParseUser.getCurrentUser().getUsername());
@@ -105,7 +127,6 @@ public class CartActivity extends AppCompatActivity {
             if(objects.size() > 0){
                 for(int i = 0; i < objects.size(); i++){
                     String name = objects.get(i).get("RecipeName").toString();
-                    Log.i("StringName", name);
                     names.add(name);
                 }
             }
@@ -117,6 +138,74 @@ public class CartActivity extends AppCompatActivity {
         return names;
     }
 
+    public List<String> getRecipePrice(){
+
+        List<String> prices = new ArrayList<>();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Cart");
+        query.whereEqualTo("Username", ParseUser.getCurrentUser().getUsername());
+
+        try {
+            List<ParseObject> objects = query.find();
+
+            if(objects.size() > 0){
+                for(int i = 0; i < objects.size(); i++){
+                    String name = objects.get(i).get("Price").toString();
+                    prices.add(name);
+                }
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return prices;
+    }
+
+    public String getSubTotal(){
+
+        String originalFormat;
+        String total;
+        float price = 0;
+
+        for(int i = 0; i < recipePrices.size(); i++){
+            originalFormat = (recipePrices.get(i));
+            price += Float.parseFloat(originalFormat);
+        }
+
+        total = String.valueOf(price);
+        subValueTextView.setText("$" + total);
+
+        return total;
+    }
+
+    public String getTax(double percentDecimal){
+        float taxCalc;
+        String tax;
+
+        taxCalc = Float.parseFloat(getSubTotal());
+        taxCalc *= percentDecimal;
+
+        tax = nf.format(taxCalc);
+
+        taxValueTextView.setText("$" + tax);
+
+        return tax;
+    }
+
+    public String getTotal(double percentDecimal){
+        double subTotal = Double.parseDouble(getSubTotal());
+        double tax = Double.parseDouble(getTax(percentDecimal));
+
+        double total = subTotal + tax;
+
+        String finalTotal = nf.format(total);
+
+        totalValueTextView.setText("$" + finalTotal);
+
+        return finalTotal;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,9 +213,17 @@ public class CartActivity extends AppCompatActivity {
 
         setTitle("Cart");
 
-        List<String> recipeNames = getRecipeNames();
+        subValueTextView = (TextView) findViewById(R.id.subValueTextView);
+        taxValueTextView = (TextView) findViewById(R.id.taxValueTextView);
+        totalValueTextView = (TextView) findViewById(R.id.totalValueTextView);
 
-        adapter = new CustomList(CartActivity.this, recipeNames);
+        nf = new DecimalFormat("##.##");
+
+        recipeNames = getRecipeNames();
+        recipePrices = getRecipePrice();
+        getTotal(.07);
+
+        adapter = new CustomList(CartActivity.this, recipeNames, recipePrices);
         cartListView = (ListView) findViewById(R.id.cartListView);
         cartListView.setAdapter(adapter);
     }
