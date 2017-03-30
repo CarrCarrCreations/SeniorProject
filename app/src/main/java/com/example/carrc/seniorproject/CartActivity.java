@@ -83,6 +83,7 @@ class CustomList extends ArrayAdapter<String>{
                             });
                             recipeName.remove(position);
                             notifyDataSetChanged();
+                            context.recreate();
                         }
                     }
                 });
@@ -173,7 +174,7 @@ public class CartActivity extends AppCompatActivity {
             price += Float.parseFloat(originalFormat);
         }
 
-        total = String.valueOf(price);
+        total = nf.format(price);
         subValueTextView.setText("$" + total);
 
         return total;
@@ -204,6 +205,11 @@ public class CartActivity extends AppCompatActivity {
         totalValueTextView.setText("$" + finalTotal);
 
         return finalTotal;
+    }
+
+    public void recreate(){
+        startActivity(getIntent());
+        finish();
     }
 
     @Override
