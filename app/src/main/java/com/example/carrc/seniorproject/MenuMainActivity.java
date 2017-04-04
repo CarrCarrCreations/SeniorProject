@@ -1,40 +1,40 @@
 package com.example.carrc.seniorproject;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.GridLayout;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+ import android.content.Intent;
+        import android.graphics.Bitmap;
+        import android.graphics.BitmapFactory;
+        import android.graphics.Color;
+        import android.os.AsyncTask;
+        import android.support.v7.app.AppCompatActivity;
+        import android.os.Bundle;
+        import android.util.Log;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.AdapterView;
+        import android.widget.CheckBox;
+        import android.widget.EditText;
+        import android.widget.GridLayout;
+        import android.widget.GridView;
+        import android.widget.ImageView;
+        import android.widget.LinearLayout;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+        import com.parse.FindCallback;
+        import com.parse.ParseException;
+        import com.parse.ParseObject;
+        import com.parse.ParseQuery;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.InterfaceAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
+        import java.io.IOException;
+        import java.io.InputStream;
+        import java.net.HttpURLConnection;
+        import java.net.InterfaceAddress;
+        import java.net.MalformedURLException;
+        import java.net.URL;
+        import java.util.ArrayList;
+        import java.util.List;
+        import java.util.Random;
+        import java.util.concurrent.ExecutionException;
 
 public class MenuMainActivity extends AppCompatActivity {
 
@@ -56,6 +56,8 @@ public class MenuMainActivity extends AppCompatActivity {
     CheckBox shellfishCheckBox;
     CheckBox soyCheckBox;
     CheckBox wheatCheckBox;
+    CheckBox veganCheckBox;
+    CheckBox vegetarianCheckBox;
 
     public class RecipeInfo {
 
@@ -82,9 +84,16 @@ public class MenuMainActivity extends AppCompatActivity {
             // if the current checkbox is selected
             if(checkBoxes[i].isChecked()){
                 // get the intolerance name from the checkbox and lowercase it
+                String formattedText = "";
                 String checkboxText = checkBoxes[i].getText().toString().toLowerCase();
+
                 // add the Free to the text so it matches the database entry name
-                String formattedText = checkboxText + "Free";
+                if(checkboxText.matches("vegan") || checkboxText.matches("vegetarian")){
+                    formattedText = checkboxText;
+            } else {
+                    formattedText = checkboxText + "Free";
+                }
+
                 // add to intolerance list
                 intoleranceQueries.add(formattedText);
             }
@@ -128,6 +137,7 @@ public class MenuMainActivity extends AppCompatActivity {
             for (int i = 0; i < intoleranceFilters.size(); i++) {
                 Log.i("Intolerance",intoleranceFilters.get(i));
                 query.whereEqualTo(intoleranceFilters.get(i), "true");
+                queryMealType.whereEqualTo(intoleranceFilters.get(i), "true");
             }
         }
 
@@ -373,11 +383,14 @@ public class MenuMainActivity extends AppCompatActivity {
         shellfishCheckBox = (CheckBox) findViewById(R.id.shellfishCheckBox);
         soyCheckBox = (CheckBox) findViewById(R.id.soyCheckBox);
         wheatCheckBox = (CheckBox) findViewById(R.id.wheatCheckBox);
+        veganCheckBox = (CheckBox) findViewById(R.id.veganCheckBox);
+        vegetarianCheckBox = (CheckBox) findViewById(R.id.vegetarianCheckBox);
 
         searchEditText = (EditText) findViewById(R.id.searchEditText);
 
         checkBoxes = new CheckBox[]{dairyCheckBox, eggCheckBox, glutenCheckBox, peanutCheckBox,
-                sesameCheckBox, seafoodCheckBox, shellfishCheckBox, soyCheckBox, wheatCheckBox};
+                sesameCheckBox, seafoodCheckBox, shellfishCheckBox, soyCheckBox, wheatCheckBox,
+                veganCheckBox, vegetarianCheckBox};
 
         filterGridLayout = (GridLayout) findViewById(R.id.filterGridLayout);
         linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
@@ -388,3 +401,5 @@ public class MenuMainActivity extends AppCompatActivity {
         displayMenu();
     }
 }
+
+
