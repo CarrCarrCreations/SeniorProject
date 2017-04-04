@@ -35,6 +35,8 @@
         <activity android:name=".MenuActivity" />
         <activity android:name=".MenuMainActivity" />
         <activity android:name=".MenuItemActivity"></activity>
+        <activity android:name=".CreateRecipeActivity"></activity>
+
     </application>
 
 </manifest>
