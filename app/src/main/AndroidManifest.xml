@@ -37,9 +37,6 @@
         <activity android:name=".MenuItemActivity" />
         <activity android:name=".CartActivity" />
         <activity android:name=".IngredientManagementActivity" />
-        <activity android:name=".EditIngredActivity" />
-        <activity android:name=".DeleteIngredActivity" />
-        <activity android:name=".AddIngredActivity"></activity>
         <activity android:name=".CreateRecipeActivity"></activity>
 
     </application>

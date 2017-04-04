@@ -7,21 +7,6 @@ import android.view.View;
 
 public class IngredientManagementActivity extends AppCompatActivity {
 
-    public void addIngred(View view){
-        Intent intent = new Intent(this, AddIngredActivity.class);
-        startActivity(intent);
-    }
-
-    public void editIngred(View view){
-        Intent intent = new Intent(this, EditIngredActivity.class);
-        startActivity(intent);
-    }
-
-    public void deleteIngred(View view){
-        Intent intent = new Intent(this, DeleteIngredActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
