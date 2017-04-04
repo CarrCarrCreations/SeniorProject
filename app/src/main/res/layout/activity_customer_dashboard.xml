@@ -37,5 +37,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/cartButton"
             android:onClick="toCart" />
+
+        <Button
+            android:id="@+id/createRecipeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="openRecipe"
+            android:text="Create Recipe" />
+
     </LinearLayout>
 </RelativeLayout>

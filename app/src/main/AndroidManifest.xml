@@ -40,6 +40,8 @@
         <activity android:name=".EditIngredActivity" />
         <activity android:name=".DeleteIngredActivity" />
         <activity android:name=".AddIngredActivity"></activity>
+        <activity android:name=".CreateRecipeActivity"></activity>
+
     </application>
 
 </manifest>
