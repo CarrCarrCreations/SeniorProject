@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_cart"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.carrc.seniorproject.CartActivity">
+
+    <TextView
+        android:text="Subtotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="150dp"
+        android:id="@+id/subtotalTextView"
+        android:textSize="20sp" />
+
+    <TextView
+        android:text="Tax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/subtotalTextView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="34dp"
+        android:id="@+id/taxTextView"
+        android:textSize="20sp" />
+
+    <TextView
+        android:text="Total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/totalTextView"
+        android:textSize="20sp"
+        android:layout_below="@+id/taxTextView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="13dp" />
+
+    <Button
+        android:text="Checkout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/button"
+        android:onClick="checkOut" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/subtotalTextView"
+        android:id="@+id/cartListView" />
+
+    <TextView
+        android:text="$5.00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cartListView"
+        android:layout_toEndOf="@+id/subtotalTextView"
+        android:layout_marginStart="102dp"
+        android:id="@+id/subValueTextView"
+        android:textSize="20sp" />
+
+    <TextView
+        android:text="$2.00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/taxValueTextView"
+        android:textSize="20sp"
+        android:layout_above="@+id/totalTextView"
+        android:layout_alignStart="@+id/subValueTextView" />
+
+    <TextView
+        android:text="$20.00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/totalValueTextView"
+        android:textSize="20sp"
+        android:layout_alignBaseline="@+id/totalTextView"
+        android:layout_alignBottom="@+id/totalTextView"
+        android:layout_alignStart="@+id/taxValueTextView" />
+</RelativeLayout>

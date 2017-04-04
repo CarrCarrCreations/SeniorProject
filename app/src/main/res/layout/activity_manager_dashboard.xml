@@ -72,5 +72,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/apiButton"
             android:onClick="openMenu" />
+
+        <Button
+            android:text="Ingredient Management"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ingredientManagementButton"
+            android:onClick="ingredientManagement" />
+
     </LinearLayout>
 </RelativeLayout>

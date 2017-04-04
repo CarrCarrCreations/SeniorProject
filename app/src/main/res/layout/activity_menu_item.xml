@@ -19,4 +19,39 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:textColor="@android:color/black" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratingBar"
+        android:layout_below="@+id/nameTextView"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Add To Cart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addCartButton"
+        android:onClick="addToCart"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/commentsEditText"
+        android:hint="Enter comments here..."
+        android:layout_above="@+id/addCartButton"
+        android:layout_alignParentStart="true" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ratingBar"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/commentsEditText"
+        android:id="@+id/ingredientsListView" />
+
 </RelativeLayout>
