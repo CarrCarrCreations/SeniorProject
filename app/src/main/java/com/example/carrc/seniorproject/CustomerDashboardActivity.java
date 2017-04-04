@@ -71,10 +71,6 @@ public class CustomerDashboardActivity extends AppCompatActivity {
 
     }
 
-    public void openRecipe(View view) {
-       Intent intent = new Intent(this, CreateRecipeActivity.class);
-       startActivity(intent);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

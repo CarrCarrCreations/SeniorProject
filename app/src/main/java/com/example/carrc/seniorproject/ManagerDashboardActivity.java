@@ -32,6 +32,11 @@ public class ManagerDashboardActivity extends AppCompatActivity {
         finish();
     }
 
+    public void recipeManagement(View view) {
+        Intent intent = new Intent(this, RecipeManagementActivity.class);
+        startActivity(intent);
+    }
+
     public void ingredientManagement(View view){
         Intent intent = new Intent(this, IngredientManagementActivity.class);
         startActivity(intent);
