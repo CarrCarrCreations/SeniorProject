@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -66,6 +67,15 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void recipe(View view){
+
+    }
+
+    public void openRecipe(View view) {
+       Intent intent = new Intent(this, CreateRecipeActivity.class);
+       startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -100,4 +110,6 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         // query the name of the waiter currently working the apps saved table number
         locateWaiter();
     }
+
 }
+
