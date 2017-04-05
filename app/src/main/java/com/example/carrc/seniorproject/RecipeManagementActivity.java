@@ -12,6 +12,11 @@ public class RecipeManagementActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void editRecipe(View view) {
+        Intent intent = new Intent(this, EditRecipeActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
