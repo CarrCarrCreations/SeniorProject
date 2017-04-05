@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -26,9 +27,104 @@ public class EditRecipeActivity extends AppCompatActivity{
 
     int prevTextViewId = 0;
     ArrayList<EditText> ingredients = new ArrayList<EditText>();
+    String objectId = "ihtkJl2lYz";
 
-    public void update() {
+    public void update(View view) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
+        //query.whereContains("objectId", objectId);
+        query.getInBackground(objectId, new GetCallback<ParseObject>() {  //retrieve serverID instead of object from parse
+            public void done(ParseObject recipe, ParseException e) {
+                if (e == null) {
 
+                    int listCount = 0;
+
+                    // Food name
+
+                    EditText name = (EditText) findViewById(R.id.recipeText);
+
+                    // Intolerance Checkboxes
+
+                    CheckBox dairyCheckBox = (CheckBox) findViewById(R.id.dairyCheckBox);
+                    CheckBox glutenCheckBox = (CheckBox) findViewById(R.id.glutenCheckBox);
+                    CheckBox peanutCheckBox = (CheckBox) findViewById(R.id.peanutCheckBox);
+                    CheckBox seafoodCheckBox = (CheckBox) findViewById(R.id.seafoodCheckBox);
+                    CheckBox veganCheckBox = (CheckBox) findViewById(R.id.veganCheckBox);
+                    CheckBox vegetarianCheckBox = (CheckBox) findViewById(R.id.vegetarianCheckBox);
+                    CheckBox veryPopularCheckBox = (CheckBox) findViewById(R.id.veryPopularCheckBox);
+                    CheckBox veryHealthyCheckBox = (CheckBox) findViewById(R.id.healthyCheckBox);
+                /*
+                    CheckBox eggCheckBox = (CheckBox) findViewById(R.id.eggCheckBox);
+                    CheckBox sesameCheckBox = (CheckBox) findViewById(R.id.sesameCheckBox);
+                    CheckBox shellfishCheckBox = (CheckBox) findViewById(R.id.shellfishCheckBox);
+                    CheckBox soyCheckBox = (CheckBox) findViewById(R.id.soyCheckBox);
+                    CheckBox wheatCheckBox = (CheckBox) findViewById(R.id.wheatCheckBox);
+                */
+
+                    // image
+                    EditText imageUrl = (EditText) findViewById(R.id.imageUrl);
+
+                    // EditTexts
+
+                    EditText pricePerServing = (EditText) findViewById(R.id.pricePerServing);
+                    EditText course = (EditText) findViewById(R.id.course);
+                    EditText mealType = (EditText) findViewById(R.id.mealType);
+                    EditText weightWatcher = (EditText) findViewById(R.id.weightWatcher);
+
+
+                    // SQL PUSH all ingredients,
+
+                    ParseObject recipeNew = new ParseObject("Recipes");
+
+                    recipe.put("IngredientName0", ingredients.get(listCount).getText().toString());
+                    recipe.put("IngredientAmount0", ingredients.get(listCount+1).getText().toString());
+                    recipe.put("IngredientUnit0", ingredients.get(listCount+2).getText().toString());
+                    recipe.put("Image", imageUrl.getText().toString());
+                    recipe.put("ItemTitle", name.getText().toString());
+                    recipe.put("dairyFree", (Boolean.toString(dairyCheckBox.isChecked())));
+                    recipe.put("glutenFree", (Boolean.toString(glutenCheckBox.isChecked())));
+                    recipe.put("peanutFree", Boolean.toString(peanutCheckBox.isChecked()));
+                    recipe.put("seafoodFree", Boolean.toString(seafoodCheckBox.isChecked()));
+                    recipe.put("vegan", Boolean.toString(veganCheckBox.isChecked()));
+                    recipe.put("vegetarian", Boolean.toString(vegetarianCheckBox.isChecked()));
+                    recipe.put("veryHealthy", Boolean.toString(veryHealthyCheckBox.isChecked()));
+                    recipe.put("veryPopular", Boolean.toString(veryPopularCheckBox.isChecked()));
+                    // Need to change?
+                    recipe.put("cheap", "false");
+//
+                    recipe.put("PricePerServing", pricePerServing.getText().toString());
+                    recipe.put("course", course.getText().toString());
+                    recipe.put("mealType", mealType.getText().toString());
+                    recipe.put("weightWatcher", pricePerServing.getText().toString());
+
+                    listCount +=3;
+
+
+                    for(int i=1; i<prevTextViewId; i++){
+
+                        recipe.put( "IngredientName" + ( (listCount/3) ) ,ingredients.get(listCount).getText().toString() );
+                        recipe.put( "IngredientAmount" + ( (listCount/3) ) ,ingredients.get(listCount+1).getText().toString() );
+                        recipe.put( "IngredientUnit" + ( (listCount/3) ) ,ingredients.get(listCount+2).getText().toString() );
+
+                        listCount += 3;
+                    }
+
+                    recipe.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e == null) {
+
+                            } else {
+                                System.out.println(e.getMessage());
+                            }
+                        }
+                    });
+
+
+                }
+            }
+        });
+
+        Toast.makeText(this, "Recipe updated in the database!", Toast.LENGTH_SHORT).show();
     }
 
     public void fillRest(ParseObject recipe){
@@ -145,7 +241,7 @@ public class EditRecipeActivity extends AppCompatActivity{
         setContentView(R.layout.activity_edit_recipe);
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
-        query.whereEqualTo("objectId", "4pDX0lTAkm");
+        query.whereEqualTo("objectId", objectId);
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -221,93 +317,6 @@ public class EditRecipeActivity extends AppCompatActivity{
         // Food name
 
 
-
-    }
-
-    public void display(View view) throws ParseException {
-
-        int listCount = 0;
-
-        // Food name
-
-        EditText name = (EditText) findViewById(R.id.recipeText);
-
-        // Intolerance Checkboxes
-
-        CheckBox dairyCheckBox = (CheckBox) findViewById(R.id.dairyCheckBox);
-        CheckBox glutenCheckBox = (CheckBox) findViewById(R.id.glutenCheckBox);
-        CheckBox peanutCheckBox = (CheckBox) findViewById(R.id.peanutCheckBox);
-        CheckBox seafoodCheckBox = (CheckBox) findViewById(R.id.seafoodCheckBox);
-        CheckBox veganCheckBox = (CheckBox) findViewById(R.id.veganCheckBox);
-        CheckBox vegetarianCheckBox = (CheckBox) findViewById(R.id.vegetarianCheckBox);
-        CheckBox veryPopularCheckBox = (CheckBox) findViewById(R.id.veryPopularCheckBox);
-        CheckBox veryHealthyCheckBox = (CheckBox) findViewById(R.id.healthyCheckBox);
-    /*
-        CheckBox eggCheckBox = (CheckBox) findViewById(R.id.eggCheckBox);
-        CheckBox sesameCheckBox = (CheckBox) findViewById(R.id.sesameCheckBox);
-        CheckBox shellfishCheckBox = (CheckBox) findViewById(R.id.shellfishCheckBox);
-        CheckBox soyCheckBox = (CheckBox) findViewById(R.id.soyCheckBox);
-        CheckBox wheatCheckBox = (CheckBox) findViewById(R.id.wheatCheckBox);
-    */
-
-        // image
-        EditText imageUrl = (EditText) findViewById(R.id.imageUrl);
-
-        // EditTexts
-
-        EditText pricePerServing = (EditText) findViewById(R.id.pricePerServing);
-        EditText course = (EditText) findViewById(R.id.course);
-        EditText mealType = (EditText) findViewById(R.id.mealType);
-        EditText weightWatcher = (EditText) findViewById(R.id.weightWatcher);
-
-
-        // SQL PUSH all ingredients,
-
-        ParseObject recipe = new ParseObject("Recipes");
-
-        recipe.put("IngredientName0", ingredients.get(listCount).getText().toString());
-        recipe.put("IngredientAmount0", ingredients.get(listCount+1).getText().toString());
-        recipe.put("IngredientUnit0", ingredients.get(listCount+2).getText().toString());
-        recipe.put("Image", imageUrl.getText().toString());
-        recipe.put("ItemTitle", name.getText().toString());
-        recipe.put("dairyFree", (Boolean.toString(dairyCheckBox.isChecked())));
-        recipe.put("glutenFree", (Boolean.toString(glutenCheckBox.isChecked())));
-        recipe.put("peanutFree", Boolean.toString(peanutCheckBox.isChecked()));
-        recipe.put("seafoodFree", Boolean.toString(seafoodCheckBox.isChecked()));
-        recipe.put("vegan", Boolean.toString(veganCheckBox.isChecked()));
-        recipe.put("vegetarian", Boolean.toString(vegetarianCheckBox.isChecked()));
-        recipe.put("veryHealthy", Boolean.toString(veryHealthyCheckBox.isChecked()));
-        recipe.put("veryPopular", Boolean.toString(veryPopularCheckBox.isChecked()));
-        // Need to change?
-        recipe.put("cheap", "false");
-//
-        recipe.put("PricePerServing", pricePerServing.getText().toString());
-        recipe.put("course", course.getText().toString());
-        recipe.put("mealType", mealType.getText().toString());
-        recipe.put("weightWatcher", pricePerServing.getText().toString());
-
-        listCount +=3;
-
-
-        for(int i=1; i<prevTextViewId; i++){
-
-            recipe.put( "IngredientName" + ( (listCount/3) ) ,ingredients.get(listCount).getText().toString() );
-            recipe.put( "IngredientAmount" + ( (listCount/3) ) ,ingredients.get(listCount+1).getText().toString() );
-            recipe.put( "IngredientUnit" + ( (listCount/3) ) ,ingredients.get(listCount+2).getText().toString() );
-
-            listCount += 3;
-        }
-
-        recipe.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null) {
-
-                } else {
-                    System.out.println(e.getMessage());
-                }
-            }
-        });
 
     }
 
