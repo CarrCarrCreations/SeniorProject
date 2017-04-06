@@ -27,9 +27,10 @@ public class EditRecipeActivity extends AppCompatActivity{
 
     int prevTextViewId = 0;
     ArrayList<EditText> ingredients = new ArrayList<EditText>();
-    String objectId = "ihtkJl2lYz";
+    String objectId = "";
 
     public void update(View view) {
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
         //query.whereContains("objectId", objectId);
         query.getInBackground(objectId, new GetCallback<ParseObject>() {  //retrieve serverID instead of object from parse
@@ -180,7 +181,7 @@ public class EditRecipeActivity extends AppCompatActivity{
 
                     String x = "IngredientName";
                     int ingCount = 1;
-                    System.out.println(x+ingCount);
+                    //System.out.println(x+ingCount);
                     //while recipe.get(IngredientNameX) is not null, if IngredientNameX is not null, it has a triple
                     // where Name Amount and Unit are all not null
                     while(recipe.get(x + ingCount)!= null){
@@ -239,6 +240,8 @@ public class EditRecipeActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recipe);
+
+        //TODO : get ObjectId for user chosen recipe (before everything loads)
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
         query.whereEqualTo("objectId", objectId);
@@ -315,6 +318,7 @@ public class EditRecipeActivity extends AppCompatActivity{
         // populate fields
 
         // Food name
+
 
 
 

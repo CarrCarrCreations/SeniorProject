@@ -9,17 +9,23 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseRole;
 import com.parse.SaveCallback;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.TimeZone;
 
 /**
  * Created by scottieb on 3/26/17.
@@ -29,6 +35,11 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
     int prevTextViewId = 0;
     ArrayList<EditText> ingredients = new ArrayList<EditText>();
+    ParseObject first;
+    List<ParseObject> x;
+    String constant ="";
+    String objectId = "before";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -37,8 +48,61 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
     }
 
-    public void display(View view) throws ParseException {
+    public void finish(List<ParseObject> objects){
 
+    }
+
+    public void getPreviousRecipe(){
+
+    }
+
+    public void submit(View view) throws ParseException {
+
+        // give recipe new Id
+        int recipeId = (int) (Math.random()* 70001 ) + 1;
+        boolean taken = false;
+        while(!taken){
+            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Recipes");
+            if(query.whereEqualTo("FoodID", Integer.toString(recipeId)).count() == 0){
+                taken = true;
+
+            } else {
+            }
+
+        }
+
+        //System.out.println(objectId);
+       // System.out.println(objectId);
+
+        //System.out.println(objectId);
+
+//        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Recipes");
+//        // query.orderByDescending("createdAt");
+//        query.addDescendingOrder("createdAt");
+//        // query.toString();
+//        System.out.println("::::::::::::::::::QUERY:::::::::::::::" + query);
+//        try {
+//            x = query.find();
+//        } catch (ParseException e) {
+//            Log.e("Error", e.getMessage());
+//            e.printStackTrace();
+//        }
+//        if (x.size() > 0) {
+//            for(ParseObject ob: x){
+//
+//                System.out.println(.get(0).get("createdAt").toString());
+//
+//
+//            }
+//        }
+
+
+
+
+        //System.out.println(first.get("objectId").toString());
+        //String oldRecipeId = query.get("objectId").toString();
+        //int oldFoodID = Integer.parseInt(query.get("FoodID").toString());
+       // System.out.println(oldFoodID);
         int listCount = 0;
 
         // Food name
@@ -77,10 +141,63 @@ public class CreateRecipeActivity extends AppCompatActivity {
         // SQL PUSH all ingredients,
 
         ParseObject recipe = new ParseObject("Recipes");
+        recipe.put("FoodID", Integer.toString(recipeId));
+        int ingredientId;
+            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Ingredients");
+            if(query.whereEqualTo("Name", ingredients.get(listCount).getText().toString()).count() == 0){
+                //Not an ingredient that already exists
+                ParseObject ingredient = new ParseObject("Ingredients");
+                ingredient.put("Name", ingredients.get(listCount).getText().toString());
+                ingredient.put("Unit", ingredients.get(listCount+2).getText().toString());
 
-        recipe.put("IngredientName0", ingredients.get(listCount).getText().toString());
-        recipe.put("IngredientAmount0", ingredients.get(listCount+1).getText().toString());
-        recipe.put("IngredientUnit0", ingredients.get(listCount+2).getText().toString());
+                ingredientId = (int) (Math.random()* 1000001 ) + 1;
+                taken = false;
+                while(!taken){
+                    ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Ingredients");
+                    if(query.whereEqualTo("ID", Integer.toString(ingredientId)).count() == 0){
+                        taken = true;
+
+                    } else {
+                    }
+
+                }
+
+                ingredient.put("ID", Integer.toString(ingredientId));
+
+                recipe.put("IngredientName0", ingredients.get(listCount).getText().toString());
+                recipe.put("IngredientAmount0", ingredients.get(listCount+1).getText().toString());
+                recipe.put("IngredientUnit0", ingredients.get(listCount+2).getText().toString());
+                recipe.put("IngredientID0", Integer.toString(ingredientId));
+
+            } else {
+                // ingredient exists
+
+
+
+                ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Ingredients");
+                query2.whereEqualTo("Name", ingredients.get(listCount).getText().toString());
+                ParseObject ingredient;
+                String[] namesAndEmails = {};
+                try {
+                    ingredient = query2.getFirst();
+                    //query.whereNotContainedIn("username", person.getList("friends"));
+                    //query.whereNotContainedIn("email", n);
+                    //query.setLimit(15);
+                    recipe.put("IngredientID0", ingredient.get("ID").toString());
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+
+
+
+                recipe.put("IngredientName0", ingredients.get(listCount).getText().toString());
+                recipe.put("IngredientAmount0", ingredients.get(listCount+1).getText().toString());
+                recipe.put("IngredientUnit0", ingredients.get(listCount+2).getText().toString());
+
+                // get ingredient ID
+
+              }
+
         recipe.put("Image", imageUrl.getText().toString());
         recipe.put("ItemTitle", name.getText().toString());
         recipe.put("dairyFree", (Boolean.toString(dairyCheckBox.isChecked())));
@@ -104,9 +221,50 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
         for(int i=1; i<prevTextViewId; i++){
 
-            recipe.put( "IngredientName" + ( (listCount/3) ) ,ingredients.get(listCount).getText().toString() );
-            recipe.put( "IngredientAmount" + ( (listCount/3) ) ,ingredients.get(listCount+1).getText().toString() );
-            recipe.put( "IngredientUnit" + ( (listCount/3) ) ,ingredients.get(listCount+2).getText().toString() );
+
+            if(query.whereEqualTo("Name", ingredients.get(listCount).getText().toString()).count() == 0){
+                //Not an ingredient that already exists
+                ParseObject ingredient = new ParseObject("Ingredients");
+                ingredient.put("Name", ingredients.get(listCount).getText().toString());
+                ingredient.put("Unit", ingredients.get(listCount+2).getText().toString());
+
+                ingredientId = (int) (Math.random()* 1000001 ) + 1;
+                taken = false;
+                while(!taken){
+                    ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Ingredients");
+                    if(query.whereEqualTo("ID", Integer.toString(ingredientId)).count() == 0){
+                        taken = true;
+
+                    } else {
+                    }
+
+                }
+
+                ingredient.put("ID", Integer.toString(ingredientId));
+
+                recipe.put("IngredientName" + ( (listCount/3) ), ingredients.get(listCount).getText().toString());
+                recipe.put("IngredientAmount" + ( (listCount/3) ), ingredients.get(listCount+1).getText().toString());
+                recipe.put("IngredientUnit" + ( (listCount/3) ), ingredients.get(listCount+2).getText().toString());
+                recipe.put("IngredientID" + ( (listCount/3) ), Integer.toString(ingredientId));
+
+            } else {
+                // ingredient exists
+
+//                ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Recipes");
+//                query2.whereEqualTo("Name", ingredients.get(listCount).getText().toString());
+//                query2.findInBackground(new FindCallback&lt;ParseObject&gt;() {
+//                    public void done(List&lt;ParseObject&gt; objects, ParseException e) {
+//                      if (e == null) {
+//                          objectsWereRetrievedSuccessfully(objects);
+//                      } else {
+//                          objectRetrievalFailed();
+//                      }
+//                  }
+                recipe.put("IngredientName" + ( (listCount/3) ), ingredients.get(listCount).getText().toString());
+                recipe.put("IngredientAmount" + ( (listCount/3) ), ingredients.get(listCount+1).getText().toString());
+                recipe.put("IngredientUnit" + ( (listCount/3) ), ingredients.get(listCount+2).getText().toString());
+
+            }
 
             listCount += 3;
         }
@@ -121,6 +279,8 @@ public class CreateRecipeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Toast.makeText(this, "Recipe created in the database!", Toast.LENGTH_SHORT).show();
 
     }
 
