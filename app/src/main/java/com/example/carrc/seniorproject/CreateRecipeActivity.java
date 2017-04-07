@@ -121,13 +121,13 @@ public class CreateRecipeActivity extends AppCompatActivity {
             CheckBox vegetarianCheckBox = (CheckBox) findViewById(R.id.vegetarianCheckBox);
             CheckBox veryPopularCheckBox = (CheckBox) findViewById(R.id.veryPopularCheckBox);
             CheckBox veryHealthyCheckBox = (CheckBox) findViewById(R.id.healthyCheckBox);
-        /*
+
             CheckBox eggCheckBox = (CheckBox) findViewById(R.id.eggCheckBox);
             CheckBox sesameCheckBox = (CheckBox) findViewById(R.id.sesameCheckBox);
             CheckBox shellfishCheckBox = (CheckBox) findViewById(R.id.shellfishCheckBox);
             CheckBox soyCheckBox = (CheckBox) findViewById(R.id.soyCheckBox);
             CheckBox wheatCheckBox = (CheckBox) findViewById(R.id.wheatCheckBox);
-        */
+
 
             // image
             EditText imageUrl = (EditText) findViewById(R.id.imageUrl);
@@ -217,6 +217,11 @@ public class CreateRecipeActivity extends AppCompatActivity {
             recipe.put("vegetarian", Boolean.toString(vegetarianCheckBox.isChecked()));
             recipe.put("veryHealthy", Boolean.toString(veryHealthyCheckBox.isChecked()));
             recipe.put("veryPopular", Boolean.toString(veryPopularCheckBox.isChecked()));
+            recipe.put("eggFree", Boolean.toString(eggCheckBox.isChecked()));
+            recipe.put("soyFree", Boolean.toString(soyCheckBox.isChecked()));
+            recipe.put("sesameFree", Boolean.toString(sesameCheckBox.isChecked()));
+            recipe.put("shellfishFree", Boolean.toString(shellfishCheckBox.isChecked()));
+            recipe.put("wheatFree", Boolean.toString(wheatCheckBox.isChecked()));
             // Need to change?
             recipe.put("cheap", "false");
             //

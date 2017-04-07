@@ -20,45 +20,50 @@ import com.parse.ParseQuery;
 public class DeleteRecipeActivity extends AppCompatActivity {
 
     String FoodID = "";
-    public void deleteRecipe(View view){
-        //get recipe in search view
+    public void deleteRecipe(View view) throws ParseException {
+
         EditText deleteRecipeText = (EditText) findViewById(R.id.editText);
-        String deleteRecipeName = deleteRecipeText.getText().toString();
 
-        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Recipes");
-        query2.whereEqualTo("ItemTitle",deleteRecipeName);
-        ParseObject recipe;
-        try {
-            recipe = query2.getFirst();
-            //query.whereNotContainedIn("username", person.getList("friends"));
-            //query.whereNotContainedIn("email", n);
-            //query.setLimit(15);
-            //recipe.put("IngredientID0", ingredient.get("ID").toString());
-            FoodID = recipe.get("FoodID").toString();
-        } catch (ParseException e1) {
-            e1.printStackTrace();
+        ParseQuery<ParseObject> query3 = new ParseQuery<ParseObject>("Recipes");
+        if(query3.whereEqualTo("ItemTitle", deleteRecipeText.getText().toString()).count() == 1) {
+            //get recipe in search view
+            String deleteRecipeName = deleteRecipeText.getText().toString();
+
+            ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Recipes");
+            query2.whereEqualTo("ItemTitle", deleteRecipeName);
+            ParseObject recipe;
+            try {
+                recipe = query2.getFirst();
+                //query.whereNotContainedIn("username", person.getList("friends"));
+                //query.whereNotContainedIn("email", n);
+                //query.setLimit(15);
+                //recipe.put("IngredientID0", ingredient.get("ID").toString());
+                FoodID = recipe.get("FoodID").toString();
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
+
+            //ask for confirmation
+
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Deleting Recipe")
+                    .setMessage("Are you sure you want to delete this recipe?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // delete from database
+                            finishDelete();
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+
+            //delete from database
+        } else {
+            Toast.makeText(this, "Recipe does not exist in the database!", Toast.LENGTH_SHORT).show();
         }
-
-        //ask for confirmation
-
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Deleting Recipe")
-                .setMessage("Are you sure you want to delete this recipe?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // delete from database
-                        finishDelete();
-                    }
-
-                })
-                .setNegativeButton("No", null)
-                .show();
-
-        //delete from database
-
     }
 
     public void finishDelete(){

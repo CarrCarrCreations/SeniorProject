@@ -21,13 +21,21 @@
             android:visibility="visible"
             tools:context="com.example.carrc.seniorproject.CreateRecipeActivity">
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Recipe Name" />
+
             <EditText
                 android:id="@+id/editRecipeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_below="@id/textView"
                 android:gravity="center"
-                android:text="EditText"
+                android:hint="Recipe Name"
 
                 />
 

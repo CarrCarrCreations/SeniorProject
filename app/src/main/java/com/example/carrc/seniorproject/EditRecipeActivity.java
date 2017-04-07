@@ -249,31 +249,41 @@ public class EditRecipeActivity extends AppCompatActivity{
 
     }
 
-    public void changeLayout(View view) {
-        EditText editRecipeText = (EditText) findViewById(R.id.editRecipeName);
-        String editRecipeName = editRecipeText.getText().toString();
+    public void changeLayout(View view) throws ParseException {
 
-        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Recipes");
-        query2.whereEqualTo("ItemTitle",editRecipeName);
-        ParseObject recipe;
-        try {
-            recipe = query2.getFirst();
-            //query.whereNotContainedIn("username", person.getList("friends"));
-            //query.whereNotContainedIn("email", n);
-            //query.setLimit(15);
-            //recipe.put("IngredientID0", ingredient.get("ID").toString());
-            FoodID = recipe.get("FoodID").toString();
-        } catch (ParseException e1) {
-            e1.printStackTrace();
+        EditText editRecipeText = (EditText) findViewById(R.id.editRecipeName);
+
+        ParseQuery<ParseObject> query3 = new ParseQuery<ParseObject>("Recipes");
+        if(query3.whereEqualTo("ItemTitle", editRecipeText.getText().toString()).count() == 1) {
+
+            String editRecipeName = editRecipeText.getText().toString();
+
+            ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Recipes");
+            query2.whereEqualTo("ItemTitle",editRecipeName);
+            ParseObject recipe;
+            try {
+                recipe = query2.getFirst();
+                //query.whereNotContainedIn("username", person.getList("friends"));
+                //query.whereNotContainedIn("email", n);
+                //query.setLimit(15);
+                //recipe.put("IngredientID0", ingredient.get("ID").toString());
+                FoodID = recipe.get("FoodID").toString();
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
+
+            RelativeLayout editLayout = (RelativeLayout) findViewById(R.id.editLayout);
+            editLayout.setVisibility(View.INVISIBLE);
+
+            RelativeLayout recipeLayout = (RelativeLayout) findViewById(R.id.activity_create_recipe);
+            recipeLayout.setVisibility(View.VISIBLE);
+
+            getRecipe(FoodID);
+        } else {
+            Toast.makeText(this, "Recipe does not exist in the database!", Toast.LENGTH_SHORT).show();
+
         }
 
-        RelativeLayout editLayout = (RelativeLayout) findViewById(R.id.editLayout);
-        editLayout.setVisibility(View.INVISIBLE);
-
-        RelativeLayout recipeLayout = (RelativeLayout) findViewById(R.id.activity_create_recipe);
-        recipeLayout.setVisibility(View.VISIBLE);
-
-        getRecipe(FoodID);
     }
 
     public void getRecipe(String FoodID){

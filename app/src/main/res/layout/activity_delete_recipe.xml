@@ -2,6 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recipe Name"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp" />
+
     <EditText
         android:id="@+id/editText"
         android:layout_width="wrap_content"
@@ -9,9 +18,11 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="38dp"
+        android:layout_below="@id/textView"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name" />
+        android:hint="Recipe Name"
+        />
 
     <Button
         android:id="@+id/deleteRecipe"
