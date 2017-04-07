@@ -8,227 +8,261 @@
     >
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/activity_create_recipe"
+        android:id="@+id/relLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="visible"
         tools:context="com.example.carrc.seniorproject.CreateRecipeActivity">
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/editLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            tools:context="com.example.carrc.seniorproject.CreateRecipeActivity">
 
-        <TextView
-            android:id="@+id/recipeNameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/recipeText"
-            android:text="Recipe Name" />
-
-        <EditText
-            android:id="@+id/recipeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="22dp"
-            android:layout_marginTop="12dp"
-            android:layout_below="@+id/recipeNameTextView"
-            android:ems="10"
-            android:hint="Enter name of recipe..."
-            android:inputType="textPersonName" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/recipeText"
-            android:layout_marginEnd="17dp"
-            android:onClick="addItem"
-            android:text="Add Item" />
-
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/sview"
-            android:layout_below="@+id/button">
-            <RelativeLayout
-                android:id="@+id/layout"
+            <EditText
+                android:id="@+id/editRecipeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                >
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="EditText"
 
-            </RelativeLayout>
-        </ScrollView>
+                />
 
-        <TextView
-            android:id="@+id/intolerancesTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Intolerances"
-            android:layout_below="@id/sview"
-            />
-
-        <GridLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/intolerancesTextView"
-            android:id="@+id/gridlayout">
-
-            <CheckBox
-                android:text="Dairy"
+            <Button
+                android:id="@+id/button6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:id="@+id/dairyCheckBox" />
+                android:layout_below="@id/editRecipeName"
+                android:onClick="changeLayout"
+                android:text="Edit Recipe"
+                android:layout_centerHorizontal="true"
+                />
 
-            <CheckBox
-                android:text="Seafood"
+        </RelativeLayout>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/activity_create_recipe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            tools:context="com.example.carrc.seniorproject.CreateRecipeActivity">
+
+            <TextView
+                android:id="@+id/recipeNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_row="0"
-                android:layout_column="1"
-                android:id="@+id/seafoodCheckBox" />
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/recipeText"
+                android:text="Recipe Name" />
 
-            <CheckBox
-                android:text="Gluten"
+            <EditText
+                android:id="@+id/recipeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_row="0"
-                android:layout_column="2"
-                android:id="@+id/glutenCheckBox" />
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_below="@+id/recipeNameTextView"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:hint="Enter name of recipe..."
+                android:inputType="textPersonName" />
 
-            <CheckBox
-                android:text="Peanut"
+            <Button
+                android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_row="0"
-                android:layout_column="3"
-                android:id="@+id/peanutCheckBox" />
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/recipeText"
+                android:layout_marginEnd="17dp"
+                android:onClick="addItem"
+                android:text="Add Item" />
 
-            <CheckBox
-                android:text="Very Healthy"
+            <ScrollView
+                android:id="@+id/sview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_row="2"
-                android:layout_column="1"
-                android:id="@+id/healthyCheckBox" />
+                android:layout_below="@+id/button">
 
-            <CheckBox
-                android:text="Vegan"
+                <RelativeLayout
+                    android:id="@+id/layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </RelativeLayout>
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/intolerancesTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_row="1"
-                android:layout_column="1"
-                android:id="@+id/veganCheckBox" />
+                android:layout_below="@id/sview"
+                android:text="Intolerances" />
 
-            <CheckBox
-                android:text="Vegetarian"
+            <GridLayout
+                android:id="@+id/gridlayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_row="1"
-                android:layout_column="2"
-                android:id="@+id/vegetarianCheckBox" />
+                android:layout_below="@+id/intolerancesTextView">
 
-            <CheckBox
-                android:text="Very Popular"
+                <CheckBox
+                    android:id="@+id/dairyCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_row="0"
+                    android:text="Dairy" />
+
+                <CheckBox
+                    android:id="@+id/seafoodCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_row="0"
+                    android:text="Seafood" />
+
+                <CheckBox
+                    android:id="@+id/glutenCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_row="0"
+                    android:text="Gluten" />
+
+                <CheckBox
+                    android:id="@+id/peanutCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="3"
+                    android:layout_row="0"
+                    android:text="Peanut" />
+
+                <CheckBox
+                    android:id="@+id/healthyCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_row="2"
+                    android:text="Very Healthy" />
+
+                <CheckBox
+                    android:id="@+id/veganCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_row="1"
+                    android:text="Vegan" />
+
+                <CheckBox
+                    android:id="@+id/vegetarianCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_row="1"
+                    android:text="Vegetarian" />
+
+                <CheckBox
+                    android:id="@+id/veryPopularCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_row="2"
+                    android:text="Very Popular" />
+
+            </GridLayout>
+
+            <TextView
+                android:id="@+id/imageUrlTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_row="2"
-                android:layout_column="2"
-                android:id="@+id/veryPopularCheckBox" />
+                android:layout_below="@+id/gridlayout"
+                android:text="Image Url"
 
-        </GridLayout>
+                />
 
-        <TextView
-            android:id="@+id/imageUrlTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Image Url"
-            android:layout_below="@+id/gridlayout"
+            <EditText
+                android:id="@+id/imageUrl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageUrlTextView"
+                android:hint="Enter image url..."
+                android:inputType="textUri" />
 
-            />
+            <TextView
+                android:id="@+id/pricePerServingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageUrl"
+                android:text="Price Per Serving" />
 
-        <EditText
-            android:id="@+id/imageUrl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Enter image url..."
-            android:layout_below="@+id/imageUrlTextView"
-            android:inputType="textUri" />
+            <EditText
+                android:id="@+id/pricePerServing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pricePerServingTextView"
+                android:hint="Price Per Serving..."
+                android:inputType="number" />
 
-        <TextView
-            android:id="@+id/pricePerServingTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Price Per Serving"
-            android:layout_below="@id/imageUrl"
-            />
+            <TextView
+                android:id="@+id/courseTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pricePerServing"
+                android:text="Course" />
 
-        <EditText
-            android:id="@+id/pricePerServing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Price Per Serving..."
-            android:layout_below="@+id/pricePerServingTextView"
-            android:inputType="number" />
+            <EditText
+                android:id="@+id/course"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/courseTextView"
+                android:hint="Course..."
+                android:inputType="text" />
 
-        <TextView
-            android:id="@+id/courseTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Course"
-            android:layout_below="@id/pricePerServing"
-            />
+            <TextView
+                android:id="@+id/mealTypeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/course"
+                android:text="Meal Type" />
 
-        <EditText
-            android:id="@+id/course"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Course..."
-            android:layout_below="@+id/courseTextView"
-            android:inputType="text" />
+            <EditText
+                android:id="@+id/mealType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mealTypeTextView"
+                android:hint="Meal Type..."
+                android:inputType="text" />
 
-        <TextView
-            android:id="@+id/mealTypeTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Meal Type"
-            android:layout_below="@id/course"
-            />
+            <TextView
+                android:id="@+id/weightWatcherTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mealType"
+                android:text="Weight Watcher" />
 
-        <EditText
-            android:id="@+id/mealType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Meal Type..."
-            android:layout_below="@+id/mealTypeTextView"
-            android:inputType="text" />
+            <EditText
+                android:id="@+id/weightWatcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/weightWatcherTextView"
+                android:hint="Weight Watcher..."
+                android:inputType="number" />
 
-        <TextView
-            android:id="@+id/weightWatcherTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Weight Watcher"
-            android:layout_below="@id/mealType"
-            />
-
-        <EditText
-            android:id="@+id/weightWatcher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Weight Watcher..."
-            android:layout_below="@+id/weightWatcherTextView"
-            android:inputType="number" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="update"
-            android:text="Submit"
-            android:layout_below="@+id/weightWatcher"
-            android:layout_alignStart="@+id/button"
-            />
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/button"
+                android:layout_below="@+id/weightWatcher"
+                android:onClick="update"
+                android:text="Submit" />
 
 
+        </RelativeLayout>
     </RelativeLayout>
+
 </ScrollView>

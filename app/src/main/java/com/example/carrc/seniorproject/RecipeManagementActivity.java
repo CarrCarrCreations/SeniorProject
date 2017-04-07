@@ -17,6 +17,12 @@ public class RecipeManagementActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void deleteRecipe(View view) {
+        Intent intent = new Intent(this, DeleteRecipeActivity.class);
+        startActivity(intent);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

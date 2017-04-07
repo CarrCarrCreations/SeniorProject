@@ -177,7 +177,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
                 ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Ingredients");
                 query2.whereEqualTo("Name", ingredients.get(listCount).getText().toString());
                 ParseObject ingredient;
-                String[] namesAndEmails = {};
                 try {
                     ingredient = query2.getFirst();
                     //query.whereNotContainedIn("username", person.getList("friends"));

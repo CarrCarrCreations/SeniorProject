@@ -7,6 +7,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
@@ -27,13 +28,13 @@ public class EditRecipeActivity extends AppCompatActivity{
 
     int prevTextViewId = 0;
     ArrayList<EditText> ingredients = new ArrayList<EditText>();
-    String objectId = "";
+    String FoodID = "";
 
     public void update(View view) {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
         //query.whereContains("objectId", objectId);
-        query.getInBackground(objectId, new GetCallback<ParseObject>() {  //retrieve serverID instead of object from parse
+        query.getInBackground(FoodID, new GetCallback<ParseObject>() {  //retrieve serverID instead of object from parse
             public void done(ParseObject recipe, ParseException e) {
                 if (e == null) {
 
@@ -236,6 +237,7 @@ public class EditRecipeActivity extends AppCompatActivity{
                     }
 
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -243,72 +245,111 @@ public class EditRecipeActivity extends AppCompatActivity{
 
         //TODO : get ObjectId for user chosen recipe (before everything loads)
 
+
+
+    }
+
+    public void changeLayout(View view) {
+        EditText editRecipeText = (EditText) findViewById(R.id.editRecipeName);
+        String editRecipeName = editRecipeText.getText().toString();
+
+        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Recipes");
+        query2.whereEqualTo("ItemTitle",editRecipeName);
+        ParseObject recipe;
+        try {
+            recipe = query2.getFirst();
+            //query.whereNotContainedIn("username", person.getList("friends"));
+            //query.whereNotContainedIn("email", n);
+            //query.setLimit(15);
+            //recipe.put("IngredientID0", ingredient.get("ID").toString());
+            FoodID = recipe.get("FoodID").toString();
+            System.out.println(FoodID);
+        } catch (ParseException e1) {
+            e1.printStackTrace();
+        }
+
+        RelativeLayout editLayout = (RelativeLayout) findViewById(R.id.editLayout);
+        editLayout.setVisibility(View.INVISIBLE);
+
+        RelativeLayout recipeLayout = (RelativeLayout) findViewById(R.id.activity_create_recipe);
+        recipeLayout.setVisibility(View.VISIBLE);
+
+        getRecipe(FoodID);
+    }
+
+    public void getRecipe(String FoodID){
+        // get recipe using name
+        // make view visible
+
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
-        query.whereEqualTo("objectId", objectId);
+        System.out.println("This one" + FoodID);
+        query.whereEqualTo("FoodID", FoodID);
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, com.parse.ParseException e) {
                 if (e == null) {
-                    ParseObject recipe = objects.get(0);
-                    EditText name = (EditText) findViewById(R.id.recipeText);
-                    name.setText(recipe.get("ItemTitle").toString());
-                    // Intolerance Checkboxes
+                    if(objects.size()>0) {
+                        ParseObject recipe = objects.get(0);
+                        EditText name = (EditText) findViewById(R.id.recipeText);
+                        name.setText(recipe.get("ItemTitle").toString());
+                        // Intolerance Checkboxes
 
-                    CheckBox dairyCheckBox = (CheckBox) findViewById(R.id.dairyCheckBox);
-                    CheckBox glutenCheckBox = (CheckBox) findViewById(R.id.glutenCheckBox);
-                    CheckBox peanutCheckBox = (CheckBox) findViewById(R.id.peanutCheckBox);
-                    CheckBox seafoodCheckBox = (CheckBox) findViewById(R.id.seafoodCheckBox);
-                    CheckBox veganCheckBox = (CheckBox) findViewById(R.id.veganCheckBox);
-                    CheckBox vegetarianCheckBox = (CheckBox) findViewById(R.id.vegetarianCheckBox);
-                    CheckBox veryPopularCheckBox = (CheckBox) findViewById(R.id.veryPopularCheckBox);
-                    CheckBox veryHealthyCheckBox = (CheckBox) findViewById(R.id.healthyCheckBox);
+                        CheckBox dairyCheckBox = (CheckBox) findViewById(R.id.dairyCheckBox);
+                        CheckBox glutenCheckBox = (CheckBox) findViewById(R.id.glutenCheckBox);
+                        CheckBox peanutCheckBox = (CheckBox) findViewById(R.id.peanutCheckBox);
+                        CheckBox seafoodCheckBox = (CheckBox) findViewById(R.id.seafoodCheckBox);
+                        CheckBox veganCheckBox = (CheckBox) findViewById(R.id.veganCheckBox);
+                        CheckBox vegetarianCheckBox = (CheckBox) findViewById(R.id.vegetarianCheckBox);
+                        CheckBox veryPopularCheckBox = (CheckBox) findViewById(R.id.veryPopularCheckBox);
+                        CheckBox veryHealthyCheckBox = (CheckBox) findViewById(R.id.healthyCheckBox);
 
-                    // image
-                    EditText imageUrl = (EditText) findViewById(R.id.imageUrl);
-                    imageUrl.setText(recipe.get("Image").toString());
+                        // image
+                        EditText imageUrl = (EditText) findViewById(R.id.imageUrl);
+                        imageUrl.setText(recipe.get("Image").toString());
 
-                    // EditTexts
+                        // EditTexts
 
-                    EditText pricePerServing = (EditText) findViewById(R.id.pricePerServing);
-                    EditText course = (EditText) findViewById(R.id.course);
-                    EditText mealType = (EditText) findViewById(R.id.mealType);
-                    EditText weightWatcher = (EditText) findViewById(R.id.weightWatcher);
+                        EditText pricePerServing = (EditText) findViewById(R.id.pricePerServing);
+                        EditText course = (EditText) findViewById(R.id.course);
+                        EditText mealType = (EditText) findViewById(R.id.mealType);
+                        EditText weightWatcher = (EditText) findViewById(R.id.weightWatcher);
 
-                    pricePerServing.setText(recipe.get("PricePerServing").toString());
-                    course.setText(recipe.get("course").toString());
-                    mealType.setText(recipe.get("mealType").toString());
-                    weightWatcher.setText(recipe.get("weightWatcher").toString());
+                        pricePerServing.setText(recipe.get("PricePerServing").toString());
+                        course.setText(recipe.get("course").toString());
+                        mealType.setText(recipe.get("mealType").toString());
+                        weightWatcher.setText(recipe.get("weightWatcher").toString());
 
 
-                    if(recipe.get("dairyFree") !=null && recipe.get("dairyFree").toString() == "true"){
-                        dairyCheckBox.toggle();
+                        if (recipe.get("dairyFree") != null && recipe.get("dairyFree").toString() == "true") {
+                            dairyCheckBox.toggle();
+                        }
+                        if (recipe.get("glutenFree") != null && recipe.get("glutenFree").toString() == "true") {
+                            glutenCheckBox.toggle();
+                        }
+                        if (recipe.get("peanutFree") != null && recipe.get("peanutFree").toString() == "true") {
+                            peanutCheckBox.toggle();
+                        }
+                        if (recipe.get("seafoodFree") != null && recipe.get("seafoodFree").toString() == "true") {
+                            seafoodCheckBox.toggle();
+                        }
+                        if (recipe.get("vegan") != null && recipe.get("vegan").toString() == "true") {
+                            veganCheckBox.toggle();
+                        }
+                        if (recipe.get("vegetarian") != null && recipe.get("vegetarian").toString() == "true") {
+                            vegetarianCheckBox.toggle();
+                        }
+                        if (recipe.get("veryPopular") != null && recipe.get("veryPopular").toString() == "true") {
+                            veryPopularCheckBox.toggle();
+                        }
+                        if (recipe.get("veryHealthy") != null && recipe.get("veryHealthy").toString() == "true") {
+                            veryHealthyCheckBox.toggle();
+                        }
+
+                        fillRest(recipe);
+
                     }
-                    if(recipe.get("glutenFree") !=null && recipe.get("glutenFree").toString() == "true"){
-                        glutenCheckBox.toggle();
-                    }
-                    if(recipe.get("peanutFree") !=null && recipe.get("peanutFree").toString() == "true"){
-                        peanutCheckBox.toggle();
-                    }
-                    if(recipe.get("seafoodFree")!=null && recipe.get("seafoodFree").toString() == "true"){
-                        seafoodCheckBox.toggle();
-                    }
-                    if(recipe.get("vegan") !=null  && recipe.get("vegan").toString() == "true"){
-                        veganCheckBox.toggle();
-                    }
-                    if(recipe.get("vegetarian") !=null && recipe.get("vegetarian").toString() == "true"){
-                        vegetarianCheckBox.toggle();
-                    }
-                    if(recipe.get("veryPopular") !=null && recipe.get("veryPopular").toString() == "true"){
-                        veryPopularCheckBox.toggle();
-                    }
-                    if(recipe.get("veryHealthy") !=null && recipe.get("veryHealthy").toString() == "true"){
-                        veryHealthyCheckBox.toggle();
-                    }
-
-                    fillRest(recipe);
-
-
                 } else {
                     // Something went wrong.
                 }
@@ -319,11 +360,7 @@ public class EditRecipeActivity extends AppCompatActivity{
 
         // Food name
 
-
-
-
     }
-
     public void addItem(View view){
         //Log.i("Info", "Here");
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.layout);

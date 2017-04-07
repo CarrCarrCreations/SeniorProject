@@ -229,13 +229,6 @@
             android:layout_alignStart="@+id/button"
             />
 
-        <TextView
-            android:id="@+id/objectId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:alpha="1"
-            android:text="TextView" />
-
 
     </RelativeLayout>
 </ScrollView>
