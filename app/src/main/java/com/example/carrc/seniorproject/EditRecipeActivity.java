@@ -263,7 +263,6 @@ public class EditRecipeActivity extends AppCompatActivity{
             //query.setLimit(15);
             //recipe.put("IngredientID0", ingredient.get("ID").toString());
             FoodID = recipe.get("FoodID").toString();
-            System.out.println(FoodID);
         } catch (ParseException e1) {
             e1.printStackTrace();
         }
@@ -283,7 +282,6 @@ public class EditRecipeActivity extends AppCompatActivity{
 
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
-        System.out.println("This one" + FoodID);
         query.whereEqualTo("FoodID", FoodID);
 
         query.findInBackground(new FindCallback<ParseObject>() {
