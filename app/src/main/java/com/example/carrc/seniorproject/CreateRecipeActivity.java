@@ -156,7 +156,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
                 taken = false;
                 while (!taken) {
                     ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Ingredients");
-                    if (query.whereEqualTo("ID", Integer.toString(ingredientId)).count() == 0) {
+                    if (query2.whereEqualTo("ID", Integer.toString(ingredientId)).count() == 0) {
                         taken = true;
 
                     } else {
@@ -193,6 +193,8 @@ public class CreateRecipeActivity extends AppCompatActivity {
                     //query.whereNotContainedIn("username", person.getList("friends"));
                     //query.whereNotContainedIn("email", n);
                     //query.setLimit(15);
+                    // get ingredient ID
+
                     recipe.put("IngredientID0", ingredient.get("ID").toString());
                 } catch (ParseException e1) {
                     e1.printStackTrace();
@@ -203,7 +205,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
                 recipe.put("IngredientAmount0", ingredients.get(listCount + 1).getText().toString());
                 recipe.put("IngredientUnit0", ingredients.get(listCount + 2).getText().toString());
 
-                // get ingredient ID
 
             }
 
@@ -246,7 +247,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
                     taken = false;
                     while (!taken) {
                         ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Ingredients");
-                        if (query.whereEqualTo("ID", Integer.toString(ingredientId)).count() == 0) {
+                        if (query2.whereEqualTo("ID", Integer.toString(ingredientId)).count() == 0) {
                             taken = true;
 
                         } else {
@@ -275,16 +276,21 @@ public class CreateRecipeActivity extends AppCompatActivity {
                 } else {
                     // ingredient exists
 
-                    //                ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Recipes");
-                    //                query2.whereEqualTo("Name", ingredients.get(listCount).getText().toString());
-                    //                query2.findInBackground(new FindCallback&lt;ParseObject&gt;() {
-                    //                    public void done(List&lt;ParseObject&gt; objects, ParseException e) {
-                    //                      if (e == null) {
-                    //                          objectsWereRetrievedSuccessfully(objects);
-                    //                      } else {
-                    //                          objectRetrievalFailed();
-                    //                      }
-                    //                  }
+                    ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Ingredients");
+                    query2.whereEqualTo("Name", ingredients.get(listCount).getText().toString());
+                    ParseObject ingredient;
+                    try {
+                        ingredient = query2.getFirst();
+                        //query.whereNotContainedIn("username", person.getList("friends"));
+                        //query.whereNotContainedIn("email", n);
+                        //query.setLimit(15);
+                        // get ingredient ID
+
+                        recipe.put("IngredientID" + ((listCount / 3)), ingredient.get("ID").toString());
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+
                     recipe.put("IngredientName" + ((listCount / 3)), ingredients.get(listCount).getText().toString());
                     recipe.put("IngredientAmount" + ((listCount / 3)), ingredients.get(listCount + 1).getText().toString());
                     recipe.put("IngredientUnit" + ((listCount / 3)), ingredients.get(listCount + 2).getText().toString());

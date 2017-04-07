@@ -1,5 +1,6 @@
 package com.example.carrc.seniorproject;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.carrc.seniorproject.R.id.soyCheckBox;
+
 /**
  * Created by scottieb on 4/3/17.
  */
@@ -29,14 +32,23 @@ public class EditRecipeActivity extends AppCompatActivity{
     int prevTextViewId = 0;
     ArrayList<EditText> ingredients = new ArrayList<EditText>();
     String FoodID = "";
+    boolean taken = false;
 
     public void update(View view) {
 
+        System.out.println(ingredients.size());
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
-        //query.whereContains("objectId", objectId);
-        query.getInBackground(FoodID, new GetCallback<ParseObject>() {  //retrieve serverID instead of object from parse
-            public void done(ParseObject recipe, ParseException e) {
-                if (e == null) {
+        query.whereContains("FoodID", FoodID);
+        ParseObject recipe = null;
+        final Context _this = this;
+        try {
+            recipe = query.getFirst();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        // query.getInBackground(FoodID, new GetCallback<ParseObject>() {  //retrieve serverID instead of object from parse
+          //  public void done(ParseObject recipe, ParseException e) {
+            //    if (e == null) {
 
                     int listCount = 0;
 
@@ -54,13 +66,13 @@ public class EditRecipeActivity extends AppCompatActivity{
                     CheckBox vegetarianCheckBox = (CheckBox) findViewById(R.id.vegetarianCheckBox);
                     CheckBox veryPopularCheckBox = (CheckBox) findViewById(R.id.veryPopularCheckBox);
                     CheckBox veryHealthyCheckBox = (CheckBox) findViewById(R.id.healthyCheckBox);
-                /*
+
                     CheckBox eggCheckBox = (CheckBox) findViewById(R.id.eggCheckBox);
                     CheckBox sesameCheckBox = (CheckBox) findViewById(R.id.sesameCheckBox);
                     CheckBox shellfishCheckBox = (CheckBox) findViewById(R.id.shellfishCheckBox);
                     CheckBox soyCheckBox = (CheckBox) findViewById(R.id.soyCheckBox);
                     CheckBox wheatCheckBox = (CheckBox) findViewById(R.id.wheatCheckBox);
-                */
+
 
                     // image
                     EditText imageUrl = (EditText) findViewById(R.id.imageUrl);
@@ -75,7 +87,77 @@ public class EditRecipeActivity extends AppCompatActivity{
 
                     // SQL PUSH all ingredients,
 
-                    ParseObject recipeNew = new ParseObject("Recipes");
+                    //ParseObject recipeNew = new ParseObject("Recipes");
+
+                    int ingredientId;
+
+                    ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Ingredients");
+                    try {
+                        if (query2.whereEqualTo("Name", ingredients.get(listCount).getText().toString()).count() == 0) {
+
+                            //Not an ingredient that already exists
+                            ParseObject ingredient = new ParseObject("Ingredients");
+                            ingredient.put("Name", ingredients.get(listCount).getText().toString());
+                            ingredient.put("Unit", ingredients.get(listCount + 2).getText().toString());
+
+                            ingredientId = (int) (Math.random() * 1000001) + 1;
+                            taken = false;
+                            while (!taken) {
+                                ParseQuery<ParseObject> query3 = new ParseQuery<ParseObject>("Ingredients");
+                                if (query3.whereEqualTo("ID", Integer.toString(ingredientId)).count() == 0) {
+                                    taken = true;
+
+                                } else {
+                                }
+
+                            }
+
+                            ingredient.put("ID", Integer.toString(ingredientId));
+
+                            ingredient.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                    } else {
+                                        System.out.println(e.getMessage());
+                                    }
+                                }
+                            });
+
+                            recipe.put("IngredientName0", ingredients.get(listCount).getText().toString());
+                            recipe.put("IngredientAmount0", ingredients.get(listCount + 1).getText().toString());
+                            recipe.put("IngredientUnit0", ingredients.get(listCount + 2).getText().toString());
+                            recipe.put("IngredientID0", Integer.toString(ingredientId));
+
+                        } else {
+                            // ingredient exists
+
+
+                            ParseQuery<ParseObject> query4 = ParseQuery.getQuery("Ingredients");
+                            query4.whereEqualTo("Name", ingredients.get(listCount).getText().toString());
+                            ParseObject ingredient;
+                            try {
+                                ingredient = query4.getFirst();
+                                //query.whereNotContainedIn("username", person.getList("friends"));
+                                //query.whereNotContainedIn("email", n);
+                                //query.setLimit(15);
+                                recipe.put("IngredientID0", ingredient.get("ID").toString());
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+
+
+                            recipe.put("IngredientName0", ingredients.get(listCount).getText().toString());
+                            recipe.put("IngredientAmount0", ingredients.get(listCount + 1).getText().toString());
+                            recipe.put("IngredientUnit0", ingredients.get(listCount + 2).getText().toString());
+
+                            // get ingredient ID
+
+                        }
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+
 
                     recipe.put("IngredientName0", ingredients.get(listCount).getText().toString());
                     recipe.put("IngredientAmount0", ingredients.get(listCount+1).getText().toString());
@@ -90,6 +172,11 @@ public class EditRecipeActivity extends AppCompatActivity{
                     recipe.put("vegetarian", Boolean.toString(vegetarianCheckBox.isChecked()));
                     recipe.put("veryHealthy", Boolean.toString(veryHealthyCheckBox.isChecked()));
                     recipe.put("veryPopular", Boolean.toString(veryPopularCheckBox.isChecked()));
+                    recipe.put("eggFree", Boolean.toString(eggCheckBox.isChecked()));
+                    recipe.put("soyFree", Boolean.toString(soyCheckBox.isChecked()));
+                    recipe.put("sesameFree", Boolean.toString(sesameCheckBox.isChecked()));
+                    recipe.put("shellfishFree", Boolean.toString(shellfishCheckBox.isChecked()));
+                    recipe.put("wheatFree", Boolean.toString(wheatCheckBox.isChecked()));
                     // Need to change?
                     recipe.put("cheap", "false");
 //
@@ -103,9 +190,71 @@ public class EditRecipeActivity extends AppCompatActivity{
 
                     for(int i=1; i<prevTextViewId; i++){
 
-                        recipe.put( "IngredientName" + ( (listCount/3) ) ,ingredients.get(listCount).getText().toString() );
-                        recipe.put( "IngredientAmount" + ( (listCount/3) ) ,ingredients.get(listCount+1).getText().toString() );
-                        recipe.put( "IngredientUnit" + ( (listCount/3) ) ,ingredients.get(listCount+2).getText().toString() );
+                        ParseQuery<ParseObject> query5 = new ParseQuery<ParseObject>("Ingredients");
+
+                        try {
+                            if (query5.whereEqualTo("Name", ingredients.get(listCount).getText().toString()).count() == 0) {
+                                //Not an ingredient that already exists
+                                ParseObject ingredient = new ParseObject("Ingredients");
+                                ingredient.put("Name", ingredients.get(listCount).getText().toString());
+                                ingredient.put("Unit", ingredients.get(listCount + 2).getText().toString());
+
+                                ingredientId = (int) (Math.random() * 1000001) + 1;
+                                taken = false;
+                                while (!taken) {
+                                    ParseQuery<ParseObject> query6 = new ParseQuery<ParseObject>("Ingredients");
+                                    if (query6.whereEqualTo("ID", Integer.toString(ingredientId)).count() == 0) {
+                                        taken = true;
+
+                                    } else {
+                                    }
+
+                                }
+
+                                ingredient.put("ID", Integer.toString(ingredientId));
+
+                                ingredient.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        if (e == null) {
+
+                                        } else {
+                                            System.out.println(e.getMessage());
+                                        }
+                                    }
+                                });
+
+                                recipe.put("IngredientName" + ((listCount / 3)), ingredients.get(listCount).getText().toString());
+                                recipe.put("IngredientAmount" + ((listCount / 3)), ingredients.get(listCount + 1).getText().toString());
+                                recipe.put("IngredientUnit" + ((listCount / 3)), ingredients.get(listCount + 2).getText().toString());
+                                recipe.put("IngredientID" + ((listCount / 3)), Integer.toString(ingredientId));
+
+                            } else {
+                                // ingredient exists
+
+                                ParseQuery<ParseObject> query7 = ParseQuery.getQuery("Ingredients");
+                                query7.whereEqualTo("Name", ingredients.get(listCount).getText().toString());
+                                ParseObject ingredient;
+                                try {
+                                    ingredient = query7.getFirst();
+                                    //query.whereNotContainedIn("username", person.getList("friends"));
+                                    //query.whereNotContainedIn("email", n);
+                                    //query.setLimit(15);
+                                    // get ingredient ID
+
+                                    recipe.put("IngredientID" + ((listCount / 3)), ingredient.get("ID").toString());
+                                } catch (ParseException e1) {
+                                    e1.printStackTrace();
+                                }
+
+                                recipe.put("IngredientName" + ((listCount / 3)), ingredients.get(listCount).getText().toString());
+                                recipe.put("IngredientAmount" + ((listCount / 3)), ingredients.get(listCount + 1).getText().toString());
+                                recipe.put("IngredientUnit" + ((listCount / 3)), ingredients.get(listCount + 2).getText().toString());
+
+                            }
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
 
                         listCount += 3;
                     }
@@ -114,7 +263,7 @@ public class EditRecipeActivity extends AppCompatActivity{
                         @Override
                         public void done(ParseException e) {
                             if(e == null) {
-
+                                Toast.makeText(_this, "Recipe updated in the database!", Toast.LENGTH_SHORT).show();
                             } else {
                                 System.out.println(e.getMessage());
                             }
@@ -122,11 +271,10 @@ public class EditRecipeActivity extends AppCompatActivity{
                     });
 
 
-                }
-            }
-        });
+         //       }
+         //   }
+        //});
 
-        Toast.makeText(this, "Recipe updated in the database!", Toast.LENGTH_SHORT).show();
     }
 
     public void fillRest(ParseObject recipe){
@@ -313,6 +461,11 @@ public class EditRecipeActivity extends AppCompatActivity{
                         CheckBox veryPopularCheckBox = (CheckBox) findViewById(R.id.veryPopularCheckBox);
                         CheckBox veryHealthyCheckBox = (CheckBox) findViewById(R.id.healthyCheckBox);
 
+                        CheckBox eggCheckBox = (CheckBox) findViewById(R.id.eggCheckBox);
+                        CheckBox sesameCheckBox = (CheckBox) findViewById(R.id.sesameCheckBox);
+                        CheckBox shellfishCheckBox = (CheckBox) findViewById(R.id.shellfishCheckBox);
+                        CheckBox soyCheckBox = (CheckBox) findViewById(R.id.soyCheckBox);
+                        CheckBox wheatCheckBox = (CheckBox) findViewById(R.id.wheatCheckBox);
                         // image
                         EditText imageUrl = (EditText) findViewById(R.id.imageUrl);
                         imageUrl.setText(recipe.get("Image").toString());
@@ -329,32 +482,52 @@ public class EditRecipeActivity extends AppCompatActivity{
                         mealType.setText(recipe.get("mealType").toString());
                         weightWatcher.setText(recipe.get("weightWatcher").toString());
 
-
-                        if (recipe.get("dairyFree") != null && recipe.get("dairyFree").toString() == "true") {
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                        System.out.println("Toggling values");
+                        if (recipe.get("dairyFree") != null && recipe.get("dairyFree").toString().equals("true")) {
                             dairyCheckBox.toggle();
                         }
-                        if (recipe.get("glutenFree") != null && recipe.get("glutenFree").toString() == "true") {
+                        if (recipe.get("glutenFree") != null && recipe.get("glutenFree").toString().equals("true")) {
                             glutenCheckBox.toggle();
                         }
-                        if (recipe.get("peanutFree") != null && recipe.get("peanutFree").toString() == "true") {
+                        if (recipe.get("peanutFree") != null && recipe.get("peanutFree").toString().equals("true")) {
                             peanutCheckBox.toggle();
                         }
-                        if (recipe.get("seafoodFree") != null && recipe.get("seafoodFree").toString() == "true") {
+                        if (recipe.get("seafoodFree") != null && recipe.get("seafoodFree").toString().equals("true")) {
                             seafoodCheckBox.toggle();
                         }
-                        if (recipe.get("vegan") != null && recipe.get("vegan").toString() == "true") {
+                        if (recipe.get("vegan") != null && recipe.get("vegan").toString().equals("true")) {
                             veganCheckBox.toggle();
                         }
-                        if (recipe.get("vegetarian") != null && recipe.get("vegetarian").toString() == "true") {
+                        if (recipe.get("vegetarian") != null && recipe.get("vegetarian").toString().equals("true")) {
                             vegetarianCheckBox.toggle();
                         }
-                        if (recipe.get("veryPopular") != null && recipe.get("veryPopular").toString() == "true") {
+                        if (recipe.get("veryPopular") != null && recipe.get("veryPopular").toString().equals("true")) {
                             veryPopularCheckBox.toggle();
                         }
-                        if (recipe.get("veryHealthy") != null && recipe.get("veryHealthy").toString() == "true") {
+                        if (recipe.get("veryHealthy") != null && recipe.get("veryHealthy").toString().equals("true")) {
                             veryHealthyCheckBox.toggle();
                         }
 
+                        if (recipe.get("soyFree") != null && recipe.get("soyFree").toString().equals("true")) {
+                            soyCheckBox.toggle();
+                        }
+                        if (recipe.get("wheatFree") != null && recipe.get("wheatFree").toString().equals("true")) {
+                            wheatCheckBox.toggle();
+                        }
+                        if (recipe.get("shellfishFree") != null && recipe.get("shellfishFree").toString().equals("true")) {
+                            shellfishCheckBox.toggle();
+                        }
+                        if (recipe.get("sesameFree") != null && recipe.get("sesameFree").toString().equals("true")) {
+                            sesameCheckBox.toggle();
+                        }
+                        if (recipe.get("eggFree") != null && recipe.get("eggFree").toString().equals("true")) {
+                            eggCheckBox.toggle();
+                        }
                         fillRest(recipe);
 
                     }
