@@ -39,6 +39,9 @@
         <activity android:name=".IngredientManagementActivity" />
         <activity android:name=".CreateRecipeActivity" />
         <activity android:name=".RecipeManagementActivity"></activity>
+        <activity android:name=".EditRecipeActivity" />
+        <activity android:name=".DeleteRecipeActivity"/>
+
     </application>
 
 </manifest>
