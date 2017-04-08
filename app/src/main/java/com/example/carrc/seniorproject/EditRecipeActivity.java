@@ -36,7 +36,6 @@ public class EditRecipeActivity extends AppCompatActivity{
 
     public void update(View view) {
 
-        System.out.println(ingredients.size());
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
         query.whereContains("FoodID", FoodID);
         ParseObject recipe = null;
@@ -183,7 +182,7 @@ public class EditRecipeActivity extends AppCompatActivity{
                     recipe.put("PricePerServing", pricePerServing.getText().toString());
                     recipe.put("course", course.getText().toString());
                     recipe.put("mealType", mealType.getText().toString());
-                    recipe.put("weightWatcher", pricePerServing.getText().toString());
+                    recipe.put("weightWatcher", weightWatcher.getText().toString());
 
                     listCount +=3;
 
@@ -487,7 +486,6 @@ public class EditRecipeActivity extends AppCompatActivity{
                         } catch (InterruptedException e1) {
                             e1.printStackTrace();
                         }
-                        System.out.println("Toggling values");
                         if (recipe.get("dairyFree") != null && recipe.get("dairyFree").toString().equals("true")) {
                             dairyCheckBox.toggle();
                         }
