@@ -229,7 +229,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
             recipe.put("PricePerServing", pricePerServing.getText().toString());
             recipe.put("course", course.getText().toString());
             recipe.put("mealType", mealType.getText().toString());
-            recipe.put("weightWatcher", pricePerServing.getText().toString());
+            recipe.put("weightWatcher", weightWatcher.getText().toString());
 
             listCount += 3;
 
