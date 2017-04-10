@@ -107,6 +107,7 @@ public class EditRecipeActivity extends AppCompatActivity{
                                     taken = true;
 
                                 } else {
+                                    ingredientId = (int) (Math.random() * 1000001) + 1;
                                 }
 
                             }
@@ -206,6 +207,7 @@ public class EditRecipeActivity extends AppCompatActivity{
                                         taken = true;
 
                                     } else {
+                                        ingredientId = (int) (Math.random() * 1000001) + 1;
                                     }
 
                                 }

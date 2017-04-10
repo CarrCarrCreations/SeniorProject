@@ -72,6 +72,8 @@ public class CreateRecipeActivity extends AppCompatActivity {
                     taken = true;
 
                 } else {
+                    recipeId = (int) (Math.random() * 70001) + 1;
+
                 }
 
             }
@@ -156,10 +158,12 @@ public class CreateRecipeActivity extends AppCompatActivity {
                 taken = false;
                 while (!taken) {
                     ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Ingredients");
+                    //if this ID
                     if (query2.whereEqualTo("ID", Integer.toString(ingredientId)).count() == 0) {
                         taken = true;
 
                     } else {
+                        ingredientId = (int) (Math.random() * 1000001) + 1;
                     }
 
                 }
@@ -251,6 +255,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
                             taken = true;
 
                         } else {
+                            ingredientId = (int) (Math.random() * 1000001) + 1;
                         }
 
                     }
