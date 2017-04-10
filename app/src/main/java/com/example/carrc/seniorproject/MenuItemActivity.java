@@ -58,6 +58,8 @@ public class MenuItemActivity extends AppCompatActivity {
     RelativeLayout activity_menu_item;
     ListView ingredientsListView;
 
+    RatingBar ratingBar;
+
 
     public class ingredientInfo {
         String ingredName;
@@ -181,6 +183,35 @@ public class MenuItemActivity extends AppCompatActivity {
         }
     }
 
+    public void addToFavorites(View view){
+        ParseObject favorite = new ParseObject("FavoriteMeals");
+        favorite.put("Username", ParseUser.getCurrentUser().getUsername());
+        favorite.add("MealName", name);
+        favorite.add("MealID", id);
+
+        for(int i = 0; i < ingredients.size(); i++){
+            favorite.put("IngredientName" + i, ingredients.get(i).ingredName);
+            favorite.put("IngredientID" + i, ingredients.get(i).ingredID);
+        }
+
+        if(!comments.getText().toString().isEmpty()){
+            comment = comments.getText().toString();
+            favorite.put("Comment", comment);
+        }
+
+
+        favorite.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null){
+                    Toast.makeText(getBaseContext(), "Meal Saved To Favorites Successfully!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getBaseContext(), e.getMessage() , Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 
 
     @Override
@@ -208,6 +239,8 @@ public class MenuItemActivity extends AppCompatActivity {
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ingredientsArrayList);
         ingredientsListView.setAdapter(arrayAdapter);
+
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         displayIngredients();
     }

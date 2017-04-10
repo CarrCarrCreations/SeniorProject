@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/ratingBar"
         android:layout_below="@+id/nameTextView"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:text="Add To Cart"
@@ -53,5 +53,16 @@
         android:layout_alignParentStart="true"
         android:layout_above="@+id/commentsEditText"
         android:id="@+id/ingredientsListView" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ingredientsListView"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/nameTextView"
+        android:layout_toStartOf="@+id/ratingBar"
+        android:onClick="addToFavorites"
+        android:text="Add To Favorites" />
 
 </RelativeLayout>
