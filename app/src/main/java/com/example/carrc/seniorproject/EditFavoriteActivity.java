@@ -152,6 +152,8 @@ public class EditFavoriteActivity extends AppCompatActivity {
             List<ParseObject> objects = query.find();
             ParseObject recipe = objects.get(0);
 
+            counter = 0;
+
             do {
 
                 ingredName = "IngredientName" + counter;
