@@ -32,6 +32,7 @@ public class EditFavoriteActivity extends AppCompatActivity {
 
     String name;
     String ingredName;
+    String ingredID;
     String id;
     String price;
 
@@ -48,6 +49,12 @@ public class EditFavoriteActivity extends AppCompatActivity {
     ParseObject oldRecipe;
 
     String menuItems[] = {"Remove Ingredient"};
+
+    public class ingredientInfo {
+        String ingredName;
+        String ingredID;
+        int ingredTag;
+    }
 
     // create the menu for long pressing an item on the listView
     @Override
@@ -148,13 +155,16 @@ public class EditFavoriteActivity extends AppCompatActivity {
             do {
 
                 ingredName = "IngredientName" + counter;
+                ingredID = "IngredientID" + counter;
 
                 if(recipe.get(ingredName) == null){
                     break;
                 }
 
                 String ingredientName = recipe.get(ingredName).toString();
+                String ingredientID = recipe.get(ingredID).toString();
                 cartItem.put(ingredName, ingredientName);
+                cartItem.put(ingredID, ingredientID);
 
                 counter++;
 
@@ -214,6 +224,7 @@ public class EditFavoriteActivity extends AppCompatActivity {
 
             for(int i = 0; i < ingredients.size(); i++){
                 newFavorite.put("IngredientName" + i, ingredients.get(i));
+                newFavorite.put("IngredientID" + i, oldRecipe.get("IngredientID" + i));
             }
 
 
@@ -262,15 +273,19 @@ public class EditFavoriteActivity extends AppCompatActivity {
             List<ParseObject> originalObjects = original.find();
             ParseObject originalRecipe = originalObjects.get(0);
 
+
+
+
             // query the current favorite
             List<ParseObject> currentObjects = current.find();
             ParseObject currentRecipe = currentObjects.get(0);
 
+            // delete current favorite
+            currentRecipe.deleteInBackground();
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
     }
 
 
