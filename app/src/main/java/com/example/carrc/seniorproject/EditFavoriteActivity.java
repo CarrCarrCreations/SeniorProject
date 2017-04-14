@@ -50,10 +50,9 @@ public class EditFavoriteActivity extends AppCompatActivity {
 
     String menuItems[] = {"Remove Ingredient"};
 
-    public class ingredientInfo {
-        String ingredName;
-        String ingredID;
-        int ingredTag;
+    public void recreate(){
+        startActivity(getIntent());
+        finish();
     }
 
     // create the menu for long pressing an item on the listView
@@ -264,7 +263,7 @@ public class EditFavoriteActivity extends AppCompatActivity {
         ParseObject newFavorite = new ParseObject("FavoriteMeals");
 
         ParseQuery<ParseObject> original = ParseQuery.getQuery("Recipes");
-        original.whereEqualTo("MealID", id);
+        original.whereEqualTo("FoodID", id);
 
         ParseQuery<ParseObject> current = ParseQuery.getQuery("FavoriteMeals");
         current.whereEqualTo("Username", ParseUser.getCurrentUser().getUsername());
@@ -275,7 +274,47 @@ public class EditFavoriteActivity extends AppCompatActivity {
             List<ParseObject> originalObjects = original.find();
             ParseObject originalRecipe = originalObjects.get(0);
 
+            SharedPreferences sharedPreferences = this.getSharedPreferences("com.example.carrc.seniorproject", Context.MODE_PRIVATE );
+            String currentTableNumber = sharedPreferences.getString("tableNumber", "");
 
+            newFavorite.put("Username", ParseUser.getCurrentUser().getUsername());
+            newFavorite.put("MealName", name);
+            newFavorite.put("MealID", id);
+            newFavorite.put("Price", price);
+
+            // save table number and current user with order
+            newFavorite.put("TableNumber", currentTableNumber);
+
+            counter = 0;
+
+            do {
+
+                ingredName = "IngredientName" + counter;
+                ingredID = "IngredientID" + counter;
+
+                if(originalRecipe.get(ingredName) == null){
+                    break;
+                }
+
+                String ingredientName = originalRecipe.get(ingredName).toString();
+                String ingredientID = originalRecipe.get(ingredID).toString();
+                newFavorite.put(ingredName, ingredientName);
+                newFavorite.put(ingredID, ingredientID);
+
+                counter++;
+
+            } while(originalRecipe.get(ingredName) != null);
+
+            newFavorite.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e == null){
+                        Toast.makeText(getBaseContext(), "Original Recipe Restored!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getBaseContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
 
             // query the current favorite
@@ -283,7 +322,19 @@ public class EditFavoriteActivity extends AppCompatActivity {
             ParseObject currentRecipe = currentObjects.get(0);
 
             // delete current favorite
-            currentRecipe.deleteInBackground();
+            currentRecipe.deleteInBackground(new DeleteCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e == null){
+                        Toast.makeText(getBaseContext(), "Old favorite deleted.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getBaseContext(), e.getMessage() , Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            arrayAdapter.notifyDataSetChanged();
+            recreate();
 
         } catch (ParseException e) {
             e.printStackTrace();
