@@ -42,8 +42,6 @@ public class MenuItemActivity extends AppCompatActivity {
     List<ingredientInfo> ingredients;
     String menuItems[] = {"Remove Ingredient"};
 
-    Intent intent;
-
     EditText comments;
 
     int ingredientNum;
@@ -59,8 +57,6 @@ public class MenuItemActivity extends AppCompatActivity {
 
     RelativeLayout activity_menu_item;
     ListView ingredientsListView;
-
-    RatingBar ratingBar;
 
 
     public class ingredientInfo {
@@ -185,36 +181,6 @@ public class MenuItemActivity extends AppCompatActivity {
         }
     }
 
-    public void addToFavorites(View view){
-        ParseObject favorite = new ParseObject("FavoriteMeals");
-        favorite.put("Username", ParseUser.getCurrentUser().getUsername());
-        favorite.put("MealName", name);
-        favorite.put("MealID", id);
-        favorite.put("Price", price);
-
-        for(int i = 0; i < ingredients.size(); i++){
-            favorite.put("IngredientName" + i, ingredients.get(i).ingredName);
-            favorite.put("IngredientID" + i, ingredients.get(i).ingredID);
-        }
-
-        if(!comments.getText().toString().isEmpty()){
-            comment = comments.getText().toString();
-            favorite.put("Comments", comment);
-        }
-
-
-        favorite.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null){
-                    Toast.makeText(getBaseContext(), "Meal Saved To Favorites!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getBaseContext(), e.getMessage() , Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
 
 
     @Override
@@ -224,7 +190,7 @@ public class MenuItemActivity extends AppCompatActivity {
 
         setTitle("Modify Order");
 
-        intent = getIntent();
+        Intent intent = getIntent();
         name = intent.getStringExtra("name");
         id = intent.getStringExtra("id");
 
@@ -242,8 +208,6 @@ public class MenuItemActivity extends AppCompatActivity {
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ingredientsArrayList);
         ingredientsListView.setAdapter(arrayAdapter);
-
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         displayIngredients();
     }
