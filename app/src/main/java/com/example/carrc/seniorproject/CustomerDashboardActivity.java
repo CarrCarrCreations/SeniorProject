@@ -67,8 +67,9 @@ public class CustomerDashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void recipe(View view){
-
+    public void toFavoriteMeals(View view){
+        Intent intent = new Intent(this, FavoriteMealsActivity.class);
+        startActivity(intent);
     }
 
 

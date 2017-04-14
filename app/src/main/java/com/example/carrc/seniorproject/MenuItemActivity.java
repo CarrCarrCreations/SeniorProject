@@ -42,6 +42,8 @@ public class MenuItemActivity extends AppCompatActivity {
     List<ingredientInfo> ingredients;
     String menuItems[] = {"Remove Ingredient"};
 
+    Intent intent;
+
     EditText comments;
 
     int ingredientNum;
@@ -186,8 +188,8 @@ public class MenuItemActivity extends AppCompatActivity {
     public void addToFavorites(View view){
         ParseObject favorite = new ParseObject("FavoriteMeals");
         favorite.put("Username", ParseUser.getCurrentUser().getUsername());
-        favorite.add("MealName", name);
-        favorite.add("MealID", id);
+        favorite.put("MealName", name);
+        favorite.put("MealID", id);
 
         for(int i = 0; i < ingredients.size(); i++){
             favorite.put("IngredientName" + i, ingredients.get(i).ingredName);
@@ -196,7 +198,7 @@ public class MenuItemActivity extends AppCompatActivity {
 
         if(!comments.getText().toString().isEmpty()){
             comment = comments.getText().toString();
-            favorite.put("Comment", comment);
+            favorite.put("Comments", comment);
         }
 
 
@@ -204,7 +206,7 @@ public class MenuItemActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if(e == null){
-                    Toast.makeText(getBaseContext(), "Meal Saved To Favorites Successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Meal Saved To Favorites!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getBaseContext(), e.getMessage() , Toast.LENGTH_SHORT).show();
                 }
@@ -221,7 +223,7 @@ public class MenuItemActivity extends AppCompatActivity {
 
         setTitle("Modify Order");
 
-        Intent intent = getIntent();
+        intent = getIntent();
         name = intent.getStringExtra("name");
         id = intent.getStringExtra("id");
 

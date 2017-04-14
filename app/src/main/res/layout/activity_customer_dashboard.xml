@@ -38,5 +38,12 @@
             android:id="@+id/cartButton"
             android:onClick="toCart" />
 
+        <Button
+            android:id="@+id/favoritesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="toFavoriteMeals"
+            android:text="Favorite Meals" />
+
     </LinearLayout>
 </RelativeLayout>
