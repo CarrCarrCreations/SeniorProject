@@ -190,6 +190,7 @@ public class MenuItemActivity extends AppCompatActivity {
         favorite.put("Username", ParseUser.getCurrentUser().getUsername());
         favorite.put("MealName", name);
         favorite.put("MealID", id);
+        favorite.put("Price", price);
 
         for(int i = 0; i < ingredients.size(); i++){
             favorite.put("IngredientName" + i, ingredients.get(i).ingredName);
