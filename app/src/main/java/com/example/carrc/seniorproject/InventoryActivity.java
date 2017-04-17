@@ -3,12 +3,14 @@ package com.example.carrc.seniorproject;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -25,7 +27,8 @@ import java.util.List;
 public class InventoryActivity extends AppCompatActivity {
 
     int prevTextViewId = 0;
-    ArrayList<EditText> ingredients = new ArrayList<EditText>();
+    ArrayList<TextView> ingredients = new ArrayList<TextView>();
+    ArrayList<EditText> ingredients2 = new ArrayList<EditText>();
     ArrayList<String> ingredientNameList = new ArrayList<String>();
     ArrayList<String> ingredientUnitList = new ArrayList<String>();
     ArrayList<String> ingredientQuantityList = new ArrayList<String>();
@@ -54,25 +57,30 @@ public class InventoryActivity extends AppCompatActivity {
             TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
             row.setLayoutParams(lp);
 
-
-
             int curTextViewId = prevTextViewId + 1;
-            final EditText editText = new EditText(this);
-            editText.setText(ingredientNameList.get(i));
-            final EditText editText2 = new EditText(this);
-            editText2.setText(ingredientUnitList.get(i));
+            final TextView textView = new TextView(this);
+            textView.setText(ingredientNameList.get(i));
+            textView.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+            final TextView textView2 = new TextView(this);
+            textView2.setText(ingredientUnitList.get(i));
+            textView2.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+
             final EditText editText3 = new EditText(this);
             editText3.setText(ingredientQuantityList.get(i));
+            editText3.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+
 
 
 
             prevTextViewId = curTextViewId;
 
-            row.addView(editText);
-            ingredients.add(editText);
-            row.addView(editText2);
+            //TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.WRAP_CONTENT,Gravity.LEFT | Gravity.CENTER_VERTICAL);
+
+            row.addView(textView);
+            ingredients.add(textView);
+            row.addView(textView2);
             row.addView(editText3);
-            ingredients.add(editText2);
+            ingredients.add(textView2);
             ingredients.add(editText3);
 
 
