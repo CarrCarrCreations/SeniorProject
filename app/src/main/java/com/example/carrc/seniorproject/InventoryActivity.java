@@ -69,6 +69,7 @@ public class InventoryActivity extends AppCompatActivity {
 
     }
 
+=
     public void displayInventory(){
         //System.out.println(ingredientNameList.size());\
 
@@ -108,6 +109,7 @@ public class InventoryActivity extends AppCompatActivity {
 
 
 
+
             prevTextViewId = curTextViewId;
 
             //TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.WRAP_CONTENT,Gravity.LEFT | Gravity.CENTER_VERTICAL);
@@ -118,6 +120,7 @@ public class InventoryActivity extends AppCompatActivity {
             row.addView(editText3);
             ingredientsUnit.add(textView2);
             ingredientsQuantity.add(editText3);
+
 
 
 
@@ -137,6 +140,7 @@ public class InventoryActivity extends AppCompatActivity {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
         try {
             query.setLimit(20);
+
             List<ParseObject> ingredientsList = query.find();
 
             System.out.println("Size of query find" + ingredientsList.size());
