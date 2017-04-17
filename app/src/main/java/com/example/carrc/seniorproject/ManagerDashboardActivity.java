@@ -42,6 +42,10 @@ public class ManagerDashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void inventoryManagement(View view){
+        Intent intent = new Intent(this, InventoryActivity.class);
+        startActivity(intent);
+    }
 
     public void openMenu(View view){
         Intent intent = new Intent(this, MenuActivity.class);
