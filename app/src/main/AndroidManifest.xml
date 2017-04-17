@@ -41,6 +41,7 @@
         <activity android:name=".RecipeManagementActivity"></activity>
         <activity android:name=".EditRecipeActivity" />
         <activity android:name=".DeleteRecipeActivity"/>
+        <activity android:name=".InventoryActivity"/>
 
     </application>
 

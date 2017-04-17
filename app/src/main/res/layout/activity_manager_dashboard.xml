@@ -80,5 +80,12 @@
             android:onClick="recipeManagement"
             android:text="Recipe Management" />
 
+        <Button
+            android:id="@+id/inventoryManagementButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="inventoryManagement"
+            android:text="Inventory Management" />
+
     </LinearLayout>
 </RelativeLayout>
