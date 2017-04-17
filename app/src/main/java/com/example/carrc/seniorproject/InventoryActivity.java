@@ -27,6 +27,7 @@ import java.util.List;
 public class InventoryActivity extends AppCompatActivity {
 
     int prevTextViewId = 0;
+<<<<<<< af04a3fbf5d3ca5be3afaee0cdee28db99f39c14
     ArrayList<TextView> ingredientsName = new ArrayList<TextView>();
     ArrayList<TextView> ingredientsUnit = new ArrayList<TextView>();
     ArrayList<EditText> ingredientsQuantity = new ArrayList<EditText>();
@@ -105,6 +106,8 @@ public class InventoryActivity extends AppCompatActivity {
             final EditText editText3 = new EditText(this);
             editText3.setText(ingredientQuantityList.get(i));
             editText3.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+
+<<<<<<< af04a3fbf5d3ca5be3afaee0cdee28db99f39c14
 
 
 
