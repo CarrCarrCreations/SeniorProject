@@ -45,6 +45,8 @@
         <activity android:name=".IngredientManagementActivity" />
         <activity android:name=".ModifyIngredientActivity" />
         <activity android:name=".CreateIngredientActivity"></activity>
+        <activity android:name=".InventoryActivity"/>
+
     </application>
 
 </manifest>
