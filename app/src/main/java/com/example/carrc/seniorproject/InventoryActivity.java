@@ -27,7 +27,7 @@ import java.util.List;
 public class InventoryActivity extends AppCompatActivity {
 
     int prevTextViewId = 0;
-<<<<<<< af04a3fbf5d3ca5be3afaee0cdee28db99f39c14
+
     ArrayList<TextView> ingredientsName = new ArrayList<TextView>();
     ArrayList<TextView> ingredientsUnit = new ArrayList<TextView>();
     ArrayList<EditText> ingredientsQuantity = new ArrayList<EditText>();
@@ -70,7 +70,7 @@ public class InventoryActivity extends AppCompatActivity {
 
     }
 
-=
+
     public void displayInventory(){
         //System.out.println(ingredientNameList.size());\
 
@@ -107,7 +107,6 @@ public class InventoryActivity extends AppCompatActivity {
             editText3.setText(ingredientQuantityList.get(i));
             editText3.setGravity(Gravity.CENTER | Gravity.BOTTOM);
 
-<<<<<<< af04a3fbf5d3ca5be3afaee0cdee28db99f39c14
 
 
 
@@ -123,6 +122,7 @@ public class InventoryActivity extends AppCompatActivity {
             row.addView(editText3);
             ingredientsUnit.add(textView2);
             ingredientsQuantity.add(editText3);
+
 
 
 
@@ -143,6 +143,7 @@ public class InventoryActivity extends AppCompatActivity {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
         try {
             query.setLimit(20);
+
 
             List<ParseObject> ingredientsList = query.find();
 
