@@ -27,11 +27,47 @@ import java.util.List;
 public class InventoryActivity extends AppCompatActivity {
 
     int prevTextViewId = 0;
-    ArrayList<TextView> ingredients = new ArrayList<TextView>();
-    ArrayList<EditText> ingredients2 = new ArrayList<EditText>();
+    ArrayList<TextView> ingredientsName = new ArrayList<TextView>();
+    ArrayList<TextView> ingredientsUnit = new ArrayList<TextView>();
+    ArrayList<EditText> ingredientsQuantity = new ArrayList<EditText>();
     ArrayList<String> ingredientNameList = new ArrayList<String>();
     ArrayList<String> ingredientUnitList = new ArrayList<String>();
     ArrayList<String> ingredientQuantityList = new ArrayList<String>();
+
+    public void updateInventory(View view) {
+        // get all quantities currently
+
+        // go through original list,
+        //ingredientQuantityList.size()
+        for(int i=0; i<ingredientQuantityList.size(); i++) {
+
+            if(!ingredientQuantityList.get(i).equals(ingredientsQuantity.get(i).getText().toString())){
+                // if different, update
+                    // grab i-th item in Name list, and update according.
+
+                String name = ingredientNameList.get(i);
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
+                query.whereEqualTo("Name", name);
+                try{
+                    ParseObject ingredient = query.getFirst();
+                    ingredient.put("Quantity", ingredientsQuantity.get(i).getText().toString());
+
+
+                    ingredient.saveInBackground();
+                } catch (ParseException e) {
+
+                }
+            } else {
+
+            }
+        }
+
+
+
+
+
+
+    }
 
     public void displayInventory(){
         //System.out.println(ingredientNameList.size());\
@@ -77,11 +113,11 @@ public class InventoryActivity extends AppCompatActivity {
             //TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.WRAP_CONTENT,Gravity.LEFT | Gravity.CENTER_VERTICAL);
 
             row.addView(textView);
-            ingredients.add(textView);
+            ingredientsName.add(textView);
             row.addView(textView2);
             row.addView(editText3);
-            ingredients.add(textView2);
-            ingredients.add(editText3);
+            ingredientsUnit.add(textView2);
+            ingredientsQuantity.add(editText3);
 
 
 
@@ -100,7 +136,7 @@ public class InventoryActivity extends AppCompatActivity {
         final Context _this = this;
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
         try {
-            query.setLimit(300);
+            query.setLimit(20);
             List<ParseObject> ingredientsList = query.find();
 
             System.out.println("Size of query find" + ingredientsList.size());
