@@ -75,6 +75,8 @@ public class IngredientListViewAdapter extends BaseAdapter {
                     recipelNamesList.add(wp);
                 }
             }
+            IngredientObject createNew = new IngredientObject("Create New Ingredient");
+            recipelNamesList.add(createNew);
         }
         notifyDataSetChanged();
     }

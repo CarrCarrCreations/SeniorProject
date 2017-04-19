@@ -98,7 +98,13 @@ public class CreateIngredientActivity extends AppCompatActivity {
 
         setTitle("Create Ingredient");
 
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("Name");
+
         nameEditText = (EditText) findViewById(R.id.nameEditText);
+        if(!name.isEmpty()){
+            nameEditText.setText(name);
+        }
         unitEditText = (EditText) findViewById(R.id.unitEditText);
         quantityEditText = (EditText) findViewById(R.id.quantityEditText);
 

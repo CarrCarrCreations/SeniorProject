@@ -26,7 +26,7 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
     ListView list;
     IngredientListViewAdapter adapter;
     SearchView editsearch;
-    String[] animalNameList;
+    String text;
     ArrayList<IngredientObject> arraylist = new ArrayList<IngredientObject>();
 
     public void getIngredientNames(){
@@ -88,9 +88,15 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = adapter.getItem(position).getIngredientNameName();
 
-                Intent intent = new Intent(getApplicationContext(), ModifyIngredientActivity.class);
-                intent.putExtra("Name", name);
-                startActivity(intent);
+                if(name.equals("Create New Ingredient")){
+                    Intent intent = new Intent(getApplicationContext(), CreateIngredientActivity.class);
+                    intent.putExtra("Name", text);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), ModifyIngredientActivity.class);
+                    intent.putExtra("Name", name);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -107,7 +113,7 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String text = newText;
+        text = newText;
         adapter.filter(text);
 
         return false;

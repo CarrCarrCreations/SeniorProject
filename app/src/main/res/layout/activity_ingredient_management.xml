@@ -15,20 +15,11 @@
         android:id="@+id/searchView" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/button7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/searchView"
-        android:onClick="createIngredient"
-        android:text="Create New Ingredient" />
-
-    <Button
-        android:id="@+id/button9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/button8"
         android:onClick="managerDash"
         android:text="Manager Dashboard" />
 
@@ -37,6 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/button9" />
+        android:layout_below="@+id/button7" />
 
 </RelativeLayout>
