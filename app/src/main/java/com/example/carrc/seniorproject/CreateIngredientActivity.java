@@ -65,7 +65,7 @@ public class CreateIngredientActivity extends AppCompatActivity {
                 String stringID = String.valueOf(id);
 
                 ParseObject ingredient = new ParseObject("Ingredients");
-                ingredient.put("Name", nameEditText.getText().toString());
+                ingredient.put("Name", nameEditText.getText().toString().toLowerCase());
                 ingredient.put("Unit", unitEditText.getText().toString());
                 ingredient.put("Quantity", quantityEditText.getText().toString());
                 ingredient.put("ID", stringID);
