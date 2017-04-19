@@ -1,7 +1,12 @@
 package com.example.carrc.seniorproject;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -57,6 +62,16 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
 
         // Binds the Adapter to the ListView
         list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = adapter.getItem(position).getIngredientNameName();
+
+                Intent intent = new Intent(getApplicationContext(), ModifyIngredientActivity.class);
+                intent.putExtra("Name", name);
+                startActivity(intent);
+            }
+        });
 
         // Locate the EditText in listview_main.xml
         editsearch = (SearchView) findViewById(R.id.searchView);
