@@ -109,6 +109,7 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
     public boolean onQueryTextChange(String newText) {
         String text = newText;
         adapter.filter(text);
+
         return false;
     }
 }
