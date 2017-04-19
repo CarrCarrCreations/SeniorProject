@@ -2,6 +2,7 @@ package com.example.carrc.seniorproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,6 +18,8 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+import bolts.Task;
+
 public class IngredientManagementActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     // Declare Variables
@@ -28,6 +31,11 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
 
     public void getIngredientNames(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
+        query.orderByDescending("createdAt");
+        Task<Integer> count = query.countInBackground();
+        SystemClock.sleep(1000);
+        query.setLimit(count.getResult());
+
         List<ParseObject> objects;
 
         try {
@@ -42,6 +50,18 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public void createIngredient(View view){
+
+        Intent intent = new Intent(this, CreateIngredientActivity.class);
+        startActivity(intent);
+    }
+
+    public void managerDash(View view){
+
+        Intent intent = new Intent(this, ManagerDashboardActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -59,6 +79,7 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
 
         // Pass results to IngredientListViewAdapter Class
         adapter = new IngredientListViewAdapter(this, arraylist);
+        adapter.notifyDataSetChanged();
 
         // Binds the Adapter to the ListView
         list.setAdapter(adapter);

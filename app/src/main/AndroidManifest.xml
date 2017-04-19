@@ -43,7 +43,8 @@
         <activity android:name=".FavoriteMealsActivity" />
         <activity android:name=".EditFavoriteActivity" />
         <activity android:name=".IngredientManagementActivity" />
-        <activity android:name=".ModifyIngredientActivity"></activity>
+        <activity android:name=".ModifyIngredientActivity" />
+        <activity android:name=".CreateIngredientActivity"></activity>
     </application>
 
 </manifest>

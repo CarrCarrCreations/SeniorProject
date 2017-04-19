@@ -29,6 +29,12 @@ public class ModifyIngredientActivity extends AppCompatActivity {
         String quantity;
     }
 
+    public void recreate(){
+        Intent intent = new Intent(this, IngredientManagementActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     public Ingredient getIngredientInfo(){
 
         Ingredient ingredientObject = new Ingredient();
@@ -99,6 +105,8 @@ public class ModifyIngredientActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            recreate();
 
         } catch (ParseException e) {
             e.printStackTrace();
