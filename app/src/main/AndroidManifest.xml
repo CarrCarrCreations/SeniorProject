@@ -36,12 +36,13 @@
         <activity android:name=".MenuMainActivity" />
         <activity android:name=".MenuItemActivity" />
         <activity android:name=".CartActivity" />
-        <activity android:name=".IngredientManagementActivity" />
         <activity android:name=".CreateRecipeActivity" />
-        <activity android:name=".RecipeManagementActivity"></activity>
+        <activity android:name=".RecipeManagementActivity" />
         <activity android:name=".EditRecipeActivity" />
-        <activity android:name=".DeleteRecipeActivity"/>
-
+        <activity android:name=".DeleteRecipeActivity" />
+        <activity android:name=".FavoriteMealsActivity" />
+        <activity android:name=".EditFavoriteActivity" />
+        <activity android:name=".IngredientManagementActivity"></activity>
     </application>
 
 </manifest>
