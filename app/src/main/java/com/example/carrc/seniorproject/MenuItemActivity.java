@@ -117,7 +117,11 @@ public class MenuItemActivity extends AppCompatActivity {
                     menuItem.add("Substitute Ingredient");
 
                     for(int i = 0; i < objects.size(); i++){
-                        subIngredArray.add(objects.get(i).get("Name").toString());
+                        if(objects.get(i).get("Name").toString().matches(ingredientsArrayList.get(itemSelectedTag))){
+                            continue;
+                        } else {
+                            subIngredArray.add(objects.get(i).get("Name").toString());
+                        }
                     }
 
                     SubArrayAdapter.notifyDataSetChanged();
@@ -129,7 +133,11 @@ public class MenuItemActivity extends AppCompatActivity {
                     if(objects.size() > 0){
                         subIngredArray.add("*** Vegetarian/Vegan Options ***");
                         for(int i = 0; i < objects.size(); i++){
-                            subIngredArray.add(objects.get(i).get("Name").toString());
+                            if(objects.get(i).get("Name").toString().matches(ingredientsArrayList.get(itemSelectedTag))){
+                                continue;
+                            } else {
+                                subIngredArray.add(objects.get(i).get("Name").toString());
+                            }
                         }
                         SubArrayAdapter.notifyDataSetChanged();
                     }
