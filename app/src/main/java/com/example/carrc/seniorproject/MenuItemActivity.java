@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,7 +44,6 @@ public class MenuItemActivity extends AppCompatActivity {
     ArrayList<String> ingredientsArrayList = new ArrayList<>();
     List<ingredientInfo> ingredients;
     ArrayList<String> menuItem = new ArrayList<>();
-    String menuItems[] = {"Remove Ingredient"};
 
     Intent intent;
 
@@ -65,6 +65,13 @@ public class MenuItemActivity extends AppCompatActivity {
     ListView ingredientsListView;
 
     RatingBar ratingBar;
+
+    // popup alertbox variables
+    ArrayList<String> subIngredArray = new ArrayList<>();
+    ArrayAdapter SubArrayAdapter;
+    ListView subListView;
+    AlertDialog.Builder mBuilder;
+    View mView;
 
 
 
@@ -97,8 +104,16 @@ public class MenuItemActivity extends AppCompatActivity {
                 objects = typeQuery.find();
                 if(objects.size() > 0){
                     menuItem.clear();
+                    subIngredArray.clear();
                     menuItem.add("Remove Ingredient");
                     menuItem.add("Substitute Ingredient");
+
+                    for(int i = 0; i < objects.size(); i++){
+                        subIngredArray.add(objects.get(i).get("Name").toString());
+                    }
+
+                    SubArrayAdapter.notifyDataSetChanged();
+
                 } else {
                     menuItem.add("Remove Ingredient");
                 }
@@ -111,13 +126,11 @@ public class MenuItemActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         if(v.getId() == R.id.ingredientsListView){
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             for(int i = 0; i < menuItem.size(); i++){
                 menu.add(Menu.NONE, i, i,menuItem.get(i));
             }
-            //itemSelectedTag = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
         }
     }
 
@@ -126,7 +139,7 @@ public class MenuItemActivity extends AppCompatActivity {
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int menuItemIndex = item.getItemId();
-        String menuItemName = menuItems[menuItemIndex];
+        String menuItemName = menuItem.get(menuItemIndex);
 
 
         if(menuItemName.matches("Remove Ingredient")){
@@ -134,6 +147,14 @@ public class MenuItemActivity extends AppCompatActivity {
             ingredientsArrayList.remove(itemSelectedTag);
             ingredients.remove(itemSelectedTag);
             arrayAdapter.notifyDataSetChanged();
+        }
+
+        if(menuItemName.matches("Substitute Ingredient")){
+
+            // create and show the dialog box
+            mBuilder.setView(mView);
+            AlertDialog dialog = mBuilder.create();
+            dialog.show();
         }
 
         return super.onContextItemSelected(item);
@@ -284,5 +305,13 @@ public class MenuItemActivity extends AppCompatActivity {
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         displayIngredients();
+
+        // create the alert dialog box with the substitute_popup layout
+        mBuilder = new AlertDialog.Builder(MenuItemActivity.this);
+        mView = getLayoutInflater().inflate(R.layout.substitute_popup, null);
+
+        subListView = (ListView) mView.findViewById(R.id.subListView);
+        SubArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, subIngredArray);
+        subListView.setAdapter(SubArrayAdapter);
     }
 }

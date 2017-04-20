@@ -27,7 +27,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/sendChatButton"
-        android:layout_below="@+id/listView"
+        android:layout_below="@+id/subListView"
         android:onClick="sendChat" />
 
     <ListView

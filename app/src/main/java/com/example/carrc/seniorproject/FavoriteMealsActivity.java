@@ -3,9 +3,6 @@ package com.example.carrc.seniorproject;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ActionMenuView;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -56,7 +53,7 @@ public class FavoriteMealsActivity extends AppCompatActivity {
 
         setTitle("Favorite Meals");
 
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.subListView);
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, meals);
         listView.setAdapter(arrayAdapter);
 

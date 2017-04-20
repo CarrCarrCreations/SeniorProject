@@ -7,7 +7,7 @@
     tools:context="com.example.carrc.seniorproject.FavoriteMealsActivity">
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/subListView"
         android:layout_width="368dp"
         android:layout_height="495dp"
         tools:layout_editor_absoluteX="8dp"
