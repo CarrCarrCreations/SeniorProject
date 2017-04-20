@@ -25,7 +25,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -44,7 +46,8 @@ public class MenuItemActivity extends AppCompatActivity {
     ArrayList<String> ingredientsArrayList = new ArrayList<>();
     List<ingredientInfo> ingredients;
     ArrayList<String> menuItem = new ArrayList<>();
-    List<ParseObject>  vegList;
+
+    boolean favorite;
 
     Intent intent;
 
@@ -143,6 +146,7 @@ public class MenuItemActivity extends AppCompatActivity {
                     }
 
                 } else {
+                    menuItem.clear();
                     menuItem.add("Remove Ingredient");
                 }
             } else {
@@ -277,33 +281,64 @@ public class MenuItemActivity extends AppCompatActivity {
     }
 
     public void addToFavorites(View view){
-        ParseObject favorite = new ParseObject("FavoriteMeals");
-        favorite.put("Username", ParseUser.getCurrentUser().getUsername());
-        favorite.put("MealName", name);
-        favorite.put("MealID", id);
-        favorite.put("Price", price);
 
-        for(int i = 0; i < ingredients.size(); i++){
-            favorite.put("IngredientName" + i, ingredients.get(i).ingredName);
-            favorite.put("IngredientID" + i, ingredients.get(i).ingredID);
-        }
+        if(favorite){
 
-        if(!comments.getText().toString().isEmpty()){
-            comment = comments.getText().toString();
-            favorite.put("Comments", comment);
-        }
+            ParseObject favorite = new ParseObject("FavoriteMeals");
+            favorite.put("Username", ParseUser.getCurrentUser().getUsername());
+            favorite.put("MealName", name);
+            favorite.put("MealID", id);
+            favorite.put("Price", price);
 
-
-        favorite.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null){
-                    Toast.makeText(getBaseContext(), "Meal Saved To Favorites!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getBaseContext(), e.getMessage() , Toast.LENGTH_SHORT).show();
-                }
+            for(int i = 0; i < ingredients.size(); i++){
+                favorite.put("IngredientName" + i, ingredients.get(i).ingredName);
+                favorite.put("IngredientID" + i, ingredients.get(i).ingredID);
             }
-        });
+
+            if(!comments.getText().toString().isEmpty()){
+                comment = comments.getText().toString();
+                favorite.put("Comments", comment);
+            }
+
+
+            favorite.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e == null){
+                        Toast.makeText(getBaseContext(), "Meal Saved To Favorites!", Toast.LENGTH_SHORT).show();
+                        recreate();
+                    } else {
+                        Toast.makeText(getBaseContext(), e.getMessage() , Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("FavoriteMeals");
+            query.whereEqualTo("Username", ParseUser.getCurrentUser().getUsername());
+            query.whereEqualTo("MealName", name);
+
+            try {
+                List<ParseObject> objects = query.find();
+                ParseObject meal = objects.get(0);
+
+                meal.deleteInBackground(new DeleteCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null){
+                            Toast.makeText(getBaseContext(), "Meal Deleted from Favorites!", Toast.LENGTH_SHORT).show();
+                            recreate();
+                        } else {
+                            Toast.makeText(getBaseContext(), e.getMessage() , Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+
     }
 
 
@@ -318,6 +353,8 @@ public class MenuItemActivity extends AppCompatActivity {
         intent = getIntent();
         name = intent.getStringExtra("name");
         id = intent.getStringExtra("id");
+
+        Button favoriteButton = (Button) findViewById(R.id.favoriteButton);
 
         activity_menu_item = (RelativeLayout) findViewById(R.id.activity_menu_item);
         comments = (EditText) findViewById(R.id.commentsEditText);
@@ -337,6 +374,25 @@ public class MenuItemActivity extends AppCompatActivity {
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         displayIngredients();
+
+        // see if the item is already in favorites
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("FavoriteMeals");
+        query.whereEqualTo("Username", ParseUser.getCurrentUser().getUsername());
+        query.whereEqualTo("MealName", name);
+
+        try {
+            List<ParseObject> objects = query.find();
+            if(objects.size() > 0){
+                favoriteButton.setText("Remove Favorite");
+                favorite = false;
+            } else {
+                favoriteButton.setText("Add to Favorite");
+                favorite = true;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
         // create the alert dialog box with the substitute_popup layout
