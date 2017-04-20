@@ -48,6 +48,14 @@
             android:hint="Ingredient Type..."
             android:inputType="textPersonName" />
 
+        <EditText
+            android:id="@+id/vegTypeEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Vegetarian/Vegan Type..."
+            android:inputType="textPersonName" />
+
         <Button
             android:id="@+id/deleteButton"
             android:layout_width="match_parent"

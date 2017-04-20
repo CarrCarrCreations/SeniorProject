@@ -44,6 +44,7 @@ public class MenuItemActivity extends AppCompatActivity {
     ArrayList<String> ingredientsArrayList = new ArrayList<>();
     List<ingredientInfo> ingredients;
     ArrayList<String> menuItem = new ArrayList<>();
+    List<ParseObject>  vegList;
 
     Intent intent;
 
@@ -55,6 +56,7 @@ public class MenuItemActivity extends AppCompatActivity {
     String ingredientName;
     String ingredientID;
     String comment;
+
     // Recipe name and id
     String name;
     String id;
@@ -75,8 +77,6 @@ public class MenuItemActivity extends AppCompatActivity {
     View mView;
 
 
-
-
     public class ingredientInfo {
         String ingredName;
         String ingredID;
@@ -88,6 +88,7 @@ public class MenuItemActivity extends AppCompatActivity {
         finish();
     }
 
+
     // create the menu for long pressing an item on the listView
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -95,11 +96,13 @@ public class MenuItemActivity extends AppCompatActivity {
 
         // do a query to find the selected ingredient and it's type
         itemSelectedTag = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
+
         ParseQuery<ParseObject> ingred = ParseQuery.getQuery("Ingredients");
         ingred.whereEqualTo("Name", ingredientsArrayList.get(itemSelectedTag));
         try {
             List<ParseObject> objects = ingred.find();
             ParseObject selectedIngred = objects.get(0);
+
             if(selectedIngred.get("Type") != null){
                 ingredType = selectedIngred.get("Type").toString();
 
@@ -118,6 +121,18 @@ public class MenuItemActivity extends AppCompatActivity {
                     }
 
                     SubArrayAdapter.notifyDataSetChanged();
+
+                    // check if there are any ingredients that have a VegType of the IngredType
+                    ParseQuery<ParseObject> vegTypeQuery = ParseQuery.getQuery("Ingredients");
+                    vegTypeQuery.whereEqualTo("VegType", ingredType);
+                    objects = vegTypeQuery.find();
+                    if(objects.size() > 0){
+                        subIngredArray.add("*** Vegetarian/Vegan Options ***");
+                        for(int i = 0; i < objects.size(); i++){
+                            subIngredArray.add(objects.get(i).get("Name").toString());
+                        }
+                        SubArrayAdapter.notifyDataSetChanged();
+                    }
 
                 } else {
                     menuItem.add("Remove Ingredient");
@@ -329,32 +344,34 @@ public class MenuItemActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = subIngredArray.get(position);
 
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
-                query.whereEqualTo("Name", name);
+                if(!name.equals("*** Vegetarian/Vegan Options ***")){
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
+                    query.whereEqualTo("Name", name);
 
-                List<ParseObject> objects;
-                try {
-                    objects = query.find();
-                    ParseObject tempIngred = objects.get(0);
+                    List<ParseObject> objects;
+                    try {
+                        objects = query.find();
+                        ParseObject tempIngred = objects.get(0);
 
-                    ingredientInfo ingredient = new ingredientInfo();
-                    ingredient.ingredName = tempIngred.get("Name").toString();
-                    ingredient.ingredID = tempIngred.get("ID").toString();
+                        ingredientInfo ingredient = new ingredientInfo();
+                        ingredient.ingredName = tempIngred.get("Name").toString();
+                        ingredient.ingredID = tempIngred.get("ID").toString();
 
-                    // remove the old ingredient
-                    ingredientsArrayList.remove(itemSelectedTag);
-                    ingredients.remove(itemSelectedTag);
-                    arrayAdapter.notifyDataSetChanged();
+                        // remove the old ingredient
+                        ingredientsArrayList.remove(itemSelectedTag);
+                        ingredients.remove(itemSelectedTag);
+                        arrayAdapter.notifyDataSetChanged();
 
-                    // add the new ingredient
-                    ingredients.add(ingredient);
-                    ingredientsArrayList.add(ingredient.ingredName);
-                    arrayAdapter.notifyDataSetChanged();
+                        // add the new ingredient
+                        ingredients.add(ingredient);
+                        ingredientsArrayList.add(ingredient.ingredName);
+                        arrayAdapter.notifyDataSetChanged();
 
-                    dialog.hide();
+                        dialog.hide();
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

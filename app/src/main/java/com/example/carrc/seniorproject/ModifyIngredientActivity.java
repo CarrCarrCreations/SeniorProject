@@ -25,12 +25,14 @@ public class ModifyIngredientActivity extends AppCompatActivity {
     EditText unitEditText;
     EditText quantityEditText;
     EditText typeEditText;
+    EditText vegTypeEditText;
 
     class Ingredient {
         String name;
         String unit;
         String quantity;
         String type;
+        String vegType;
     }
 
     public void recreate(){
@@ -58,6 +60,11 @@ public class ModifyIngredientActivity extends AppCompatActivity {
             } else {
                 ingredientObject.type = "";
             }
+            if(ingredient.get("VegType") != null){
+                ingredientObject.vegType = ingredient.get("VegType").toString();
+            } else {
+                ingredientObject.vegType = "";
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -79,6 +86,7 @@ public class ModifyIngredientActivity extends AppCompatActivity {
             ingredient.put("Unit",unitEditText.getText().toString());
             ingredient.put("Quantity",quantityEditText.getText().toString());
             ingredient.put("Type", typeEditText.getText().toString());
+            ingredient.put("VegType", vegTypeEditText.getText().toString());
 
             ingredient.saveInBackground(new SaveCallback() {
                 @Override
@@ -164,6 +172,9 @@ public class ModifyIngredientActivity extends AppCompatActivity {
 
         typeEditText = (EditText) findViewById(R.id.typeEditText);
         typeEditText.setText(ingredient.type);
+
+        vegTypeEditText = (EditText) findViewById(R.id.vegTypeEditText);
+        vegTypeEditText.setText(ingredient.vegType);
 
     }
 }
