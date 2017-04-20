@@ -53,7 +53,11 @@ public class ModifyIngredientActivity extends AppCompatActivity {
             ingredientObject.name = ingredient.get("Name").toString();
             ingredientObject.unit = ingredient.get("Unit").toString();
             ingredientObject.quantity = ingredient.get("Quantity").toString();
-            ingredientObject.type = ingredient.get("Type").toString();
+            if(ingredient.get("Type") != null){
+                ingredientObject.type = ingredient.get("Type").toString();
+            } else {
+                ingredientObject.type = "";
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();
