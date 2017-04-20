@@ -24,11 +24,13 @@ public class ModifyIngredientActivity extends AppCompatActivity {
     EditText nameEditText;
     EditText unitEditText;
     EditText quantityEditText;
+    EditText typeEditText;
 
     class Ingredient {
         String name;
         String unit;
         String quantity;
+        String type;
     }
 
     public void recreate(){
@@ -51,6 +53,7 @@ public class ModifyIngredientActivity extends AppCompatActivity {
             ingredientObject.name = ingredient.get("Name").toString();
             ingredientObject.unit = ingredient.get("Unit").toString();
             ingredientObject.quantity = ingredient.get("Quantity").toString();
+            ingredientObject.type = ingredient.get("Type").toString();
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -71,6 +74,7 @@ public class ModifyIngredientActivity extends AppCompatActivity {
             ingredient.put("Name", nameEditText.getText().toString());
             ingredient.put("Unit",unitEditText.getText().toString());
             ingredient.put("Quantity",quantityEditText.getText().toString());
+            ingredient.put("Type", typeEditText.getText().toString());
 
             ingredient.saveInBackground(new SaveCallback() {
                 @Override
@@ -153,6 +157,9 @@ public class ModifyIngredientActivity extends AppCompatActivity {
 
         quantityEditText = (EditText) findViewById(R.id.quantityEditText);
         quantityEditText.setText(ingredient.quantity);
+
+        typeEditText = (EditText) findViewById(R.id.typeEditText);
+        typeEditText.setText(ingredient.type);
 
     }
 }

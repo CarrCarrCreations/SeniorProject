@@ -19,6 +19,7 @@ public class CreateIngredientActivity extends AppCompatActivity {
     EditText nameEditText;
     EditText unitEditText;
     EditText quantityEditText;
+    EditText typeEditText;
 
     boolean unique;
 
@@ -68,6 +69,7 @@ public class CreateIngredientActivity extends AppCompatActivity {
                 ingredient.put("Name", nameEditText.getText().toString().toLowerCase());
                 ingredient.put("Unit", unitEditText.getText().toString());
                 ingredient.put("Quantity", quantityEditText.getText().toString());
+                ingredient.put("Type", typeEditText.getText().toString());
                 ingredient.put("ID", stringID);
 
                 ingredient.saveInBackground(new SaveCallback() {
@@ -107,6 +109,7 @@ public class CreateIngredientActivity extends AppCompatActivity {
         }
         unitEditText = (EditText) findViewById(R.id.unitEditText);
         quantityEditText = (EditText) findViewById(R.id.quantityEditText);
+        typeEditText = (EditText) findViewById(R.id.typeEditText);
 
     }
 }
