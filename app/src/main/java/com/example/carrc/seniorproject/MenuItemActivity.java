@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,12 +35,14 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MenuItemActivity extends AppCompatActivity {
 
     ArrayAdapter arrayAdapter;
     ArrayList<String> ingredientsArrayList = new ArrayList<>();
     List<ingredientInfo> ingredients;
+    ArrayList<String> menuItem = new ArrayList<>();
     String menuItems[] = {"Remove Ingredient"};
 
     Intent intent;
@@ -56,11 +59,14 @@ public class MenuItemActivity extends AppCompatActivity {
     String name;
     String id;
     String price;
+    String ingredType;
 
     RelativeLayout activity_menu_item;
     ListView ingredientsListView;
 
     RatingBar ratingBar;
+
+
 
 
     public class ingredientInfo {
@@ -74,12 +80,44 @@ public class MenuItemActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+
+        // do a query to find the selected ingredient and it's type
+        itemSelectedTag = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
+        ParseQuery<ParseObject> ingred = ParseQuery.getQuery("Ingredients");
+        ingred.whereEqualTo("Name", ingredientsArrayList.get(itemSelectedTag));
+        try {
+            List<ParseObject> objects = ingred.find();
+            ParseObject selectedIngred = objects.get(0);
+            if(selectedIngred.get("Type") != null){
+                ingredType = selectedIngred.get("Type").toString();
+
+                // do a query to find all ingredients with the ingredType
+                ParseQuery<ParseObject> typeQuery = ParseQuery.getQuery("Ingredients");
+                typeQuery.whereEqualTo("Type", ingredType);
+                objects = typeQuery.find();
+                if(objects.size() > 0){
+                    menuItem.clear();
+                    menuItem.add("Remove Ingredient");
+                    menuItem.add("Substitute Ingredient");
+                } else {
+                    menuItem.add("Remove Ingredient");
+                }
+            } else {
+                menuItem.clear();
+                menuItem.add("Remove Ingredient");
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         if(v.getId() == R.id.ingredientsListView){
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            for(int i = 0; i < menuItems.length; i++){
-                menu.add(Menu.NONE, i, i,menuItems[i]);
+            for(int i = 0; i < menuItem.size(); i++){
+                menu.add(Menu.NONE, i, i,menuItem.get(i));
             }
-            itemSelectedTag = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
+            //itemSelectedTag = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
         }
     }
 
