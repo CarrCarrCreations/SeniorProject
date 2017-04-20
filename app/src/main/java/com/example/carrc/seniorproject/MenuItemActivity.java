@@ -71,6 +71,7 @@ public class MenuItemActivity extends AppCompatActivity {
     ArrayAdapter SubArrayAdapter;
     ListView subListView;
     AlertDialog.Builder mBuilder;
+    AlertDialog dialog;
     View mView;
 
 
@@ -82,6 +83,10 @@ public class MenuItemActivity extends AppCompatActivity {
         int ingredTag;
     }
 
+    public void recreate(){
+        startActivity(getIntent());
+        finish();
+    }
 
     // create the menu for long pressing an item on the listView
     @Override
@@ -152,9 +157,13 @@ public class MenuItemActivity extends AppCompatActivity {
         if(menuItemName.matches("Substitute Ingredient")){
 
             // create and show the dialog box
-            mBuilder.setView(mView);
-            AlertDialog dialog = mBuilder.create();
-            dialog.show();
+            if(mView.getParent() == null){
+                mBuilder.setView(mView);
+                dialog = mBuilder.create();
+                dialog.show();
+            } else {
+                dialog.show();
+            }
         }
 
         return super.onContextItemSelected(item);
@@ -306,6 +315,7 @@ public class MenuItemActivity extends AppCompatActivity {
 
         displayIngredients();
 
+
         // create the alert dialog box with the substitute_popup layout
         mBuilder = new AlertDialog.Builder(MenuItemActivity.this);
         mView = getLayoutInflater().inflate(R.layout.substitute_popup, null);
@@ -313,5 +323,41 @@ public class MenuItemActivity extends AppCompatActivity {
         subListView = (ListView) mView.findViewById(R.id.subListView);
         SubArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, subIngredArray);
         subListView.setAdapter(SubArrayAdapter);
+
+        subListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = subIngredArray.get(position);
+
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
+                query.whereEqualTo("Name", name);
+
+                List<ParseObject> objects;
+                try {
+                    objects = query.find();
+                    ParseObject tempIngred = objects.get(0);
+
+                    ingredientInfo ingredient = new ingredientInfo();
+                    ingredient.ingredName = tempIngred.get("Name").toString();
+                    ingredient.ingredID = tempIngred.get("ID").toString();
+
+                    // remove the old ingredient
+                    ingredientsArrayList.remove(itemSelectedTag);
+                    ingredients.remove(itemSelectedTag);
+                    arrayAdapter.notifyDataSetChanged();
+
+                    // add the new ingredient
+                    ingredients.add(ingredient);
+                    ingredientsArrayList.add(ingredient.ingredName);
+                    arrayAdapter.notifyDataSetChanged();
+
+                    dialog.hide();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 }
