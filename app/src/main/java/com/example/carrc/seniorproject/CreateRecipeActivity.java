@@ -203,7 +203,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
                 ParseObject ingredient = new ParseObject("Ingredients");
                 ingredient.put("Name", ingredients.get(listCount).getText().toString());
                 ingredient.put("Unit", ingredients.get(listCount + 2).getText().toString());
-
+                ingredient.put("Quantity", "100");
                 ingredientId = (int) (Math.random() * 1000001) + 1;
                 taken = false;
                 while (!taken) {
