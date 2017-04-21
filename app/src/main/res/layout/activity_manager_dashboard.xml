@@ -87,12 +87,5 @@
             android:onClick="inventoryManagement"
             android:text="Inventory Management" />
 
-        <Button
-            android:id="@+id/test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="testMenu"
-            android:text="Test" />
-
     </LinearLayout>
 </RelativeLayout>
