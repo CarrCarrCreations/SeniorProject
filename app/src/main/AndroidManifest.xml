@@ -46,6 +46,7 @@
         <activity android:name=".ModifyIngredientActivity" />
         <activity android:name=".CreateIngredientActivity" />
         <activity android:name=".ReviewOrderActivity" />
+        <activity android:name=".InventoryActivity" />
         <activity android:name=".ReviewSelectedOrderActivity"></activity>
     </application>
 
