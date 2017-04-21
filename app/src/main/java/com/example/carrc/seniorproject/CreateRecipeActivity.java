@@ -214,6 +214,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
                     } else {
                         ingredientId = (int) (Math.random() * 1000001) + 1;
+
                     }
 
                 }
