@@ -1,13 +1,23 @@
 package com.example.carrc.seniorproject;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.SearchView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +44,12 @@ import java.util.TimeZone;
 public class CreateRecipeActivity extends AppCompatActivity {
 
     int prevTextViewId = 0;
+    int prevSearchViewId = 0;
     ArrayList<EditText> ingredients = new ArrayList<EditText>();
+    ArrayList<String> ingredientNames = new ArrayList<String>();
+    ArrayList<String> ingredientNameList = new ArrayList<String>();
+    ArrayList<String> ingredientUnitList = new ArrayList<String>();
+    ArrayList<String> ingredientQuantityList = new ArrayList<String>();
     ParseObject first;
     List<ParseObject> x;
     String constant ="";
@@ -45,6 +60,41 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
+        populateInventoryList();
+
+    }
+
+    public void populateInventoryList() {
+            //grab Ingredients table and display them.
+            final Context _this = this;
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
+            try {
+                query.setLimit(300);
+                List<ParseObject> ingredientsList = query.find();
+
+                System.out.println("Size of query find" + ingredientsList.size());
+                for(ParseObject ob: ingredientsList){
+
+                    if(ob.get("Name")!= null){
+                        ingredientNameList.add(ob.get("Name").toString());
+                        ingredientNames.add(ob.get("Name").toString());
+
+                    }
+                    else
+                        ingredientNameList.add("");
+                    if(ob.get("Unit")!= null)
+                        ingredientUnitList.add(ob.get("Unit").toString());
+                    else
+                        ingredientUnitList.add("");
+                    if(ob.get("Quantity")!= null)
+                        ingredientQuantityList.add(ob.get("Quantity").toString());
+                    else
+                        ingredientQuantityList.add("");
+                }
+            } catch (ParseException e){
+                System.out.println(e.getMessage());
+            }
+
 
     }
 
@@ -251,6 +301,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
                             taken = true;
 
                         } else {
+                            ingredientId = (int) (Math.random() * 1000001) + 1;
                         }
 
                     }
@@ -319,7 +370,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
         }
     }
 
-    public void addItem(View view){
+    public void addItemS(View view){
         //Log.i("Info", "Here");
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.layout);
 
@@ -346,6 +397,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
             params.addRule(RelativeLayout.BELOW, prevTextViewId);
             //editText.setLayoutParams(params);
             a.setLayoutParams(params);
+
             prevTextViewId = curTextViewId;
 
             a.addView(editText);
@@ -357,6 +409,148 @@ public class CreateRecipeActivity extends AppCompatActivity {
             //myRoot.addView(a);
             //layout.addView(a, params);
               layout.addView(a);
+    }
+
+    public void addItem(View view){
+        //keeping track of rows essentially
+        int curTextViewId = prevTextViewId + 1;
+        prevTextViewId = curTextViewId;
+        //Log.i("Info", "Here");
+        TableLayout tableLayout = (TableLayout) findViewById(R.id.tableLayout);
+        TableRow tableRow = new TableRow(this);
+
+        //LinearLayout myRoot = (LinearLayout) findViewById(R.id.my_root);
+        LinearLayout searchViewLayout = new LinearLayout(this);
+        searchViewLayout.setOrientation(LinearLayout.VERTICAL);
+
+        //test 1 listView for all
+
+        final ListView listIngred = new ListView(this);
+
+
+
+        final float scale = getResources().getDisplayMetrics().density;
+        //int height = (int) (50 * scale + 0.5f);
+        final SearchView searchViewIngred = new SearchView(this);
+        int curSearchViewId = prevSearchViewId + 1;
+        searchViewIngred.setId(curSearchViewId);
+        final ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ingredientNames);
+        listIngred.setAdapter(adapter);
+        // old Ingredient EditText, keeping it for algorithm to stay consistent
+        final EditText editText = new EditText(this);
+        searchViewIngred.setQueryHint("Ingredient");
+        //editText.setId(Integer.parseInt(curTextViewId + "" + 1));
+        final EditText editText2 = new EditText(this);
+        editText2.setHint("Quantity");
+        //editText2.setId(Integer.parseInt(curTextViewId + "" + 1));
+        final EditText editText3 = new EditText(this);
+        editText3.setHint("Unit");
+        //editText3.setId(Integer.parseInt(curTextViewId + "" + 1));
+
+        listIngred.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                Object listItem = listIngred.getItemAtPosition(position);
+                String str = (String) listItem; //As you are using Default String Adapter
+                editText.setText(str);
+                if(ingredientNames.contains(str)){
+                    //search databse to get file
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
+                    query.whereEqualTo("Name", str);
+                    try {
+                        ParseObject ingredient = query.getFirst();
+                        editText3.setText(ingredient.get("Unit").toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                searchViewIngred.setQuery( (CharSequence) str, false);
+                searchViewIngred.setIconified(false);
+
+                listIngred.setVisibility(View.GONE);
+            }
+        });
+
+        listIngred.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View __v, MotionEvent __event) {
+                if (__event.getAction() == MotionEvent.ACTION_DOWN) {
+                    //  Disallow the touch request for parent scroll on touch of child view
+                    requestDisallowParentInterceptTouchEvent(__v, true);
+                } else if (__event.getAction() == MotionEvent.ACTION_UP || __event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    // Re-allows parent events
+                    requestDisallowParentInterceptTouchEvent(__v, false);
+                }
+                return false;
+            }
+        });
+
+        searchViewIngred.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                editText.setText(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                // searchViewIngred.getId
+
+                // I HAVE IDD
+                // whatever ID i give it, use that as the i, the i will be same as curSearchViewID
+                //ingredients.set(  (curSearchViewId  - 1)   , ingredients.get( (curSearchViewId -1)).setText(newText) );
+                listIngred.setVisibility(View.VISIBLE);
+                listIngred.setAlpha(1);
+                adapter.getFilter().filter(newText);
+                editText.setText(newText);
+
+                if(ingredientNames.contains(newText)){
+                    //search databse to get file
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
+                    query.whereEqualTo("Name", newText);
+                    try {
+                        ParseObject ingredient = query.getFirst();
+                        editText3.setText(ingredient.get("Unit").toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                return false;
+            }
+        });
+
+
+
+
+
+
+
+        //editText.setLayoutParams(params);
+        ingredients.add(editText);
+        ingredients.add(editText2);
+        ingredients.add(editText3);
+
+        searchViewLayout.addView(searchViewIngred);
+        searchViewLayout.addView(listIngred);
+        tableRow.addView(searchViewLayout);
+        tableRow.addView(editText2);
+        tableRow.addView(editText3);
+
+        tableLayout.addView(tableRow);
+    }
+
+    private void requestDisallowParentInterceptTouchEvent(View __v, Boolean __disallowIntercept) {
+        while (__v.getParent() != null && __v.getParent() instanceof View) {
+            if (__v.getParent() instanceof ScrollView) {
+                __v.getParent().requestDisallowInterceptTouchEvent(__disallowIntercept);
+            }
+            __v = (View) __v.getParent();
+        }
     }
 }
 
