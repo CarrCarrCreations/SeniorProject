@@ -36,7 +36,7 @@ public class ModifyIngredientActivity extends AppCompatActivity {
     }
 
     public void recreate(){
-        Intent intent = new Intent(this, IngredientManagementActivity.class);
+        Intent intent = new Intent(this, ReviewOrderActivity.class);
         startActivity(intent);
         finish();
     }

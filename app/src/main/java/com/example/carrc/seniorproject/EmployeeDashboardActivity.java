@@ -217,6 +217,13 @@ public class EmployeeDashboardActivity extends AppCompatActivity {
             });
         }
 
+        if(menuItemName.matches("Review Order")){
+            String tableNumber = tableName.replace("table", "");
+            Intent intent = new Intent(getApplicationContext(), ReviewOrderActivity.class);
+            intent.putExtra("tableNumber", tableNumber);
+            startActivity(intent);
+        }
+
         return super.onContextItemSelected(item);
     }
 

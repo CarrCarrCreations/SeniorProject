@@ -341,6 +341,10 @@ public class EditFavoriteActivity extends AppCompatActivity {
         }
     }
 
+    public void deleteFavorite(View view){
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
