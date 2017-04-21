@@ -46,6 +46,7 @@
         <activity android:name=".ModifyIngredientActivity" />
         <activity android:name=".CreateIngredientActivity"></activity>
         <activity android:name=".InventoryActivity"/>
+        <activity android:name=".TestActivity"/>
 
     </application>
 
