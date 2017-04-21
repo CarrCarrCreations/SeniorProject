@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
     >
@@ -44,26 +44,23 @@
             android:onClick="addItem"
             android:text="Add Item" />
 
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/sview"
-            android:layout_below="@+id/button">
-            <RelativeLayout
-                android:id="@+id/layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                >
 
-            </RelativeLayout>
-        </ScrollView>
+                <TableLayout
+                    android:id="@+id/tableLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/button"
+                    android:shrinkColumns="0">
+
+
+                </TableLayout>
 
         <TextView
             android:id="@+id/intolerancesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Intolerances"
-            android:layout_below="@id/sview"
+            android:layout_below="@id/tableLayout"
             />
 
         <GridLayout
