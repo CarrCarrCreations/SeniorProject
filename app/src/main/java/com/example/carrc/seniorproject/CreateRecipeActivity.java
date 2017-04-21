@@ -374,47 +374,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
         }
     }
 
-    public void addItemS(View view){
-        //Log.i("Info", "Here");
-        RelativeLayout layout = (RelativeLayout) findViewById(R.id.layout);
-
-        //LinearLayout myRoot = (LinearLayout) findViewById(R.id.my_root);
-        LinearLayout a = new LinearLayout(this);
-        a.setOrientation(LinearLayout.HORIZONTAL);
-
-            int curTextViewId = prevTextViewId + 1;
-            final EditText editText = new EditText(this);
-            editText.setHint("Ingredient");
-            //editText.setId(Integer.parseInt(curTextViewId + "" + 1));
-            final EditText editText2 = new EditText(this);
-            editText2.setHint("Quantity");
-            //editText2.setId(Integer.parseInt(curTextViewId + "" + 1));
-            final EditText editText3 = new EditText(this);
-            editText3.setHint("Unit");
-            //editText3.setId(Integer.parseInt(curTextViewId + "" + 1));
-            a.setId(curTextViewId);
-
-            final RelativeLayout.LayoutParams params =
-                    new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
-                            RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-            params.addRule(RelativeLayout.BELOW, prevTextViewId);
-            //editText.setLayoutParams(params);
-            a.setLayoutParams(params);
-
-            prevTextViewId = curTextViewId;
-
-            a.addView(editText);
-            ingredients.add(editText);
-            a.addView(editText2);
-            ingredients.add(editText2);
-            a.addView(editText3);
-            ingredients.add(editText3);
-            //myRoot.addView(a);
-            //layout.addView(a, params);
-              layout.addView(a);
-    }
-
     public void addItem(View view){
         //keeping track of rows essentially
         int curTextViewId = prevTextViewId + 1;
