@@ -56,23 +56,6 @@
                         android:padding="3dip"
                         android:text="Amount" />
 
-                    <TextView
-                        android:layout_gravity="center_horizontal"
-                        android:padding="3dip"
-                        android:text="Name" />
-
-                    <TextView
-                        android:layout_column="1"
-                        android:layout_gravity="center_horizontal"
-                        android:padding="3dip"
-                        android:text="Unit" />
-
-                    <TextView
-                        android:layout_column="2"
-                        android:layout_gravity="center_horizontal"
-                        android:padding="3dip"
-                        android:text="Amount" />
-
                 </TableRow>
 
 
