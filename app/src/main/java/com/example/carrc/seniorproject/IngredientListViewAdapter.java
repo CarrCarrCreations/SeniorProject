@@ -77,12 +77,14 @@ public class IngredientListViewAdapter extends BaseAdapter {
                     recipelNamesList.add(wp);
                 }
             }
-            if(this.type.equals("Ingredient")){
-                IngredientObject createNew = new IngredientObject("Create New Ingredient");
-                recipelNamesList.add(createNew);
-            } else {
-                IngredientObject createNew = new IngredientObject("Create New Recipe");
-                recipelNamesList.add(createNew);
+            if(recipelNamesList.isEmpty()){
+                if(this.type.equals("Ingredient")){
+                    IngredientObject createNew = new IngredientObject("Create New Ingredient");
+                    recipelNamesList.add(createNew);
+                } else {
+                    IngredientObject createNew = new IngredientObject("Create New Recipe");
+                    recipelNamesList.add(createNew);
+                }
             }
 
         }
