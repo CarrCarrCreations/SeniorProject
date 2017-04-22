@@ -86,92 +86,26 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
         finish();
     }
 
-    public void getRecipe(){
+    public String getID(String name){
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
-        query.whereEqualTo("ItemTitle", recipeName);
+        ParseQuery query = ParseQuery.getQuery("Ingredients");
+        query.whereEqualTo("Name", name);
 
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if(e == null && objects.size() > 0){
-                    ParseObject recipe = objects.get(0);
-                    recipeNameEditText.setText(recipe.get("ItemTitle").toString());
-                    urlEditText.setText(recipe.get("Image").toString());
-                    priceEditText.setText(recipe.get("PricePerServing").toString());
-                    courseEditText.setText(recipe.get("course").toString());
-                    mealEditText.setText(recipe.get("mealType").toString());
+        try {
+            List<ParseObject> objects = query.find();
 
-                    for(int i = 0; i < checkBoxes.length; i++){
-                        String formattedText = "";
-                        String checkboxText = checkBoxes[i].getText().toString().toLowerCase();
+            ParseObject ingred = objects.get(0);
 
-                        if(checkboxText.matches("vegan") || checkboxText.matches("vegetarian")){
-                            formattedText = checkboxText;
-                        } else {
-                            formattedText = checkboxText + "Free";
-                        }
-                        String isChecked = recipe.get(formattedText).toString();
-                        if(isChecked == null){
-                            isChecked = "false";
-                        }
-                        if(isChecked.matches("true")){
-                            checkBoxes[i].setChecked(true);
-                        } else {
-                            checkBoxes[i].setChecked(false);
-                        }
-                    }
+            return ingred.get("ID").toString();
 
-                    ingredientNum = 0;
-                    do {
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-                        if(recipe.get("IngredientName" + ingredientNum) == null){
-                            break;
-                        }
-
-                        ingredientName = recipe.get("IngredientName" + ingredientNum).toString();
-                        String ingredientUnit = recipe.get("IngredientUnit" + ingredientNum).toString();
-                        String ingredientQuantity = recipe.get("IngredientAmount" + ingredientNum).toString();
-
-                        newIngredient newIngredient = new newIngredient();
-                        TableRow tableRow = new TableRow(getBaseContext());
-
-                        newIngredient.name = ingredientName;
-
-                        TextView nameTextView = new TextView(getBaseContext());
-                        nameTextView.setText(ingredientName);
-                        if(ingredientName.length() > 15){
-                            nameTextView.setTextSize(14);
-                        } else {
-                            nameTextView.setTextSize(20);
-                        }
-
-                        EditText unitEditText = new EditText(getBaseContext());
-                        unitEditText.setText(ingredientUnit);
-                        newIngredient.unit = unitEditText;
-
-                        EditText quantityEditText = new EditText(getBaseContext());
-                        quantityEditText.setText(ingredientQuantity);
-                        newIngredient.quantity = quantityEditText;
-
-                        newIngred.add(newIngredient);
-
-                        tableRow.addView(nameTextView);
-                        tableRow.addView(unitEditText);
-                        tableRow.addView(quantityEditText);
-                        tableRow.requestFocus();
-                        tableLayout.addView(tableRow);
-
-
-                        ingredientNum++;
-
-                    } while (ingredientName != null);
-
-                }
-            }
-        });
-
+        return null;
     }
+
+
 
     public void addIngredient(View view){
         if(mView.getParent() == null){
@@ -212,6 +146,22 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
 
             ParseObject recipe = new ParseObject("Recipes");
 
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
+            query.orderByAscending("createdAt");
+            query.setLimit(1);
+
+            try {
+                List<ParseObject> objects = query.find();
+                ParseObject temp = objects.get(0);
+                int id = Integer.parseInt(temp.get("FoodID").toString()) + 1;
+                String stringID = String.valueOf(id);
+                recipe.put("FoodID", stringID);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
             recipe.put("ItemTitle", recipeNameEditText.getText().toString());
             recipe.put("Image", urlEditText.getText().toString());
             recipe.put("PricePerServing", priceEditText.getText().toString());
@@ -223,8 +173,10 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
                 String ingredNameFormat = "IngredientName" + i;
                 String ingredUnitFormat = "IngredientUnit" + i;
                 String ingredQuantityFormat = "IngredientAmount" + i;
-                
+                String ingredIDFormat = "IngredientID" + i;
+
                 recipe.put(ingredNameFormat, newIngred.get(i).name);
+                recipe.put(ingredIDFormat, newIngred.get(i).id);
                 recipe.put(ingredUnitFormat, newIngred.get(i).unit.getText().toString());
                 recipe.put(ingredQuantityFormat, newIngred.get(i).quantity.getText().toString());
             }
@@ -301,8 +253,6 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
                 sesameCheckBox, seafoodCheckBox, shellfishCheckBox, soyCheckBox, wheatCheckBox,
                 veganCheckBox, vegetarianCheckBox};
 
-        getRecipe();
-
 
         // create pop up window and link the search view
         mBuilder = new AlertDialog.Builder(CreateNewRecipeActivity.this);
@@ -322,6 +272,8 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
 
                 String ingredName = arraylist.get(position).getIngredientNameName();
                 newIngredient.name = ingredName;
+
+                newIngredient.id = getID(newIngredient.name);
 
                 // create the text view to show ingredient name
                 // create two edit text to input unit and quantity

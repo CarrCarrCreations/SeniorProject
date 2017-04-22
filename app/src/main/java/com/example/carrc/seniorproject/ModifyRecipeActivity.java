@@ -86,6 +86,25 @@ public class ModifyRecipeActivity extends AppCompatActivity {
         finish();
     }
 
+    public String getID(String name){
+
+        ParseQuery query = ParseQuery.getQuery("Ingredients");
+        query.whereEqualTo("Name", name);
+
+        try {
+            List<ParseObject> objects = query.find();
+
+            ParseObject ingred = objects.get(0);
+
+            return ingred.get("ID").toString();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public void getRecipe(){
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
@@ -244,10 +263,6 @@ public class ModifyRecipeActivity extends AppCompatActivity {
             List<ParseObject> objects = query.find();
             ParseObject recipe = objects.get(0);
 
-            String name;
-            String id;
-            EditText unit;
-            EditText quantity;
 
             recipe.put("ItemTitle", recipeNameEditText.getText().toString());
             recipe.put("Image", urlEditText.getText().toString());
@@ -260,7 +275,10 @@ public class ModifyRecipeActivity extends AppCompatActivity {
                 String ingredNameFormat = "IngredientName" + i;
                 String ingredUnitFormat = "IngredientUnit" + i;
                 String ingredQuantityFormat = "IngredientAmount" + i;
+                String ingredIDFormat = "IngredientID" + i;
+
                 recipe.put(ingredNameFormat, newIngred.get(i).name);
+                recipe.put(ingredIDFormat, newIngred.get(i).id);
                 recipe.put(ingredUnitFormat, newIngred.get(i).unit.getText().toString());
                 recipe.put(ingredQuantityFormat, newIngred.get(i).quantity.getText().toString());
             }
@@ -356,11 +374,13 @@ public class ModifyRecipeActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                newIngredient newIngredient = new newIngredient();
+                newIngredient Ingredient = new newIngredient();
                 TableRow tableRow = new TableRow(getBaseContext());
 
                 String ingredName = arraylist.get(position).getIngredientNameName();
-                newIngredient.name = ingredName;
+                Ingredient.name = ingredName;
+
+                Ingredient.id = getID(Ingredient.name);
 
                 // create the text view to show ingredient name
                 // create two edit text to input unit and quantity
@@ -379,13 +399,13 @@ public class ModifyRecipeActivity extends AppCompatActivity {
 
                 EditText unitEditText = new EditText(getBaseContext());
                 unitEditText.setHint("Units");
-                newIngredient.unit = unitEditText;
+                Ingredient.unit = unitEditText;
 
                 EditText quantityEditText = new EditText(getBaseContext());
                 quantityEditText.setHint("Quantity");
-                newIngredient.quantity = quantityEditText;
+                Ingredient.quantity = quantityEditText;
 
-                newIngred.add(newIngredient);
+                newIngred.add(Ingredient);
 
                 tableRow.addView(nameTextView);
                 tableRow.addView(unitEditText);
