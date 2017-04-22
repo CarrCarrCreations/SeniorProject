@@ -388,6 +388,9 @@ public class ModifyRecipeActivity extends AppCompatActivity {
         ingredientScrollView = (ScrollView) findViewById(R.id.ingredientScrollView);
         tableLayout = (TableLayout) findViewById(R.id.tableLayout);
 
+        tableLayout.setColumnStretchable(0,true);
+        tableLayout.setColumnStretchable(1,true);
+        tableLayout.setColumnStretchable(2,true);
 
         recipeNameEditText = (EditText) findViewById(R.id.recipeNameEditText);
         urlEditText = (EditText) findViewById(R.id.urlEditText);

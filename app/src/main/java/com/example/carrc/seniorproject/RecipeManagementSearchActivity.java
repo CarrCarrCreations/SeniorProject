@@ -80,7 +80,7 @@ public class RecipeManagementSearchActivity extends AppCompatActivity implements
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = adapter.getItem(position).getIngredientNameName();
 
-                if(name.equals("Create New Ingredient")){
+                if(name.equals("Create New Recipe")){
                     Intent intent = new Intent(getApplicationContext(), CreateNewRecipeActivity.class);
                     intent.putExtra("Name", text);
                     startActivity(intent);

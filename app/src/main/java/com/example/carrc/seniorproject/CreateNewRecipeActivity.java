@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -52,6 +53,7 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
     CheckBox[] checkBoxes;
 
     String text;
+    int tag;
 
     EditText recipeNameEditText;
     EditText urlEditText;
@@ -75,8 +77,11 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
     public class newIngredient{
         String name;
         String id;
+        int tag;
         EditText unit;
         EditText quantity;
+        ImageView imageView;
+        TableRow tableRow;
     }
 
     public void recreate(){
@@ -224,8 +229,14 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
 
         newIngred.clear();
 
+        tag = 0;
+
         ingredientScrollView = (ScrollView) findViewById(R.id.ingredientScrollView);
         tableLayout = (TableLayout) findViewById(R.id.tableLayout);
+
+        tableLayout.setColumnStretchable(0,true);
+        tableLayout.setColumnStretchable(1,true);
+        tableLayout.setColumnStretchable(2,true);
 
 
         recipeNameEditText = (EditText) findViewById(R.id.recipeNameEditText);
@@ -270,13 +281,15 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Disabled. Create Ingredient in Ingredient Management" , Toast.LENGTH_SHORT).show();
                 } else {
 
-                    newIngredient newIngredient = new newIngredient();
-                    TableRow tableRow = new TableRow(getBaseContext());
+                    final newIngredient Ingredient = new newIngredient();
+                    final TableRow tableRow = new TableRow(getBaseContext());
+
+                    Ingredient.tag = tag;
 
                     String ingredName = arraylist.get(position).getIngredientNameName();
-                    newIngredient.name = ingredName;
+                    Ingredient.name = ingredName;
 
-                    newIngredient.id = getID(newIngredient.name);
+                    Ingredient.id = getID(Ingredient.name);
 
                     // create the text view to show ingredient name
                     // create two edit text to input unit and quantity
@@ -285,7 +298,7 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
                     // add the layout to the scroll view
 
 
-                    TextView nameTextView = new TextView(getBaseContext());
+                    final TextView nameTextView = new TextView(getBaseContext());
                     nameTextView.setText(ingredName);
                     if (ingredName.length() > 15) {
                         nameTextView.setTextSize(14);
@@ -295,20 +308,49 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
 
                     EditText unitEditText = new EditText(getBaseContext());
                     unitEditText.setHint("Units");
-                    newIngredient.unit = unitEditText;
+                    Ingredient.unit = unitEditText;
 
                     EditText quantityEditText = new EditText(getBaseContext());
                     quantityEditText.setHint("Quantity");
-                    newIngredient.quantity = quantityEditText;
+                    Ingredient.quantity = quantityEditText;
 
-                    newIngred.add(newIngredient);
+                    // create the delete image and set its parameters
+                    TableRow.LayoutParams parms = new TableRow.LayoutParams(75,75);
+                    parms.topMargin = 30;
+                    final ImageView imageView = new ImageView(getBaseContext());
+                    imageView.setBackgroundResource(R.drawable.deleteicon);
+                    imageView.setTag(tag);
+                    imageView.setLayoutParams(parms);
+                    Ingredient.imageView = imageView;
+
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            for(int i = 0; i < newIngred.size(); i++){
+
+                                if(newIngred.get(i).tag == (Integer) v.getTag()){
+                                    tableLayout.removeView(newIngred.get(i).tableRow);
+                                    newIngred.remove(i);
+                                }
+                            }
+
+                        }
+                    });
+
+                    newIngred.add(Ingredient);
 
                     tableRow.addView(nameTextView);
                     tableRow.addView(unitEditText);
                     tableRow.addView(quantityEditText);
+                    tableRow.addView(imageView);
                     tableRow.requestFocus();
+
+                    Ingredient.tableRow = tableRow;
+
                     tableLayout.addView(tableRow);
 
+                    tag++;
                     text = "";
                     dialog.hide();
                 }
