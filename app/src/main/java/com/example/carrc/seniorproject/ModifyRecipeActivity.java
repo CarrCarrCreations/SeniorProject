@@ -374,47 +374,51 @@ public class ModifyRecipeActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                newIngredient Ingredient = new newIngredient();
-                TableRow tableRow = new TableRow(getBaseContext());
-
-                String ingredName = arraylist.get(position).getIngredientNameName();
-                Ingredient.name = ingredName;
-
-                Ingredient.id = getID(Ingredient.name);
-
-                // create the text view to show ingredient name
-                // create two edit text to input unit and quantity
-                // add to an array list of newIngredient
-                // create a horizontal layout. add the text and edit texts to layout
-                // add the layout to the scroll view
-
-
-                TextView nameTextView = new TextView(getBaseContext());
-                nameTextView.setText(ingredName);
-                if(ingredName.length() > 15){
-                    nameTextView.setTextSize(14);
+                if(arraylist.get(position).getIngredientNameName().equals("Create New Ingredient")){
+                    Toast.makeText(getApplicationContext(), "Disabled. Create Ingredient in Ingredient Management" , Toast.LENGTH_SHORT).show();
                 } else {
-                    nameTextView.setTextSize(20);
+
+                    newIngredient Ingredient = new newIngredient();
+                    TableRow tableRow = new TableRow(getBaseContext());
+
+                    String ingredName = arraylist.get(position).getIngredientNameName();
+                    Ingredient.name = ingredName;
+
+                    Ingredient.id = getID(Ingredient.name);
+
+                    // create the text view to show ingredient name
+                    // create two edit text to input unit and quantity
+                    // add to an array list of newIngredient
+                    // create a horizontal layout. add the text and edit texts to layout
+                    // add the layout to the scroll view
+
+
+                    TextView nameTextView = new TextView(getBaseContext());
+                    nameTextView.setText(ingredName);
+                    if (ingredName.length() > 15) {
+                        nameTextView.setTextSize(14);
+                    } else {
+                        nameTextView.setTextSize(20);
+                    }
+
+                    EditText unitEditText = new EditText(getBaseContext());
+                    unitEditText.setHint("Units");
+                    Ingredient.unit = unitEditText;
+
+                    EditText quantityEditText = new EditText(getBaseContext());
+                    quantityEditText.setHint("Quantity");
+                    Ingredient.quantity = quantityEditText;
+
+                    newIngred.add(Ingredient);
+
+                    tableRow.addView(nameTextView);
+                    tableRow.addView(unitEditText);
+                    tableRow.addView(quantityEditText);
+                    tableRow.requestFocus();
+                    tableLayout.addView(tableRow);
+
+                    dialog.hide();
                 }
-
-                EditText unitEditText = new EditText(getBaseContext());
-                unitEditText.setHint("Units");
-                Ingredient.unit = unitEditText;
-
-                EditText quantityEditText = new EditText(getBaseContext());
-                quantityEditText.setHint("Quantity");
-                Ingredient.quantity = quantityEditText;
-
-                newIngred.add(Ingredient);
-
-                tableRow.addView(nameTextView);
-                tableRow.addView(unitEditText);
-                tableRow.addView(quantityEditText);
-                tableRow.requestFocus();
-                tableLayout.addView(tableRow);
-
-                dialog.hide();
-
             }
         });
 

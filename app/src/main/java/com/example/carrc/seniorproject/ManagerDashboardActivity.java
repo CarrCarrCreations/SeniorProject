@@ -31,7 +31,7 @@ public class ManagerDashboardActivity extends AppCompatActivity {
         startActivity(getIntent());
         finish();
     }
-    
+
 
     public void recipeManagement(View view) {
         Intent intent = new Intent(this, RecipeManagementSearchActivity.class);
