@@ -72,7 +72,7 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
 
 
         // Pass results to IngredientListViewAdapter Class
-        adapter = new IngredientListViewAdapter(this, arraylist);
+        adapter = new IngredientListViewAdapter(this, arraylist, "Ingredient");
         adapter.notifyDataSetChanged();
 
         // Binds the Adapter to the ListView

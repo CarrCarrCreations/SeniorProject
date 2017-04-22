@@ -366,7 +366,7 @@ public class ModifyRecipeActivity extends AppCompatActivity {
         mView = getLayoutInflater().inflate(R.layout.recipe_search_view, null);
 
         subListView = (ListView) mView.findViewById(R.id.subListView);
-        adapter = new IngredientListViewAdapter(this, arraylist);
+        adapter = new IngredientListViewAdapter(this, arraylist, "Ingredient");
         subListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

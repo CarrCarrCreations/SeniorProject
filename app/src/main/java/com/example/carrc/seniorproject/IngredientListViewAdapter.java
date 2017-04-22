@@ -17,13 +17,15 @@ public class IngredientListViewAdapter extends BaseAdapter {
 
     Context mContext;
     LayoutInflater inflater;
+    String type;
     private List<IngredientObject> recipelNamesList = null;
     private ArrayList<IngredientObject> arraylist;
 
-    public IngredientListViewAdapter(Context context, List<IngredientObject> recipeNameList) {
+    public IngredientListViewAdapter(Context context, List<IngredientObject> recipeNameList, String type) {
         mContext = context;
         this.recipelNamesList = recipeNameList;
         inflater = LayoutInflater.from(mContext);
+        this.type = type;
         this.arraylist = new ArrayList<IngredientObject>();
         this.arraylist.addAll(recipeNameList);
     }
@@ -75,8 +77,14 @@ public class IngredientListViewAdapter extends BaseAdapter {
                     recipelNamesList.add(wp);
                 }
             }
-            IngredientObject createNew = new IngredientObject("Create New Ingredient");
-            recipelNamesList.add(createNew);
+            if(this.type.equals("Ingredient")){
+                IngredientObject createNew = new IngredientObject("Create New Ingredient");
+                recipelNamesList.add(createNew);
+            } else {
+                IngredientObject createNew = new IngredientObject("Create New Recipe");
+                recipelNamesList.add(createNew);
+            }
+
         }
         notifyDataSetChanged();
     }

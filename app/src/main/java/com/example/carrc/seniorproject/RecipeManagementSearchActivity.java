@@ -70,7 +70,7 @@ public class RecipeManagementSearchActivity extends AppCompatActivity implements
         list = (ListView) findViewById(R.id.nameListView);
 
         // Pass results to IngredientListViewAdapter Class
-        adapter = new IngredientListViewAdapter(this, arraylist);
+        adapter = new IngredientListViewAdapter(this, arraylist, "Recipe");
         adapter.notifyDataSetChanged();
 
         // Binds the Adapter to the ListView
