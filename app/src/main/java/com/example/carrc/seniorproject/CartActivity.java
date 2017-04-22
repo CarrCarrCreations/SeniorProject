@@ -2,8 +2,10 @@ package com.example.carrc.seniorproject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.LoginFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.w3c.dom.Text;
 
@@ -111,10 +114,139 @@ public class CartActivity extends AppCompatActivity {
     List<String> recipeNames;
     List<String> recipePrices;
 
+    String ingredientUnit = "";
+    int ingredientNum;
+
     NumberFormat nf;
 
-    public void checkOut(){
+    class Inventory{
+        String recipeName;
+        List<Double> ingredientQuantities = new ArrayList<>();
+        List<String> ingredientNames = new ArrayList<>();
+        ParseQuery<ParseObject> query;
+    }
 
+    List<Inventory> ingredients;
+
+    public void buildInventory(){
+
+        for(int i = 0; i < ingredients.size(); i++){
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
+            query.whereEqualTo("ItemTitle", ingredients.get(i).recipeName);
+
+            try {
+                List<ParseObject> objects = query.find();
+                if(objects.size() > 0){
+                    ParseObject recipe = objects.get(0);
+
+                    ingredientNum = 0;
+
+                    do{
+                        if(recipe.get("IngredientAmount" + ingredientNum) == null){
+                            break;
+                        }
+
+                        String ingredientName = recipe.get("IngredientName" + ingredientNum).toString();
+                        ingredientUnit = recipe.get("IngredientAmount" + ingredientNum).toString();
+                        double amount = Double.parseDouble(ingredientUnit);
+
+                        ingredients.get(i).ingredientQuantities.add(amount);
+                        ingredients.get(i).ingredientNames.add(ingredientName);
+
+                        ingredientNum++;
+
+                    } while (ingredientUnit != null);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i = 0; i < ingredients.size(); i++){
+            Log.i("Amount", ingredients.get(i).ingredientQuantities.toString());
+            Log.i("Amount", ingredients.get(i).ingredientNames.toString());
+        }
+    }
+
+    public void inventoryMath(){
+
+        for(int i = 0; i < ingredients.size(); i++){
+
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
+            query.whereEqualTo("Name", ingredients.get(i).ingredientNames.get(i));
+
+            try {
+                List<ParseObject> objects = query.find();
+                if(objects.size() > 0){
+
+                    ParseObject ingredient = objects.get(0);
+
+                    double quantity = Double.parseDouble(ingredient.get("Quantity").toString());
+                    String newQuantity = String.valueOf(quantity - ingredients.get(i).ingredientQuantities.get(i));
+
+                    ingredient.put("Quantity", newQuantity);
+                    Log.i("NewQauntity", String.valueOf(newQuantity));
+                    ingredient.save();
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public class math extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            for(int i = 0; i < ingredients.size(); i++){
+                for(int j = 0; j < ingredients.get(i).ingredientNames.size(); j++){
+
+                    String name = ingredients.get(i).ingredientNames.get(j);
+
+                    if(params[0].matches(name)){
+                        ingredients.get(i).query = ParseQuery.getQuery("Ingredients");
+                        ingredients.get(i).query.whereEqualTo("Name", ingredients.get(i).ingredientNames.get(j));
+
+                        try {
+                            List<ParseObject> objects =  ingredients.get(i).query.find();
+                            if(objects.size() > 0){
+
+                                ParseObject ingredient = objects.get(0);
+
+                                double quantity = Double.parseDouble(ingredient.get("Quantity").toString());
+                                String newQuantity = String.valueOf(quantity - ingredients.get(i).ingredientQuantities.get(i));
+
+                                ingredient.put("Quantity", newQuantity);
+                                Log.i("NewQauntity", String.valueOf(newQuantity));
+                                ingredient.save();
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                }
+            }
+
+            return null;
+        }
+    }
+
+
+    public void checkOut(View view){
+
+        buildInventory();
+
+        for(int i = 0; i < ingredients.size(); i++){
+            for(int j = 0; j < ingredients.get(i).ingredientNames.size(); j++){
+
+                math task = new math();
+                task.execute(ingredients.get(i).ingredientNames.get(j));
+            }
+        }
     }
 
     public List<String> getRecipeNames() {
@@ -126,9 +258,17 @@ public class CartActivity extends AppCompatActivity {
             List<ParseObject> objects = query.find();
 
             if(objects.size() > 0){
+
+                ingredients.clear();
+
                 for(int i = 0; i < objects.size(); i++){
                     String name = objects.get(i).get("RecipeName").toString();
                     names.add(name);
+
+                    Inventory ingredientName = new Inventory();
+                    ingredientName.recipeName = name;
+                    ingredients.add(ingredientName);
+
                 }
             }
 
@@ -222,6 +362,8 @@ public class CartActivity extends AppCompatActivity {
         subValueTextView = (TextView) findViewById(R.id.subValueTextView);
         taxValueTextView = (TextView) findViewById(R.id.taxValueTextView);
         totalValueTextView = (TextView) findViewById(R.id.totalValueTextView);
+
+        ingredients = new ArrayList<>();
 
         nf = new DecimalFormat("##.##");
 

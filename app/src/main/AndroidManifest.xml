@@ -50,7 +50,7 @@
         <activity android:name=".ReviewSelectedOrderActivity" />
         <activity android:name=".RecipeManagementSearchActivity" />
         <activity android:name=".ModifyRecipeActivity" />
-        <activity android:name=".CreateNewRecipeActivity"></activity>
+        <activity android:name=".CreateNewRecipeActivity" />
     </application>
 
 </manifest>
