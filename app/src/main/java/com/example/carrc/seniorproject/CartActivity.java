@@ -139,6 +139,8 @@ public class CartActivity extends AppCompatActivity {
                 if(objects.size() > 0){
                     ParseObject recipe = objects.get(0);
 
+                    recipe.increment("Bought");
+
                     ingredientNum = 0;
 
                     do{
@@ -154,6 +156,7 @@ public class CartActivity extends AppCompatActivity {
                         ingredients.get(i).ingredientNames.add(ingredientName);
 
                         ingredientNum++;
+                        recipe.save();
 
                     } while (ingredientUnit != null);
                 }
@@ -167,7 +170,7 @@ public class CartActivity extends AppCompatActivity {
             Log.i("Amount", ingredients.get(i).ingredientNames.toString());
         }
     }
-    
+
 
 
     public class math extends AsyncTask<String, Void, String> {
