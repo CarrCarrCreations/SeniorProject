@@ -81,7 +81,7 @@ public class RecipeManagementSearchActivity extends AppCompatActivity implements
                 String name = adapter.getItem(position).getIngredientNameName();
 
                 if(name.equals("Create New Ingredient")){
-                    Intent intent = new Intent(getApplicationContext(), CreateIngredientActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), CreateNewRecipeActivity.class);
                     intent.putExtra("Name", text);
                     startActivity(intent);
                 } else {

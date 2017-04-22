@@ -49,7 +49,8 @@
         <activity android:name=".InventoryActivity" />
         <activity android:name=".ReviewSelectedOrderActivity" />
         <activity android:name=".RecipeManagementSearchActivity" />
-        <activity android:name=".ModifyRecipeActivity"></activity>
+        <activity android:name=".ModifyRecipeActivity" />
+        <activity android:name=".CreateNewRecipeActivity"></activity>
     </application>
 
 </manifest>
