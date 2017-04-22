@@ -31,14 +31,10 @@ public class ManagerDashboardActivity extends AppCompatActivity {
         startActivity(getIntent());
         finish();
     }
-
-    public void recipeSearch(View view){
-        Intent intent = new Intent(this, RecipeManagementSearchActivity.class);
-        startActivity(intent);
-    }
+    
 
     public void recipeManagement(View view) {
-        Intent intent = new Intent(this, RecipeManagementActivity.class);
+        Intent intent = new Intent(this, RecipeManagementSearchActivity.class);
         startActivity(intent);
     }
 
@@ -47,15 +43,7 @@ public class ManagerDashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void inventoryManagement(View view){
-        Intent intent = new Intent(this, InventoryActivity.class);
-        startActivity(intent);
-    }
 
-    public void openMenu(View view){
-        Intent intent = new Intent(this, MenuActivity.class);
-        startActivity(intent);
-    }
 
     public void deleteAccount(View view){
         Intent intent = new Intent(getApplicationContext(), DeleteEmployeeAccountActivity.class );
