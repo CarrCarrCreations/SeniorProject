@@ -1,14 +1,13 @@
 package com.example.carrc.seniorproject;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.SearchView;
 
 import com.parse.ParseException;
@@ -20,9 +19,8 @@ import java.util.List;
 
 import bolts.Task;
 
-public class IngredientManagementActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class RecipeManagementSearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    // Declare Variables
     ListView list;
     IngredientListViewAdapter adapter;
     SearchView editsearch;
@@ -30,7 +28,7 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
     ArrayList<IngredientObject> arraylist = new ArrayList<IngredientObject>();
 
     public void getIngredientNames(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
         query.orderByDescending("createdAt");
         Task<Integer> count = query.countInBackground();
         SystemClock.sleep(1000);
@@ -42,7 +40,7 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
             objects = query.find();
 
             for(int i = 0; i < objects.size(); i++){
-                String name = objects.get(i).get("Name").toString();
+                String name = objects.get(i).get("ItemTitle").toString();
                 IngredientObject recipe = new IngredientObject(name);
                 arraylist.add(recipe);
             }
@@ -58,10 +56,11 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
         startActivity(intent);
     }
 
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ingredient_management);
+        setContentView(R.layout.activity_recipe_management_search);
 
         // Generate sample data
 
@@ -69,7 +68,6 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
 
         // Locate the ListView in listview_main.xml
         list = (ListView) findViewById(R.id.nameListView);
-
 
         // Pass results to IngredientListViewAdapter Class
         adapter = new IngredientListViewAdapter(this, arraylist);
@@ -87,7 +85,7 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
                     intent.putExtra("Name", text);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(getApplicationContext(), ModifyIngredientActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), ModifyRecipeActivity.class);
                     intent.putExtra("Name", name);
                     startActivity(intent);
                 }
@@ -113,3 +111,4 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
         return false;
     }
 }
+
