@@ -1,6 +1,7 @@
 package com.example.carrc.seniorproject;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.SystemClock;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -55,6 +57,7 @@ public class ModifyRecipeActivity extends AppCompatActivity {
     String text;
     String ingredientName;
     int ingredientNum;
+    int tag;
 
     EditText recipeNameEditText;
     EditText urlEditText;
@@ -78,8 +81,11 @@ public class ModifyRecipeActivity extends AppCompatActivity {
     public class newIngredient{
         String name;
         String id;
+        int tag;
         EditText unit;
         EditText quantity;
+        ImageView imageView;
+        TableRow tableRow;
     }
 
     public void recreate(){
@@ -165,8 +171,10 @@ public class ModifyRecipeActivity extends AppCompatActivity {
                         String ingredientUnit = recipe.get("IngredientUnit" + ingredientNum).toString();
                         String ingredientQuantity = recipe.get("IngredientAmount" + ingredientNum).toString();
 
-                        newIngredient newIngredient = new newIngredient();
+                        final newIngredient newIngredient = new newIngredient();
                         TableRow tableRow = new TableRow(getBaseContext());
+
+                        newIngredient.tag = tag;
 
                         newIngredient.name = ingredientName;
                         newIngredient.id = ingredientID;
@@ -187,15 +195,43 @@ public class ModifyRecipeActivity extends AppCompatActivity {
                         quantityEditText.setText(ingredientQuantity);
                         newIngredient.quantity = quantityEditText;
 
+                        // create the delete image and set its parameters
+                        TableRow.LayoutParams parms = new TableRow.LayoutParams(75,75);
+                        parms.topMargin = 30;
+                        final ImageView imageView = new ImageView(getBaseContext());
+                        imageView.setBackgroundResource(R.drawable.deleteicon);
+                        imageView.setTag(tag);
+                        imageView.setLayoutParams(parms);
+                        newIngredient.imageView = imageView;
+
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                for(int i = 0; i < newIngred.size(); i++){
+
+                                    if(newIngred.get(i).tag == (Integer) v.getTag()){
+                                        tableLayout.removeView(newIngred.get(i).tableRow);
+                                        newIngred.remove(i);
+                                    }
+                                }
+                            }
+                        });
+
+
                         newIngred.add(newIngredient);
 
                         tableRow.addView(nameTextView);
                         tableRow.addView(unitEditText);
                         tableRow.addView(quantityEditText);
+                        tableRow.addView(imageView);
                         tableRow.requestFocus();
+
+                        newIngredient.tableRow = tableRow;
+
                         tableLayout.addView(tableRow);
 
-
+                        tag++;
                         ingredientNum++;
 
                     } while (ingredientName != null);
@@ -274,8 +310,10 @@ public class ModifyRecipeActivity extends AppCompatActivity {
 
         try {
             List<ParseObject> objects = query.find();
-            ParseObject recipe = objects.get(0);
+            ParseObject delete = objects.get(0);
+            delete.deleteInBackground();
 
+            ParseObject recipe = new ParseObject("Recipes");
 
             recipe.put("ItemTitle", recipeNameEditText.getText().toString());
             recipe.put("Image", urlEditText.getText().toString());
@@ -345,6 +383,8 @@ public class ModifyRecipeActivity extends AppCompatActivity {
 
         newIngred.clear();
 
+        tag = 0;
+
         ingredientScrollView = (ScrollView) findViewById(R.id.ingredientScrollView);
         tableLayout = (TableLayout) findViewById(R.id.tableLayout);
 
@@ -386,14 +426,16 @@ public class ModifyRecipeActivity extends AppCompatActivity {
 
         subListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 if(arraylist.get(position).getIngredientNameName().equals("Create New Ingredient")){
                     Toast.makeText(getApplicationContext(), "Disabled. Create Ingredient in Ingredient Management" , Toast.LENGTH_SHORT).show();
                 } else {
 
-                    newIngredient Ingredient = new newIngredient();
-                    TableRow tableRow = new TableRow(getBaseContext());
+                    final newIngredient Ingredient = new newIngredient();
+                    final TableRow tableRow = new TableRow(getBaseContext());
+
+                    Ingredient.tag = tag;
 
                     String ingredName = arraylist.get(position).getIngredientNameName();
                     Ingredient.name = ingredName;
@@ -407,7 +449,7 @@ public class ModifyRecipeActivity extends AppCompatActivity {
                     // add the layout to the scroll view
 
 
-                    TextView nameTextView = new TextView(getBaseContext());
+                    final TextView nameTextView = new TextView(getBaseContext());
                     nameTextView.setText(ingredName);
                     if (ingredName.length() > 15) {
                         nameTextView.setTextSize(14);
@@ -423,14 +465,43 @@ public class ModifyRecipeActivity extends AppCompatActivity {
                     quantityEditText.setHint("Quantity");
                     Ingredient.quantity = quantityEditText;
 
+                    // create the delete image and set its parameters
+                    TableRow.LayoutParams parms = new TableRow.LayoutParams(75,75);
+                    parms.topMargin = 30;
+                    final ImageView imageView = new ImageView(getBaseContext());
+                    imageView.setBackgroundResource(R.drawable.deleteicon);
+                    imageView.setTag(tag);
+                    imageView.setLayoutParams(parms);
+                    Ingredient.imageView = imageView;
+
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            for(int i = 0; i < newIngred.size(); i++){
+
+                                if(newIngred.get(i).tag == (Integer) v.getTag()){
+                                    tableLayout.removeView(newIngred.get(i).tableRow);
+                                    newIngred.remove(i);
+                                }
+                            }
+
+                        }
+                    });
+
                     newIngred.add(Ingredient);
 
                     tableRow.addView(nameTextView);
                     tableRow.addView(unitEditText);
                     tableRow.addView(quantityEditText);
+                    tableRow.addView(imageView);
                     tableRow.requestFocus();
+
+                    Ingredient.tableRow = tableRow;
+
                     tableLayout.addView(tableRow);
 
+                    tag++;
                     text = "";
                     dialog.hide();
                 }
