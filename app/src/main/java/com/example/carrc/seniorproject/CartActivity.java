@@ -167,32 +167,7 @@ public class CartActivity extends AppCompatActivity {
             Log.i("Amount", ingredients.get(i).ingredientNames.toString());
         }
     }
-
-    public void inventoryMath(){
-
-        for(int i = 0; i < ingredients.size(); i++){
-
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
-            query.whereEqualTo("Name", ingredients.get(i).ingredientNames.get(i));
-
-            try {
-                List<ParseObject> objects = query.find();
-                if(objects.size() > 0){
-
-                    ParseObject ingredient = objects.get(0);
-
-                    double quantity = Double.parseDouble(ingredient.get("Quantity").toString());
-                    String newQuantity = String.valueOf(quantity - ingredients.get(i).ingredientQuantities.get(i));
-
-                    ingredient.put("Quantity", newQuantity);
-                    Log.i("NewQauntity", String.valueOf(newQuantity));
-                    ingredient.save();
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    
 
 
     public class math extends AsyncTask<String, Void, String> {
