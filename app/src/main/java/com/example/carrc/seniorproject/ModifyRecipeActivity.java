@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -51,6 +52,7 @@ public class ModifyRecipeActivity extends AppCompatActivity {
     ArrayList<newIngredient> newIngred = new ArrayList<>();
     CheckBox[] checkBoxes;
 
+    String text;
     String ingredientName;
     int ingredientNum;
 
@@ -88,21 +90,22 @@ public class ModifyRecipeActivity extends AppCompatActivity {
 
     public String getID(String name){
 
-        ParseQuery query = ParseQuery.getQuery("Ingredients");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
         query.whereEqualTo("Name", name);
 
         try {
             List<ParseObject> objects = query.find();
+            if(objects.size() > 0){
+                ParseObject ingred = objects.get(0);
 
-            ParseObject ingred = objects.get(0);
-
-            return ingred.get("ID").toString();
+                return ingred.get("ID").toString();
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return "empty";
     }
 
     public void getRecipe(){
@@ -115,6 +118,7 @@ public class ModifyRecipeActivity extends AppCompatActivity {
             public void done(List<ParseObject> objects, ParseException e) {
                 if(e == null && objects.size() > 0){
                     ParseObject recipe = objects.get(0);
+
                     recipeNameEditText.setText(recipe.get("ItemTitle").toString());
                     urlEditText.setText(recipe.get("Image").toString());
                     priceEditText.setText(recipe.get("PricePerServing").toString());
@@ -130,13 +134,21 @@ public class ModifyRecipeActivity extends AppCompatActivity {
                         } else {
                             formattedText = checkboxText + "Free";
                         }
-                        String isChecked = recipe.get(formattedText).toString();
-                        if(isChecked == null){
+                        Object isCheckedLegal = recipe.get(formattedText);
+                        String isChecked;
+
+
+                        if(isCheckedLegal == null){
                             isChecked = "false";
+                        } else {
+                            isChecked = recipe.get(formattedText).toString();
                         }
+
                         if(isChecked.matches("true")){
+                            Log.i("CheckBox", isChecked);
                             checkBoxes[i].setChecked(true);
                         } else {
+                            Log.i("CheckBox", isChecked);
                             checkBoxes[i].setChecked(false);
                         }
                     }
@@ -149,6 +161,7 @@ public class ModifyRecipeActivity extends AppCompatActivity {
                         }
 
                         ingredientName = recipe.get("IngredientName" + ingredientNum).toString();
+                        String ingredientID = recipe.get("IngredientID" + ingredientNum).toString();
                         String ingredientUnit = recipe.get("IngredientUnit" + ingredientNum).toString();
                         String ingredientQuantity = recipe.get("IngredientAmount" + ingredientNum).toString();
 
@@ -156,6 +169,7 @@ public class ModifyRecipeActivity extends AppCompatActivity {
                         TableRow tableRow = new TableRow(getBaseContext());
 
                         newIngredient.name = ingredientName;
+                        newIngredient.id = ingredientID;
 
                         TextView nameTextView = new TextView(getBaseContext());
                         nameTextView.setText(ingredientName);
@@ -185,7 +199,6 @@ public class ModifyRecipeActivity extends AppCompatActivity {
                         ingredientNum++;
 
                     } while (ingredientName != null);
-
                 }
             }
         });
@@ -358,6 +371,7 @@ public class ModifyRecipeActivity extends AppCompatActivity {
                 sesameCheckBox, seafoodCheckBox, shellfishCheckBox, soyCheckBox, wheatCheckBox,
                 veganCheckBox, vegetarianCheckBox};
 
+
         getRecipe();
 
 
@@ -417,6 +431,7 @@ public class ModifyRecipeActivity extends AppCompatActivity {
                     tableRow.requestFocus();
                     tableLayout.addView(tableRow);
 
+                    text = "";
                     dialog.hide();
                 }
             }
@@ -432,7 +447,7 @@ public class ModifyRecipeActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                String text = newText;
+                text = newText;
                 adapter.filter(text);
                 return false;
             }

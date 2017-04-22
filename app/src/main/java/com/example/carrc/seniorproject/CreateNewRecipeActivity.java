@@ -51,8 +51,7 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
     ArrayList<newIngredient> newIngred = new ArrayList<>();
     CheckBox[] checkBoxes;
 
-    String ingredientName;
-    int ingredientNum;
+    String text;
 
     EditText recipeNameEditText;
     EditText urlEditText;
@@ -310,6 +309,7 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
                     tableRow.requestFocus();
                     tableLayout.addView(tableRow);
 
+                    text = "";
                     dialog.hide();
                 }
 
@@ -326,7 +326,7 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                String text = newText;
+                text = newText;
                 adapter.filter(text);
                 return false;
             }

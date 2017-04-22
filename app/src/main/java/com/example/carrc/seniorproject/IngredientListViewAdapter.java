@@ -86,7 +86,6 @@ public class IngredientListViewAdapter extends BaseAdapter {
                     recipelNamesList.add(createNew);
                 }
             }
-
         }
         notifyDataSetChanged();
     }
