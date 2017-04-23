@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -159,6 +160,7 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
                 ParseObject temp = objects.get(0);
                 int id = Integer.parseInt(temp.get("FoodID").toString()) + 1;
                 String stringID = String.valueOf(id);
+                Log.i("String ID", stringID);
                 recipe.put("FoodID", stringID);
 
             } catch (ParseException e) {
