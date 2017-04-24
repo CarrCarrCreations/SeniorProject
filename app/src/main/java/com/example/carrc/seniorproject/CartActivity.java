@@ -1,7 +1,9 @@
 package com.example.carrc.seniorproject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -171,6 +173,38 @@ public class CartActivity extends AppCompatActivity {
         }
     }
 
+    public void createOrder(){
+
+        ParseObject newOrder = new ParseObject("Orders");
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("com.example.carrc.seniorproject", Context.MODE_PRIVATE );
+        String currentTableNumber = sharedPreferences.getString("tableNumber", "");
+
+        for(int i = 0; i < ingredients.size(); i++){
+
+            newOrder.put("ItemTitle", ingredients.get(i).recipeName);
+            newOrder.put("Username", ParseUser.getCurrentUser().getUsername());
+            newOrder.put("TableNumber", currentTableNumber);
+
+            for(int j = 0; j < ingredients.get(i).ingredientNames.size(); j++){
+
+                newOrder.put("IngredientName" + j, ingredients.get(i).ingredientNames.get(j));
+                newOrder.put("IngredientQuantity" + j, ingredients.get(i).ingredientQuantities.get(j).toString());
+                newOrder.put("Unit", "oz");
+            }
+        }
+        newOrder.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null){
+                    Toast.makeText(getApplicationContext(), "Order Placed Successfully!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), e.getMessage() , Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
 
 
     public class math extends AsyncTask<String, Void, String> {
@@ -213,6 +247,29 @@ public class CartActivity extends AppCompatActivity {
         }
     }
 
+    public void removeOrders(){
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Cart");
+        query.whereEqualTo("Username", ParseUser.getCurrentUser().getUsername());
+
+
+        try {
+            List<ParseObject> objects = query.find();
+            if(objects.size() > 0){
+
+                for(int i = 0; i < objects.size(); i++){
+                    ParseObject temp = objects.get(i);
+                    temp.deleteInBackground();
+                }
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     public void checkOut(View view){
 
@@ -225,6 +282,12 @@ public class CartActivity extends AppCompatActivity {
                 task.execute(ingredients.get(i).ingredientNames.get(j));
             }
         }
+
+        // save the order to the orders database
+        createOrder();
+        // remove the order from the cart
+        removeOrders();
+        recreate();
     }
 
     public List<String> getRecipeNames() {
