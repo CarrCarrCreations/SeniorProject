@@ -87,7 +87,7 @@ public class ChatActivity extends AppCompatActivity {
 
         setTitle("Chat with " + activeUser);
 
-        ListView chatListView = (ListView) findViewById(R.id.chatListView);
+        final ListView chatListView = (ListView) findViewById(R.id.chatListView);
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, messages);
         chatListView.setAdapter(arrayAdapter);
 
@@ -131,9 +131,11 @@ public class ChatActivity extends AppCompatActivity {
                                     messages.add(messageContent);
 
                                 }
+                                chatListView.setSelection(chatListView.getAdapter().getCount()-1);
                                 arrayAdapter.notifyDataSetChanged();
                             }
                         }
+                        chatListView.setSelection(chatListView.getAdapter().getCount()-1);
                     }
                 });
 
