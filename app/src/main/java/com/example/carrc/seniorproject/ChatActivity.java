@@ -1,10 +1,15 @@
 package com.example.carrc.seniorproject;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.CountDownTimer;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,12 +21,15 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -29,7 +37,14 @@ public class ChatActivity extends AppCompatActivity {
     ArrayList<String> messages = new ArrayList<>();
     ArrayAdapter arrayAdapter;
 
+    String tableNumber;
+
     String formatedName;
+
+    public void recreate(){
+        startActivity(getIntent());
+        finish();
+    }
 
     public void sendChat(View view){
 
@@ -55,7 +70,6 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @Override
@@ -67,7 +81,8 @@ public class ChatActivity extends AppCompatActivity {
         activeUser = intent.getStringExtra("staffName");
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("com.example.carrc.seniorproject", Context.MODE_PRIVATE );
-        String tableNumber = sharedPreferences.getString("tableNumber", "");
+        tableNumber = sharedPreferences.getString("tableNumber", "");
+
         formatedName = "table" + tableNumber;
 
         setTitle("Chat with " + activeUser);
@@ -76,47 +91,57 @@ public class ChatActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, messages);
         chatListView.setAdapter(arrayAdapter);
 
-        ParseQuery<ParseObject> query1 = new ParseQuery<ParseObject>("Message");
-        query1.whereEqualTo("sender", formatedName);
-        query1.whereEqualTo("recipient", activeUser);
+        new CountDownTimer(600000, 5000) {
 
-        ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Message");
-        query2.whereEqualTo("recipient", formatedName);
-        query2.whereEqualTo("sender", activeUser);
+            public void onTick(long millisUntilFinished) {
 
-        List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
-        queries.add(query1);
-        queries.add(query2);
+                ParseQuery<ParseObject> query1 = new ParseQuery<ParseObject>("Message");
+                query1.whereEqualTo("sender", formatedName);
+                query1.whereEqualTo("recipient", activeUser);
 
-        ParseQuery<ParseObject> query = ParseQuery.or(queries);
+                ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Message");
+                query2.whereEqualTo("recipient", formatedName);
+                query2.whereEqualTo("sender", activeUser);
 
-        query.orderByAscending("createdAt");
+                List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
+                queries.add(query1);
+                queries.add(query2);
 
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
+                ParseQuery<ParseObject> query = ParseQuery.or(queries);
 
-                if(e == null){
-                    if(objects.size() > 0){
+                query.orderByAscending("createdAt");
 
-                        messages.clear();
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> objects, ParseException e) {
 
-                        for(ParseObject message : objects){
+                        if(e == null){
+                            if(objects.size() > 0){
 
-                            String messageContent = message.getString("message");
+                                messages.clear();
 
-                            if(!message.getString("sender").matches(formatedName)){
-                                messageContent = "> " + messageContent;
+                                for(ParseObject message : objects){
+
+                                    String messageContent = message.getString("message");
+
+                                    if(!message.getString("sender").matches(formatedName)){
+                                        messageContent = "> " + messageContent;
+                                    }
+
+                                    messages.add(messageContent);
+
+                                }
+                                arrayAdapter.notifyDataSetChanged();
                             }
-
-                            messages.add(messageContent);
-
                         }
-                        arrayAdapter.notifyDataSetChanged();
                     }
+                });
 
-                }
             }
-        });
+
+            public void onFinish() {
+
+            }
+        }.start();
     }
 }

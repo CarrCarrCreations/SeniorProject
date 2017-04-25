@@ -3,6 +3,7 @@ package com.example.carrc.seniorproject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,12 +15,16 @@ import android.widget.ListView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SendCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class EmployeeChatActivity extends AppCompatActivity {
 
@@ -51,8 +56,8 @@ public class EmployeeChatActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,47 +76,60 @@ public class EmployeeChatActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, messages);
         chatListView.setAdapter(arrayAdapter);
 
-        ParseQuery<ParseObject> query1 = new ParseQuery<ParseObject>("Message");
-        query1.whereEqualTo("sender", ParseUser.getCurrentUser().getUsername());
-        query1.whereEqualTo("recipient", activeUser);
+        new CountDownTimer(600000, 5000) {
 
-        ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Message");
-        query2.whereEqualTo("recipient", ParseUser.getCurrentUser().getUsername());
-        query2.whereEqualTo("sender", activeUser);
+            public void onTick(long millisUntilFinished) {
 
-        List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
-        queries.add(query1);
-        queries.add(query2);
+                ParseQuery<ParseObject> query1 = new ParseQuery<ParseObject>("Message");
+                query1.whereEqualTo("sender", ParseUser.getCurrentUser().getUsername());
+                query1.whereEqualTo("recipient", activeUser);
 
-        ParseQuery<ParseObject> query = ParseQuery.or(queries);
+                ParseQuery<ParseObject> query2 = new ParseQuery<ParseObject>("Message");
+                query2.whereEqualTo("recipient", ParseUser.getCurrentUser().getUsername());
+                query2.whereEqualTo("sender", activeUser);
 
-        query.orderByAscending("createdAt");
+                List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
+                queries.add(query1);
+                queries.add(query2);
 
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
+                ParseQuery<ParseObject> query = ParseQuery.or(queries);
 
-                if(e == null){
-                    if(objects.size() > 0){
+                query.orderByAscending("createdAt");
 
-                        messages.clear();
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> objects, ParseException e) {
 
-                        for(ParseObject message : objects){
+                        if(e == null){
+                            if(objects.size() > 0){
 
-                            String messageContent = message.getString("message");
+                                messages.clear();
 
-                            if(!message.getString("sender").matches(ParseUser.getCurrentUser().getUsername())){
-                                messageContent = "> " + messageContent;
+                                for(ParseObject message : objects){
+
+                                    String messageContent = message.getString("message");
+
+                                    if(!message.getString("sender").matches(ParseUser.getCurrentUser().getUsername())){
+                                        messageContent = "> " + messageContent;
+                                    }
+
+                                    messages.add(messageContent);
+
+                                }
+                                arrayAdapter.notifyDataSetChanged();
                             }
 
-                            messages.add(messageContent);
-
                         }
-                        arrayAdapter.notifyDataSetChanged();
                     }
+                });
 
-                }
             }
-        });
+
+            public void onFinish() {
+
+            }
+
+        }.start();
+
     }
 }
