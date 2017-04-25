@@ -28,22 +28,25 @@
                 android:layout_centerHorizontal="true"
                 android:text="Recipe Name" />
 
-            <EditText
-                android:id="@+id/editRecipeName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_below="@id/textView"
-                android:gravity="center"
-                android:hint="Recipe Name"
-
+                android:layout_centerHorizontal="true"
                 />
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/searchView"/>
 
             <Button
                 android:id="@+id/button6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/editRecipeName"
+                android:layout_below="@id/listView"
                 android:onClick="changeLayout"
                 android:text="Edit Recipe"
                 android:layout_centerHorizontal="true"

@@ -412,6 +412,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
         editText3.setHint("Unit");
         //editText3.setId(Integer.parseInt(curTextViewId + "" + 1));
 
+
         listIngred.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
