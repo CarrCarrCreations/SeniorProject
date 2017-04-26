@@ -364,7 +364,7 @@ public class MenuItemActivity extends AppCompatActivity {
         TextView nameTextView = (TextView) findViewById(R.id.nameTextView);
         nameTextView.setText(name);
 
-        ingredientsListView = (ListView) findViewById(R.id.ListView);
+        ingredientsListView = (ListView) findViewById(R.id.ingredientsListView);
         registerForContextMenu(ingredientsListView);
 
 

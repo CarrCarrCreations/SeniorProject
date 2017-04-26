@@ -221,6 +221,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (e == null) {
                             Log.i("Sign Up", "Success");
                             addToRole(user, "Customer");
+                            Toast.makeText(MainActivity.this, "Sign Up Successful!", Toast.LENGTH_SHORT).show();
+
+                            SystemClock.sleep(1000);
+
+                            ParseUser.logInInBackground(usernameEditText.getText().toString(), passwordEditText.getText().toString(), new LogInCallback() {
+                                @Override
+                                public void done(ParseUser user, ParseException e) {
+                                    if(user != null){
+                                        Log.i("Login", "Successful");
+
+                                        sharedPreferences.edit().putString("username", usernameEditText.getText().toString()).apply();
+                                        sharedPreferences.edit().putString("password", passwordEditText.getText().toString()).apply();
+
+                                        String userRole = getRole();
+
+                                        // direct the user to the proper Activity depending on their role
+                                        if(userRole.matches("Customer")){
+                                            Intent intent = new Intent(MainActivity.this, CustomerDashboardActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        } else if(userRole.matches("Manager")){
+                                            Intent intent = new Intent(MainActivity.this, ManagerDashboardActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        } else if(userRole.matches("Employee")){
+                                            Intent intent = new Intent(MainActivity.this, EmployeeDashboardActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+
+
+
+                                    } else {
+                                        Toast.makeText(MainActivity.this, "Invalid username/password combination", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
 
                         } else {
                             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -246,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         RelativeLayout backgroundRelativeLayout = (RelativeLayout) findViewById(R.id.backgroundRelativeLayout);
         backgroundRelativeLayout.setOnClickListener(this);
-
+        
 
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
         passwordEditText.setOnKeyListener(this);
