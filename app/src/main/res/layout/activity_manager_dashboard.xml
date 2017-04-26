@@ -24,13 +24,6 @@
             android:id="@+id/createEmployeeButton"
             android:onClick="createEmployee" />
 
-        <Button
-            android:text="Delete Employee Account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/deleteAccountButton"
-            android:onClick="deleteAccount" />
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

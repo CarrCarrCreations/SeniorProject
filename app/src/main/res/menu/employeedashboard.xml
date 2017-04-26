@@ -2,6 +2,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Logout" android:id="@+id/logout" />
-    <item android:title="Update Account Info" android:id="@+id/update" />
 
 </menu>

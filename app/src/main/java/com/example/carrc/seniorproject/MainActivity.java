@@ -160,11 +160,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
 
-        if(view.getId() == R.id.forgotPasswordTextView){
-            Intent intent = new Intent(this, ForgotPasswordActivity.class);
-            startActivity(intent);
-        }
-
     }
 
     public void login(View view){
@@ -252,8 +247,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RelativeLayout backgroundRelativeLayout = (RelativeLayout) findViewById(R.id.backgroundRelativeLayout);
         backgroundRelativeLayout.setOnClickListener(this);
 
-        TextView forgotPasswordTextView = (TextView) findViewById(R.id.forgotPasswordTextView);
-        forgotPasswordTextView.setOnClickListener(this);
 
         passwordEditText = (EditText) findViewById(R.id.passwordEditText);
         passwordEditText.setOnKeyListener(this);
