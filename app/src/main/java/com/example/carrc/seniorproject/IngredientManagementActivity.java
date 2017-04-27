@@ -32,9 +32,16 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
     public void getIngredientNames(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
         query.orderByDescending("createdAt");
-        Task<Integer> count = query.countInBackground();
-        SystemClock.sleep(1000);
-        query.setLimit(count.getResult());
+        try {
+            int count = query.count();
+            query.setLimit(count);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //Task<Integer> count = query.countInBackground();
+        //SystemClock.sleep(2000);
+        //query.setLimit(count.getResult());
 
         List<ParseObject> objects;
 
@@ -64,6 +71,8 @@ public class IngredientManagementActivity extends AppCompatActivity implements S
         setContentView(R.layout.activity_ingredient_management);
 
         // Generate sample data
+
+        setTitle("Ingredient Management");
 
         getIngredientNames();
 
