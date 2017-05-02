@@ -23,7 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".EmployeeDashboardActivity" />
         <activity android:name=".ManagerDashboardActivity" />
         <activity android:name=".CustomerDashboardActivity" />
@@ -31,22 +30,16 @@
         <activity android:name=".ChatActivity" />
         <activity android:name=".EmployeeChatActivity" />
         <activity android:name=".UpdateAccountInfoActivity" />
-        <activity android:name=".DeleteEmployeeAccountActivity" />
         <activity android:name=".MenuActivity" />
         <activity android:name=".MenuMainActivity" />
         <activity android:name=".MenuItemActivity" />
         <activity android:name=".CartActivity" />
-        <activity android:name=".CreateRecipeActivity" />
-        <activity android:name=".RecipeManagementActivity" />
-        <activity android:name=".EditRecipeActivity" />
-        <activity android:name=".DeleteRecipeActivity" />
         <activity android:name=".FavoriteMealsActivity" />
         <activity android:name=".EditFavoriteActivity" />
         <activity android:name=".IngredientManagementActivity" />
         <activity android:name=".ModifyIngredientActivity" />
         <activity android:name=".CreateIngredientActivity" />
         <activity android:name=".ReviewOrderActivity" />
-        <activity android:name=".InventoryActivity" />
         <activity android:name=".ReviewSelectedOrderActivity" />
         <activity android:name=".RecipeManagementSearchActivity" />
         <activity android:name=".ModifyRecipeActivity" />

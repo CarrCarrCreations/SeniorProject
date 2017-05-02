@@ -41,9 +41,9 @@ public class ReviewSelectedOrderActivity extends AppCompatActivity {
 
     public void getIngredients(){
 
-        ParseQuery query = ParseQuery.getQuery("Cart");
+        ParseQuery query = ParseQuery.getQuery("Orders");
         query.whereEqualTo("TableNumber", tableNumber);
-        query.whereEqualTo("RecipeName", order);
+        query.whereEqualTo("ItemTitle", order);
 
         ingredientNum = 0;
 

@@ -27,7 +27,7 @@ public class ReviewOrderActivity extends AppCompatActivity {
 
     public void getOrders(){
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Cart");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Orders");
         query.whereEqualTo("TableNumber", tableNumber);
 
         try {
@@ -35,7 +35,7 @@ public class ReviewOrderActivity extends AppCompatActivity {
             if(objects.size() > 0){
                 orders.clear();
                 for(int i = 0; i < objects.size(); i++){
-                    String orderName = objects.get(i).get("RecipeName").toString();
+                    String orderName = objects.get(i).get("ItemTitle").toString();
                     orders.add(orderName);
                 }
                 arrayAdapter.notifyDataSetChanged();

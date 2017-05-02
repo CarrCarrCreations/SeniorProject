@@ -74,6 +74,9 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
     CheckBox veganCheckBox;
     CheckBox vegetarianCheckBox;
 
+    int id;
+    String stringID;
+
 
     public class newIngredient{
         String name;
@@ -157,10 +160,16 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
 
             try {
                 List<ParseObject> objects = query.find();
-                ParseObject temp = objects.get(0);
-                int id = Integer.parseInt(temp.get("FoodID").toString()) + 1;
-                String stringID = String.valueOf(id);
-                Log.i("String ID", stringID);
+
+                if(objects.isEmpty()){
+                    id = 1;
+                    stringID = String.valueOf(id);
+                } else {
+                    ParseObject temp = objects.get(0);
+                    id = Integer.parseInt(temp.get("FoodID").toString()) + 1;
+                    stringID = String.valueOf(id);
+                }
+
                 recipe.put("FoodID", stringID);
 
             } catch (ParseException e) {

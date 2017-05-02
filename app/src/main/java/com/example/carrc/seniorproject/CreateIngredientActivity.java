@@ -23,6 +23,9 @@ public class CreateIngredientActivity extends AppCompatActivity {
     EditText vegTypeEditText;
     boolean unique;
 
+    int id;
+    String stringID;
+
     public void recreate(){
         Intent intent = new Intent(this, IngredientManagementActivity.class);
         startActivity(intent);
@@ -61,9 +64,14 @@ public class CreateIngredientActivity extends AppCompatActivity {
 
             try {
                 objects = query.find();
-                ParseObject temp = objects.get(0);
-                int id = Integer.parseInt(temp.get("ID").toString()) + 1;
-                String stringID = String.valueOf(id);
+                if(objects.isEmpty()){
+                  id = 1;
+                    stringID = String.valueOf(id);
+                } else {
+                    ParseObject temp = objects.get(0);
+                    id = Integer.parseInt(temp.get("ID").toString()) + 1;
+                    stringID = String.valueOf(id);
+                }
 
                 ParseObject ingredient = new ParseObject("Ingredients");
                 ingredient.put("Name", nameEditText.getText().toString().toLowerCase());
