@@ -44,18 +44,18 @@ public class MenuActivity extends AppCompatActivity {
     public void getRecipes(){
 
         // main+course, side dish, dessert, appetizer, salad, bread, breakfast, soup, beverage, sauce, or drink.
-        courseType = "dinner";
+        courseType = "lunch";
 
         // type of food you are looking for. Either same as courseType or use words like burger.
         // capitalize the first letter
-        mealType = "Burger";
+        mealType = "lunch";
 
         //  pescetarian, lacto vegetarian, ovo vegetarian, vegan, and vegetarian.
         dietType = "";
 
         // example diary%2Cegg%2Cwheat seperate each intolerance with %2C
         //egg, peanut, sesame, seafood, shellfish, soy, and wheat.
-        intolerances = "";
+        intolerances = "soy%2Cpeanut";
 
         // number of recipes to look up
         recipeNum = "20";
@@ -127,14 +127,11 @@ public class MenuActivity extends AppCompatActivity {
                                         recipe.put("FoodID", jObj.getString("id"));
                                         recipe.put("Image", jObj.getString("image"));
                                         recipe.put("PricePerServing", jObj.getString("pricePerServing"));
+
                                         recipe.put("vegetarian", jObj.getString("vegetarian"));
                                         recipe.put("vegan", jObj.getString("vegan"));
                                         recipe.put("glutenFree", jObj.getString("glutenFree"));
                                         recipe.put("dairyFree", jObj.getString("dairyFree"));
-                                        recipe.put("veryHealthy", jObj.getString("veryHealthy"));
-                                        recipe.put("cheap", jObj.getString("cheap"));
-                                        recipe.put("veryPopular", jObj.getString("veryPopular"));
-                                        recipe.put("weightWatcher", jObj.getString("weightWatcherSmartPoints"));
 
                                         String[] intolerancesArray = intolerances.split("%2C");
 
@@ -174,7 +171,7 @@ public class MenuActivity extends AppCompatActivity {
                                             recipe.put("IngredientName" + j, json.getString("name"));
                                             recipe.put("IngredientID" + j, json.getString("id"));
                                             recipe.put("IngredientAmount" + j, json.getString("amount"));
-                                            recipe.put("IngredientUnit" + j, json.getString("unit"));
+                                            recipe.put("IngredientUnit" + j, "oz");
 
                                             ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
                                             query.whereEqualTo("ID", json.getString("id"));
@@ -184,7 +181,8 @@ public class MenuActivity extends AppCompatActivity {
                                                 ParseObject ingredientsObj = new ParseObject("Ingredients");
                                                 ingredientsObj.put("ID", json.getString("id"));
                                                 ingredientsObj.put("Name", json.getString("name"));
-                                                ingredientsObj.put("Unit", json.getString("unit"));
+                                                ingredientsObj.put("Unit", "oz");
+                                                ingredientsObj.put("Quantity", "100");
                                                 ingredientsObj.saveInBackground();
 
                                             }

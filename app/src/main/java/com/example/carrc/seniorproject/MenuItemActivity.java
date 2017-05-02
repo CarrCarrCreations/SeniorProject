@@ -66,6 +66,8 @@ public class MenuItemActivity extends AppCompatActivity {
     String price;
     String ingredType;
 
+    Button addCartButton;
+
     RelativeLayout activity_menu_item;
     ListView ingredientsListView;
 
@@ -312,6 +314,9 @@ public class MenuItemActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            addToCart(addCartButton);
+            
         } else {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("FavoriteMeals");
             query.whereEqualTo("Username", ParseUser.getCurrentUser().getUsername());
@@ -355,6 +360,7 @@ public class MenuItemActivity extends AppCompatActivity {
         id = intent.getStringExtra("id");
 
         Button favoriteButton = (Button) findViewById(R.id.favoriteButton);
+        addCartButton = (Button) findViewById(R.id.addCartButton);
 
         activity_menu_item = (RelativeLayout) findViewById(R.id.activity_menu_item);
         comments = (EditText) findViewById(R.id.commentsEditText);
