@@ -166,7 +166,7 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
                     stringID = String.valueOf(id);
                 } else {
                     ParseObject temp = objects.get(0);
-                    id = Integer.parseInt(temp.get("FoodID").toString()) + 1;
+                    id = Integer.parseInt(temp.get("FoodID").toString()) + 100;
                     stringID = String.valueOf(id);
                 }
 
