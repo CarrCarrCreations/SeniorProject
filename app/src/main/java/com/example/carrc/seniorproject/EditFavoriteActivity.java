@@ -1,8 +1,10 @@
 package com.example.carrc.seniorproject;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,11 +24,13 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRole;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EditFavoriteActivity extends AppCompatActivity {
 
@@ -101,8 +105,8 @@ public class EditFavoriteActivity extends AppCompatActivity {
             counter = 0;
             ingredients.clear();
 
-            if(recipe.get("Comments") != null){
-                commentEditText.setText(recipe.get("Comments").toString());
+            if(recipe.get("Comment") != null){
+                commentEditText.setText(recipe.get("Comment").toString());
             }
 
             do {
@@ -215,6 +219,10 @@ public class EditFavoriteActivity extends AppCompatActivity {
         newFavorite.put("MealName", name);
         newFavorite.put("MealID", id);
         newFavorite.put("Price", price);
+
+        if(!commentEditText.getText().toString().matches("")){
+            newFavorite.put("Comment", commentEditText.getText().toString());
+        }
 
         // save table number and current user with order
         newFavorite.put("TableNumber", currentTableNumber);
@@ -343,6 +351,41 @@ public class EditFavoriteActivity extends AppCompatActivity {
 
     public void deleteFavorite(View view){
 
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Delete Favorite")
+                .setMessage("Are you sure you want to delete this item?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // delete from database
+                        actualDeleteFavorite();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    public void actualDeleteFavorite(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("FavoriteMeals");
+        query.whereEqualTo("MealName", name);
+        query.whereEqualTo("Username", ParseUser.getCurrentUser().getUsername());
+
+        try {
+            List<ParseObject> objects = query.find();
+            if(!objects.isEmpty()){
+                objects.get(0).delete();
+
+                Toast.makeText(getBaseContext(), "Item deleted", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, FavoriteMealsActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 

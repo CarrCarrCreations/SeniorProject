@@ -1,5 +1,6 @@
 package com.example.carrc.seniorproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.os.SystemClock;
@@ -255,9 +256,13 @@ public class ModifyRecipeActivity extends AppCompatActivity {
     public void getIngredientNames(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Ingredients");
         query.orderByDescending("createdAt");
-        Task<Integer> count = query.countInBackground();
-        SystemClock.sleep(2000);
-        query.setLimit(count.getResult());
+        try {
+            int count = query.count();
+            query.setLimit(count);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         List<ParseObject> objects;
 
@@ -276,6 +281,24 @@ public class ModifyRecipeActivity extends AppCompatActivity {
     }
 
     public void deleteRecipe(View view){
+
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Delete Recipe")
+                .setMessage("Are you sure you want to delete this Recipe?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // delete from database
+                        actualDeleteRecipe();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    public void actualDeleteRecipe(){
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipes");
         query.whereEqualTo("ItemTitle", recipeName);

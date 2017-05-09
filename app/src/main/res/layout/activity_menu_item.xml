@@ -10,59 +10,46 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.carrc.seniorproject.MenuItemActivity">
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/nameTextView"
-        android:textSize="30sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:textColor="@android:color/black" />
-
-    <RatingBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ratingBar"
-        android:layout_below="@+id/nameTextView"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:text="Add To Cart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/addCartButton"
-        android:onClick="addToCart"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/commentsEditText"
-        android:hint="Enter comments here..."
-        android:layout_above="@+id/addCartButton"
-        android:layout_alignParentStart="true" />
-
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ratingBar"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/commentsEditText"
-        android:id="@+id/ingredientsListView" />
+        android:orientation="vertical"
+        android:weightSum="1">
 
-    <Button
-        android:id="@+id/favoriteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/ingredientsListView"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/nameTextView"
-        android:layout_toStartOf="@+id/ratingBar"
-        android:onClick="addToFavorites"
-        android:text="Add To Favorites" />
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@android:color/background_dark"
+            android:textSize="24sp" />
 
+        <Button
+            android:id="@+id/favoriteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="addToFavorites"
+            android:text="Add To Favorites" />
+
+        <ListView
+            android:id="@+id/ingredientsListView"
+            android:layout_width="match_parent"
+            android:layout_height="277dp"
+            android:layout_weight="1.02" />
+
+        <EditText
+            android:id="@+id/commentsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Enter comments here..."
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/addCartButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="addToCart"
+            android:text="Add To Cart" />
+    </LinearLayout>
 </RelativeLayout>

@@ -299,7 +299,7 @@ public class MenuItemActivity extends AppCompatActivity {
 
             if(!comments.getText().toString().isEmpty()){
                 comment = comments.getText().toString();
-                favorite.put("Comments", comment);
+                favorite.put("Comment", comment);
             }
 
 
@@ -316,7 +316,7 @@ public class MenuItemActivity extends AppCompatActivity {
             });
 
             addToCart(addCartButton);
-            
+
         } else {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("FavoriteMeals");
             query.whereEqualTo("Username", ParseUser.getCurrentUser().getUsername());
@@ -376,8 +376,6 @@ public class MenuItemActivity extends AppCompatActivity {
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, ingredientsArrayList);
         ingredientsListView.setAdapter(arrayAdapter);
-
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         displayIngredients();
 

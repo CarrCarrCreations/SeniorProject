@@ -37,9 +37,6 @@ public class RecipeManagementSearchActivity extends AppCompatActivity implements
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        //Task<Integer> count = query.countInBackground();
-        //SystemClock.sleep(2000);
-        //query.setLimit(count.getResult());
 
         List<ParseObject> objects;
 

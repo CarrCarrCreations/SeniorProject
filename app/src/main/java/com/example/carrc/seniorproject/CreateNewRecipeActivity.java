@@ -302,12 +302,6 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
 
                     Ingredient.id = getID(Ingredient.name);
 
-                    // create the text view to show ingredient name
-                    // create two edit text to input unit and quantity
-                    // add to an array list of newIngredient
-                    // create a horizontal layout. add the text and edit texts to layout
-                    // add the layout to the scroll view
-
 
                     final TextView nameTextView = new TextView(getBaseContext());
                     nameTextView.setText(ingredName);
@@ -350,7 +344,6 @@ public class CreateNewRecipeActivity extends AppCompatActivity {
                     });
 
                     newIngred.add(Ingredient);
-
                     tableRow.addView(nameTextView);
                     tableRow.addView(unitEditText);
                     tableRow.addView(quantityEditText);

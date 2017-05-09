@@ -18,6 +18,20 @@
         android:layout_alignParentStart="true">
 
         <Button
+            android:id="@+id/menuButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="menu"
+            android:text="Menu" />
+
+        <Button
+            android:id="@+id/cartButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="toCart"
+            android:text="Cart" />
+
+        <Button
             android:text="Message Waiter/Waitress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,32 +39,11 @@
             android:onClick="messenger" />
 
         <Button
-            android:text="Menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/menuButton"
-            android:onClick="menu" />
-
-        <Button
-            android:text="Cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/cartButton"
-            android:onClick="toCart" />
-
-        <Button
             android:id="@+id/favoritesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="toFavoriteMeals"
             android:text="Favorite Meals" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="create"
-            android:text="New Recipes" />
 
     </LinearLayout>
 </RelativeLayout>
